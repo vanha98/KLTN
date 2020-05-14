@@ -5,10 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\GVHD\Controllers\" />
     <Folder Include="Areas\GVHD\Data\" />
     <Folder Include="Areas\GVHD\Models\" />
-    <Folder Include="Areas\GVHD\Views\" />
     <Folder Include="Areas\SinhVien\Data\" />
     <Folder Include="Areas\SinhVien\Models\" />
   </ItemGroup>
