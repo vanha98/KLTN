@@ -2,21 +2,37 @@
 @{
     ViewData["Title"] = "Index";
 }
-    
+@section Script{ 
+    <script>
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                pageLength: 10,
+                language: {
+                    "lengthMenu": "<button type='button' class='btn btn-success btn-sm'>Đề xuất đề tài</button>",
+                    "zeroRecords": "Không có dữ liệu",
+                    "info": "<button class='btn btn-primary btn-sm'>Lưu</button>",
+                    "infoEmpty": "",
+                    "infoFiltered": "",
+                    "search": "",
+                    "searchPlaceholder": "Tìm kiếm",
+                    "paginate": {
+                        "first": "<<",
+                        "last": ">>",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                },
+            });
+        });
+    </script>
+}
     <div class="content-header">
         <h1 class="text-center">
             Đăng ký đề tài nghiên cứu khoa học
         </h1>
         <hr />
-        <div class="btn-group">
-            <button type="button" class="btn btn-success">
-                Đề xuất đề tài
-            </button>
-        </div>
-        @*<div class="btn-group float-right">
-            <input type="text" placeholder="... tìm kiếm" class="form-control" />
-            <button class="btn"><i class="fas fa-search"></i></button>
-        </div>*@
     </div>
     <div class="card">
         <div class="card-body">
@@ -113,6 +129,5 @@
             </div>
         </div>
 
-    </div>
 
     

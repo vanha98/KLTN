@@ -349,28 +349,7 @@
     <script src="~/dist/js/pages/dashboard.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="~/dist/js/demo.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                pageLength: 10,
-                language: {
-                    "lengthMenu": "",
-                    "zeroRecords": "Không có dữ liệu",
-                    "info": "<button class='btn btn-primary'>Lưu</button>",
-                    "infoEmpty": "Không có dữ liệu",
-                    "infoFiltered": "",
-                    "search": "Tìm kiếm:",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                },
-            });
-        });
-    </script>
+    @RenderSection("Script",false)
+    
 </body>
 </html>
