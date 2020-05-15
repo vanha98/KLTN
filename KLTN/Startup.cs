@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Data.Models;
+using Microsoft.EntityFrameworkCore;
+using Data.Bo;
+using Data.Interfaces;
 
 namespace KLTN
 {
@@ -24,6 +28,8 @@ namespace KLTN
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IDangKyDeTai, DangKyDeTaiBo>();
+            //services.AddDbContext<KLTNContext>(options => options.UseSqlServer("Server=DESKTOP-U7OPBBM;Database=KLTN;Trusted_Connection=True;"));
             //services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
