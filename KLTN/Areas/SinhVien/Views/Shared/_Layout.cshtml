@@ -354,6 +354,21 @@
             $("#example1").DataTable({
                 "responsive": true,
                 "autoWidth": false,
+                pageLength: 10,
+                language: {
+                    "lengthMenu": "",
+                    "zeroRecords": "Không có dữ liệu",
+                    "info": "<button class='btn btn-primary'>Lưu</button>",
+                    "infoEmpty": "Không có dữ liệu",
+                    "infoFiltered": "",
+                    "search": "Tìm kiếm:",
+                    "paginate": {
+                        "first": "<<",
+                        "last": ">>",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                },
             });
         });
     </script>
