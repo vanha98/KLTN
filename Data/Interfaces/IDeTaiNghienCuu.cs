@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data.Interfaces
 {
-    public interface IDangKyDeTai : IRepository<DeTaiNghienCuu>
+    public interface IDeTaiNghienCuu : IRepository<DeTaiNghienCuu>
     {
     }
 }
