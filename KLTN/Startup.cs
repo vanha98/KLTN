@@ -28,8 +28,11 @@ namespace KLTN
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<KLTNContext>(options => options.UseSqlServer(Configuration.GetConnectionString("KLTN")));
             services.AddScoped<IDangKyDeTai, DangKyDeTaiBo>();
-            //services.AddDbContext<KLTNContext>(options => options.UseSqlServer("Server=DESKTOP-U7OPBBM;Database=KLTN;Trusted_Connection=True;"));
+            //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
+            
+            
             //services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
