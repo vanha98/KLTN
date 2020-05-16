@@ -21,5 +21,9 @@ namespace KLTN.Areas.SinhVien.Controllers
         {
             return View(await _service.GetAll());
         }
+        public async Task Add(DeTaiNghienCuu entity)
+        {
+            await _service.Add(entity);
+        }
     }
 }
