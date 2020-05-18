@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Data.Bo
 {

@@ -11,7 +11,7 @@
                 "autoWidth": false,
                 pageLength: 10,
                 language: {
-                    "lengthMenu": "<button type='button' class='btn btn-success btn-sm' id='btnTaoDeTai'>Tạo đề tài</button>",
+                    "lengthMenu": "<a href='/GVHD/QLDeTai/Create' class='btn btn-success btn-sm'>Tạo đề tài</a>",
                     "zeroRecords": "Không có dữ liệu",
                     "info": "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>",
                     "infoEmpty": "",
@@ -78,7 +78,7 @@
                                 <td>@item.Id</td>
                                 <td>@item.TenDeTai</td>
                                 <td>@item.MoTa</td>
-                                <td>@item.NgayLap</td>
+                                <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
                                 <td>@item.Idnhom</td>
                                 <td></td>
                                 <td>@item.Status</td>
@@ -93,5 +93,6 @@
     </div>
     @*@await  Component.InvokeAsync("DangKySV")*@
 </div>
+@ViewBag.Enum
 
 

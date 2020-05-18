@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 
 namespace Data.Bo
 {
-    public class DeTaiNghienCuuBo : Repository<DeTaiNghienCuu>, IDeTaiNghienCuu
+    public class BaiPostBo : Repository<BaiPost>, IBaiPost
     {
         private readonly KLTNContext _context;
-        public DeTaiNghienCuuBo(KLTNContext context) : base(context)
+        public BaiPostBo(KLTNContext context) : base(context)
         {
             _context = context;
         }
-
+        public async Task<IEnumerable<Comments>> GetAllComments(int idbaipost)
+        {
+            return await _context.Comments.Where(x => x.IdbaiPost == idbaipost).ToListAsync();
+        }
     }
 }

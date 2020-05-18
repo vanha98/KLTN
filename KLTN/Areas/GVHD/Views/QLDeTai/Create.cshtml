@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-success">
+    <div class="card-header">
+        <h3 class="card-title">Tạo đề tài</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form role="form">
+        <div class="card-body">
+            @await Component.InvokeAsync("TenDeTai")
+            @await Component.InvokeAsync("Mota")
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="exampleInputFile">
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                    </div>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="">Upload</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+    </form>
+</div>
+<!-- /.card -->

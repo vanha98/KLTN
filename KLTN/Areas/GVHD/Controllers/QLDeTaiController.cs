@@ -19,5 +19,10 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             return View(await _service.GetAll());
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }

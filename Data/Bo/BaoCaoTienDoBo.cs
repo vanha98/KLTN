@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace Data.Bo
 {
-    public class DeTaiNghienCuuBo : Repository<DeTaiNghienCuu>, IDeTaiNghienCuu
+    public class BaoCaoTienDoBo : Repository<BaoCaoHangTuan>, IBaoCaoTienDo
     {
-        private readonly KLTNContext _context;
-        public DeTaiNghienCuuBo(KLTNContext context) : base(context)
+        public BaoCaoTienDoBo(KLTNContext context) : base(context)
         {
-            _context = context;
         }
+
 
     }
 }
