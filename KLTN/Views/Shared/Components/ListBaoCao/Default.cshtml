@@ -1,31 +1,4 @@
 ﻿
-@section Script{
-    <script>
-        $(document).ready(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                pageLength: 10,
-                language: {
-                    "lengthMenu": "<button type='button' class='btn btn-success btn-sm' id='btnDeXuat'>Đề xuất đề tài</button>",
-                    "zeroRecords": "Không có dữ liệu",
-                    "info": "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                    "search": "",
-                    "searchPlaceholder": "Tìm kiếm",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                },
-            });
-        });
-
-    </script>
-}
 <div class="card">
     <div class="card-body">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -34,19 +7,19 @@
                 <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th class="sorting" tabindex="0" aria-controls="example1">
                                 STT
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th class="sorting" tabindex="0" aria-controls="example1">
                                 Ngày báo cáo
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th class="sorting" tabindex="0" aria-controls="example1">
                                 Nội dung
                             </th>
-                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th class="sorting_desc" tabindex="0" aria-controls="example1">
                                 Tệp báo cáo
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th class="sorting" tabindex="0" aria-controls="example1">
                                 Đánh giá
                             </th>
                             <th>Tiến độ</th>
@@ -56,6 +29,7 @@
                     </thead>
                     <tbody>
                     </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -63,5 +37,7 @@
     </div>
     @*@await  Component.InvokeAsync("DangKySV")*@
 </div>
+
+
 
 
