@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Enum;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

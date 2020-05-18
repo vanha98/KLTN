@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Data.Bo
 {
@@ -32,6 +33,11 @@ namespace Data.Bo
         public async Task<IEnumerable<T>> GetAll()
         {
             return await _context.Set<T>().ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().Where(expression).ToListAsync();
         }
 
         public async Task<T> GetBy(int id)
