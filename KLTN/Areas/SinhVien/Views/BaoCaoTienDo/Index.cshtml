@@ -1,8 +1,36 @@
 ﻿
+@section Script{
+    <script>
+        $(document).ready(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+                pageLength: 10,
+                language: {
+                    "lengthMenu": "<button type='button' class='btn btn-success btn-sm' id='btnDeXuat'>Đề xuất đề tài</button>",
+                    "zeroRecords": "Không có dữ liệu",
+                    "info": "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>",
+                    "infoEmpty": "",
+                    "infoFiltered": "",
+                    "search": "",
+                    "searchPlaceholder": "Tìm kiếm",
+                    "paginate": {
+                        "first": "<<",
+                        "last": ">>",
+                        "next": ">",
+                        "previous": "<"
+                    },
+                },
+            });
+        });
+
+    </script>
+}
 <div class="content-header">
     <h1 class="text-center">
         Báo cáo tiến độ
     </h1>
     <hr />
 </div>
-@await Component.InvokeAsync("ListBaoCao")
+
+@await Component.InvokeAsync("NoiDungThaoLuan")
