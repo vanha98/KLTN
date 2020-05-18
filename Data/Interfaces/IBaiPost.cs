@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Data.Interfaces
 {
-    public interface IDeTaiNghienCuu : IRepository<DeTaiNghienCuu>
+    public interface IBaiPost : IRepository<BaiPost>
     {
-        
+        Task<IEnumerable<Comments>> GetAllComments(int idbaipost);
     }
 }

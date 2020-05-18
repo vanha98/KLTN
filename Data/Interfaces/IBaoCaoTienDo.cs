@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.Interfaces
 {
-    public interface IDeTaiNghienCuu : IRepository<DeTaiNghienCuu>
+    public interface IBaoCaoTienDo : IRepository<BaoCaoHangTuan>
     {
-        
     }
 }

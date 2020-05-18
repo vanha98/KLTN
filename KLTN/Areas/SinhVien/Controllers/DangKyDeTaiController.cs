@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Data.Bo;
 using Data.Interfaces;
+using Data.Models;
 
 namespace KLTN.Areas.SinhVien.Controllers
 {
