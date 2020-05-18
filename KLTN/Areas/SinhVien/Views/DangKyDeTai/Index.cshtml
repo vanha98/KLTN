@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Data.Models.DeTaiNghienCuu>
 @{
     ViewData["Title"] = "Index";
 }
@@ -43,34 +43,35 @@
                         <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                             <thead>
                                 <tr role="row">
-                                    <th tabindex="0" aria-controls="example1" rowspan="2" aria-label="CSS grade: activate to sort column ascending">
+                                    <th rowspan="2">
 
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2"  aria-label="Rendering engine: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
                                         Mã đề tài
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2" aria-label="Browser: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
                                         Tên đề tài
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2" aria-label="Platform(s): activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
                                         Tự đề xuất
                                     </th>
-                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="2" aria-label="Engine version: activate to sort column ascending" aria-sort="descending">
+                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="2">
                                         Mô tả
                                     </th>
-                                    <th colspan="3">Giảng viên hướng dẫn</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2" aria-label="CSS grade: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
                                         Tình trạng
                                     </th>
+                                    <th colspan="3">Giảng viên hướng dẫn</th>
+                                    @*<th></th>*@
                                 </tr>
                                 <tr>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" aria-label="CSS grade: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1" >
                                         Họ tên
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" aria-label="CSS grade: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
                                         SDT
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" aria-label="CSS grade: activate to sort column ascending">
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
                                         Email
                                     </th>
                                 </tr>
@@ -88,6 +89,7 @@
                                     <td>@item.Id</td>
                                     <td>@item.IdgiangVien</td>
                                     <td>@item.IdgiangVien</td>
+                                    @*<td><button class="btn"><i class="fas fa-edit"></i></button></td>*@
                                 </tr>
                                 }
                             </tbody>

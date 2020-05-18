@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Data.Bo
 {
-    public class DangKyDeTaiBo : Repository<DeTaiNghienCuu>, IDangKyDeTai
+    public class DangKyDeTaiBo : Repository<DeTaiNghienCuu>, IDeTaiNghienCuu
     {
 
         public DangKyDeTaiBo(KLTNContext context) : base(context)
