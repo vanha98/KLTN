@@ -11,9 +11,11 @@ namespace Data.Models
         }
 
         public int Id { get; set; }
-        public int? IddeTai { get; set; }
+        public long? IddeTai { get; set; }
         public int? IdhoiDong { get; set; }
         public int? IdmoDot { get; set; }
+        public string NoiDung { get; set; }
+        public string TepDinhKem { get; set; }
         public int? Status { get; set; }
 
         public virtual DeTaiNghienCuu IddeTaiNavigation { get; set; }

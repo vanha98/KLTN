@@ -8,7 +8,7 @@ namespace Data.Interfaces
 {
     public interface ISinhVien : IRepository<SinhVien>
     {
-        Task<NhomSv> GetGroupInfo(int idgroup);
+        Task<Nhom> GetGroupInfo(int idgroup);
         Task<IEnumerable<SinhVien>> GetMemberInfo(int idgroup);
     }
 }

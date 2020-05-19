@@ -7,23 +7,24 @@ namespace Data.Models
     {
         public DeTaiNghienCuu()
         {
-            BaoCaoHangTuan = new HashSet<BaoCaoHangTuan>();
+            BaoCaoTienDo = new HashSet<BaoCaoTienDo>();
             CtkenhThaoLuan = new HashSet<CtkenhThaoLuan>();
             XetDuyetVaDanhGia = new HashSet<XetDuyetVaDanhGia>();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string TenDeTai { get; set; }
         public string MoTa { get; set; }
-        public int? IdgiangVien { get; set; }
+        public string TepDinhKem { get; set; }
+        public long? IdgiangVien { get; set; }
         public int? Idnhom { get; set; }
         public DateTime? NgayLap { get; set; }
         public bool? Loai { get; set; }
         public int? Status { get; set; }
 
         public virtual GiangVien IdgiangVienNavigation { get; set; }
-        public virtual NhomSv IdnhomNavigation { get; set; }
-        public virtual ICollection<BaoCaoHangTuan> BaoCaoHangTuan { get; set; }
+        public virtual Nhom IdnhomNavigation { get; set; }
+        public virtual ICollection<BaoCaoTienDo> BaoCaoTienDo { get; set; }
         public virtual ICollection<CtkenhThaoLuan> CtkenhThaoLuan { get; set; }
         public virtual ICollection<XetDuyetVaDanhGia> XetDuyetVaDanhGia { get; set; }
     }

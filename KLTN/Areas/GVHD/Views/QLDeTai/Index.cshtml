@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Data.Models.DeTaiNghienCuu>
 @{
     ViewData["Title"] = "Index";
+    int check = 0;
 }
 @section Script{
     <script>
@@ -11,9 +12,9 @@
                 "autoWidth": false,
                 pageLength: 10,
                 language: {
-                    "lengthMenu": "<a href='/GVHD/QLDeTai/Create' class='btn btn-success btn-sm'>Tạo đề tài</a>",
+                    "lengthMenu": "<button class='btn btn-success btn-sm' id='btnCreate' data-id='Create' data-toggle='modal' data-target='#modal-lg'>Tạo đề tài</button>",
                     "zeroRecords": "Không có dữ liệu",
-                    "info": "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>",
+                    "info": "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>",
                     "infoEmpty": "",
                     "infoFiltered": "",
                     "search": "",
@@ -28,6 +29,10 @@
             });
         });
 
+        $("#btnCreate").on("click", function ()
+        {
+            @check = 1;
+        })
     </script>
 }
 <div class="content-header">
@@ -82,7 +87,6 @@
                                 <td>@item.Idnhom</td>
                                 <td></td>
                                 <td>@item.Status</td>
-                                <td></td>
                             </tr>
                         }
                     </tbody>
@@ -95,4 +99,5 @@
 </div>
 @ViewBag.Enum
 
+@await Html.PartialAsync("_CreateEditPopup",check)
 

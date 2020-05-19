@@ -12,7 +12,7 @@ namespace Data.Models
             KenhThaoLuan = new HashSet<KenhThaoLuan>();
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }
         public int? GioiTinh { get; set; }

@@ -5,7 +5,12 @@ namespace Data.Models
 {
     public partial class SinhVien
     {
-        public int Id { get; set; }
+        public SinhVien()
+        {
+            NhomSinhVien = new HashSet<NhomSinhVien>();
+        }
+
+        public long Mssv { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }
         public int? GioiTinh { get; set; }
@@ -13,9 +18,8 @@ namespace Data.Models
         public string DiaChi { get; set; }
         public string Sdt { get; set; }
         public string Email { get; set; }
-        public int? Idnhom { get; set; }
         public int? Status { get; set; }
 
-        public virtual NhomSv IdnhomNavigation { get; set; }
+        public virtual ICollection<NhomSinhVien> NhomSinhVien { get; set; }
     }
 }

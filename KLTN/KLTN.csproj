@@ -5,10 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\GVHD\Data\" />
-    <Folder Include="Areas\GVHD\Models\" />
-    <Folder Include="Areas\SinhVien\Data\" />
-    <Folder Include="Areas\SinhVien\Models\" />
+    <None Include="Areas\GVHD\Views\Home\Index.cshtml" />
+    <None Include="Areas\GVHD\Views\QLDeTai\Index.cshtml" />
+    <None Include="Areas\GVHD\Views\Shared\_Layout.cshtml" />
+    <None Include="Areas\GVHD\Views\_ViewImports.cshtml" />
+    <None Include="Areas\GVHD\Views\_ViewStart.cshtml" />
+    <None Include="Areas\SinhVien\Views\BaoCaoTienDo\Index.cshtml" />
+    <None Include="Areas\SinhVien\Views\DangKyDeTai\Index.cshtml" />
+    <None Include="Areas\SinhVien\Views\DeTaiDaDangKy\Index.cshtml" />
+    <None Include="Areas\SinhVien\Views\Home\Index.cshtml" />
+    <None Include="Areas\SinhVien\Views\Shared\_Layout.cshtml" />
+    <None Include="Areas\SinhVien\Views\_ViewImports.cshtml" />
+    <None Include="Areas\SinhVien\Views\_ViewStart.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,7 +12,7 @@ namespace Data.Models
 
         public int Id { get; set; }
         public int? IdkenhThaoLuan { get; set; }
-        public int? IddeTai { get; set; }
+        public long? IddeTai { get; set; }
         public int? Status { get; set; }
 
         public virtual DeTaiNghienCuu IddeTaiNavigation { get; set; }

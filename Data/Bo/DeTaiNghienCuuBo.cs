@@ -11,10 +11,8 @@ namespace Data.Bo
 {
     public class DeTaiNghienCuuBo : Repository<DeTaiNghienCuu>, IDeTaiNghienCuu
     {
-        private readonly KLTNContext _context;
         public DeTaiNghienCuuBo(KLTNContext context) : base(context)
         {
-            _context = context;
         }
 
     }

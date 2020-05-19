@@ -30,7 +30,7 @@ namespace KLTN
             services.AddControllersWithViews();
             services.AddDbContext<KLTNContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("KLTN")));
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>() ;
-            services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
+            //services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
 
 

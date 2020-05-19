@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Data.Bo
 {
-    public class BaoCaoTienDoBo : Repository<BaoCaoHangTuan>, IBaoCaoTienDo
+    public class BaoCaoTienDoBo : Repository<BaoCaoTienDo>, IBaoCaoTienDo
     {
         public BaoCaoTienDoBo(KLTNContext context) : base(context)
         {

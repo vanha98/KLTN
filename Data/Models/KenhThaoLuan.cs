@@ -11,7 +11,7 @@ namespace Data.Models
         }
 
         public int Id { get; set; }
-        public int? IdgiangVien { get; set; }
+        public long? IdgiangVien { get; set; }
         public int? Status { get; set; }
 
         public virtual GiangVien IdgiangVienNavigation { get; set; }

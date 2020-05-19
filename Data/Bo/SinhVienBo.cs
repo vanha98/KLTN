@@ -18,14 +18,28 @@ namespace Data.Bo
             _context = context;
         }
 
-        public async Task<NhomSv> GetGroupInfo(int idgroup)
+        public async Task<Nhom> GetGroupInfo(int idgroup)
         {
-            return await _context.NhomSv.FindAsync(idgroup);
+            return await _context.Nhom.FindAsync(idgroup);
         }
 
         public async Task<IEnumerable<SinhVien>> GetMemberInfo(int idgroup)
         {
-            return await _context.SinhVien.Where(x => x.Idnhom == idgroup).ToListAsync();
+            return await GetListMemberFrom(idgroup);
+        }
+
+        private async Task<List<SinhVien>> GetListMemberFrom(int idgroup)
+        {
+            List<NhomSinhVien> nhomSinhViens = await _context.NhomSinhVien.Where(x => x.Idnhom == idgroup).ToListAsync();
+            List<SinhVien> listSV = new List<SinhVien>();
+
+            foreach (var item in nhomSinhViens)
+            {
+                SinhVien sinhVien =  await _context.SinhVien.FindAsync(item.IdsinhVien);
+                listSV.Add(sinhVien);
+            }
+
+            return listSV;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Data.Models
 
         public int Id { get; set; }
         public int? IdnamHoc { get; set; }
-        public int? IdquanLy { get; set; }
+        public long? IdquanLy { get; set; }
         public DateTime? ThoiGianBd { get; set; }
         public DateTime? ThoiGianKt { get; set; }
         public int? Loai { get; set; }

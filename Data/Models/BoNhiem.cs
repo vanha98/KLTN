@@ -6,8 +6,8 @@ namespace Data.Models
     public partial class BoNhiem
     {
         public int Id { get; set; }
-        public int? IdgiangVien { get; set; }
-        public int? IdquanLy { get; set; }
+        public long? IdgiangVien { get; set; }
+        public long? IdquanLy { get; set; }
         public int? IdhoiDong { get; set; }
         public int? VaiTro { get; set; }
         public DateTime? NgayBoNhiem { get; set; }
