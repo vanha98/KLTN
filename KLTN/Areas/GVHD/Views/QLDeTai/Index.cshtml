@@ -29,10 +29,6 @@
             });
         });
 
-        $("#btnCreate").on("click", function ()
-        {
-            @check = 1;
-        })
     </script>
 }
 <div class="content-header">
@@ -99,5 +95,5 @@
 </div>
 @ViewBag.Enum
 
-@await Html.PartialAsync("_CreateEditPopup",check)
+@await Html.PartialAsync("_CreateEditPopup")
 

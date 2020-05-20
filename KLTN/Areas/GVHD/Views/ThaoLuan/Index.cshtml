@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row h-100">
+        <div class="col-md-4">
+            @await Component.InvokeAsync("ListBaiPost")
+        </div>
+        <div class="col-md-8">
+            @await Component.InvokeAsync("NoiDungThaoLuan")
+        </div>
+    </div>
+</div>
+
+
