@@ -6,12 +6,14 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-4 p-3 bg-white">
+        <div class="col-md-4 p-3 card">
+            @await Component.InvokeAsync("BtnTaoBaiDang")
+            <br />
             @await Component.InvokeAsync("TimKiem")
             <br />
             @await Component.InvokeAsync("ListBaiPost")
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 card">
             @await Component.InvokeAsync("NoiDungThaoLuan")
         </div>
     </div>
