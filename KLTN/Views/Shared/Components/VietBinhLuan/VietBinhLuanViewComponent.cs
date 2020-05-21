@@ -8,9 +8,10 @@ namespace KLTN.Views.Shared.Components.VietBinhLuan
 {
     public class VietBinhLuanViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(int ViewX)
         {
-            return View();
+            var view = new Models.Views { ViewType = ViewX };
+            return View(view);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿
+﻿@model IEnumerable<Data.Models.SinhVien>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Index giảng viên</h1>
-@await Component.InvokeAsync("ListBinhLuan")
+@await Component.InvokeAsync("ToggleThongTinSinhVien", Model)

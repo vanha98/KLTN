@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Data.Models.SinhVien>
+<section class="content w-100">
+
+    <!-- Default box -->
+    <div class="card collapsed-card">
+        <div class="card-header bg-navy">
+            <h3 class="card-title">Thông tin nhóm thực hiện</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            MSSV
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            Họ tên
+                        </th>
+                        <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            SDT
+                        </th>
+                        <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                            Email
+                        </th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="row_@item.Mssv">
+                            <td>@item.Mssv</td>
+                            <td>@item.Ho @item.Ten</td>
+                            <td>@item.Sdt</td>
+                            <td>@item.Email</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.card -->
+
+</section>

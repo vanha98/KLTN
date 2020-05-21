@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace KLTN.Views.Shared.NoiDungThaoLuan
+namespace KLTN.Views.Shared.Components.ToggleListCauHoi
 {
-    public class NoiDungThaoLuanViewComponent:ViewComponent
+    public class ToggleListCauHoiViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {
