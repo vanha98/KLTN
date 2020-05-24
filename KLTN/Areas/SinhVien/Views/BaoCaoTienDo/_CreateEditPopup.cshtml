@@ -1,14 +1,18 @@
-﻿@model Data.Models.DeTaiNghienCuu
+﻿
+
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Tạo mới</h4>
+                <h4 class="modal-title titleHeader"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @await Html.PartialAsync("_CreateEditPopup",Model, new ViewDataDictionary(ViewData) { { "IsNew", true} })
+            <div class="modal-body">
+                @await Component.InvokeAsync("Mota")
+            </div>
+            @await Component.InvokeAsync("LuuHuyFooter")
         </div>
         <!-- /.modal-content -->
     </div>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace KLTN.Views.Shared.Components.MoTa
 {

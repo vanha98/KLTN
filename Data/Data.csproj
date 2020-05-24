@@ -11,6 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200524043040_updateType.cs" />
+    <Compile Remove="Migrations\20200524043040_updateType.Designer.cs" />
+    <Compile Remove="Migrations\20200524061544_updateProperty.cs" />
+    <Compile Remove="Migrations\20200524061544_updateProperty.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Models\AppRole.cs" />
+    <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\BaiPost.cs" />
     <Compile Include="Models\BaoCaoTienDo.cs" />
     <Compile Include="Models\BoNhiem.cs" />
@@ -32,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
