@@ -118,7 +118,7 @@ namespace Data.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("NoiDung")
-                        .HasColumnType("date");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
