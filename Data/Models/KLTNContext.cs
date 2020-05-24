@@ -1,10 +1,12 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Data.Models
 {
-    public partial class KLTNContext : DbContext
+    public partial class KLTNContext : IdentityDbContext<AppUser,AppRole,Guid>
     {
         public KLTNContext()
         {
@@ -38,12 +40,19 @@ namespace Data.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=ERP-HAIDT\\SQLEXPRESS;Database=KLTN;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-U7OPBBM;Database=KLTN;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x=> new {x.UserId,x.RoleId });
+            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("AppUserLogins").HasKey(x=>x.UserId);
+
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("AppRoleClaims");
+            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("AppUserTokens").HasKey(x=>x.UserId);
+
             modelBuilder.Entity<BaiPost>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -212,6 +221,7 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
+
             });
 
             modelBuilder.Entity<HoiDong>(entity =>
@@ -331,8 +341,8 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
-            });
 
+            });
             modelBuilder.Entity<SinhVien>(entity =>
             {
                 entity.HasKey(e => e.Mssv)
@@ -356,8 +366,9 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
-            });
+                
 
+            });
             modelBuilder.Entity<XetDuyetVaDanhGia>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");

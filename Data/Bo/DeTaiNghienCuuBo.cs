@@ -15,5 +15,11 @@ namespace Data.Bo
         {
         }
 
+        public long KhoiTaoMa(string maht)
+        {
+            string nam = DateTime.Now.Year.ToString();
+            string kq = nam + maht;
+            return long.Parse(kq);
+        }
     }
 }

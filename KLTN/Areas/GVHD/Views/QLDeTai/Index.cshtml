@@ -1,34 +1,70 @@
-﻿@model IEnumerable<Data.Models.DeTaiNghienCuu>
+﻿@using KLTN.Areas.GVHD.Models
+@model IEnumerable<Data.Models.DeTaiNghienCuu>
 @{
     ViewData["Title"] = "Index";
-    int check = 0;
 }
 @section Script{
-    <script>
-        $(document).ready(function ()
-        {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                pageLength: 10,
-                language: {
-                    "lengthMenu": "<button class='btn btn-success btn-sm' id='btnCreate' data-id='Create' data-toggle='modal' data-target='#modal-lg'>Tạo đề tài</button>",
-                    "zeroRecords": "Không có dữ liệu",
-                    "info": "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                    "search": "",
-                    "searchPlaceholder": "Tìm kiếm",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                },
-            });
-        });
 
+    <script>
+        (function () {
+            $(function () {
+                //init datatable
+                var btnCreate = "<button class='btn btn-success btn-sm' id='btnCreate' data-toggle='modal' data-target='#modal-lg'>Tạo đề tài</button>";
+                var btnSave = "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>";
+                var table = new CustomTable("example1", btnCreate, btnSave);
+                table.Init();
+
+                //Create new object
+                $("#btnCreate").on('click', function () {
+                    $(".titleHeader").text("Tạo mới");
+                    $("#btnLuu").on('click', function () {
+                        var TenDeTai = $("#InputTenDeTai").val();
+                        var MoTa = $("#InputMoTa").val();
+                        var files = $("#Files").get(0).files;
+                        var data = new FormData();
+                        for (var i = 0; i < files.length; i++) {
+                            data.append('Files', files[i]);
+                        }
+                        data.append('TenDeTai', TenDeTai);
+                        data.append('MoTa', MoTa);
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GVHD/QLDeTai/Create',
+                            processData: false,
+                            contentType: false,
+                            data: data,
+                            //async: false,
+                            success: function (response) {
+                                if (response.status == 1) {
+                                    $("#example1").ajax.reload();
+                                }
+                            }
+                        });
+                        //var TenDeTai = $("#InputTenDeTai").val();
+                        //var MoTa = $("#InputMoTa").val();
+                        //var FileMoTa = document.getElementById("files").files;
+                        ////CreateNew(TenDeTai, MoTa, FileMoTa);
+                    });
+                });
+            });
+        })();
+        function CreateNew(TenDeTai,MoTa,FileMoTa) {
+            var formData = new FormData();
+            for (var i = 0; i != FileMoTa.length; i++) {
+                formData.append("files",FileMoTa[i]);
+            }
+            $.ajax({
+            url: '/GVHD/QLDeTai/CreateNew',
+            type: 'POST',
+                //datatype: 'json',
+                data: { TenDeTai: TenDeTai, MoTa: MoTa, formData: formData },
+            processData: false,
+            contentType:false,
+            success: function (response) {
+                alert("OK");
+            }
+            });
+        }   
     </script>
 }
 <div class="content-header">
@@ -70,7 +106,7 @@
 
                             </th>
                         </tr>
-                        
+
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
@@ -81,7 +117,9 @@
                                 <td>@item.MoTa</td>
                                 <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
                                 <td>@item.Idnhom</td>
-                                <td>@item.TepDinhKem</td>
+                                <td>
+                                    @item.TenTep
+                                </td>
                                 <td>@item.Status</td>
                                 <td></td>
                             </tr>
@@ -96,5 +134,5 @@
 </div>
 @ViewBag.Enum
 
-@await Html.PartialAsync("_CreateEditPopup")
+@await Html.PartialAsync("_CreateEditPopup", new DeTaiNghienCuuViewModel { })
 

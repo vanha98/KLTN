@@ -4,28 +4,14 @@
 }
     @section Script{
         <script>
-        $(document).ready(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                pageLength: 10,
-                language: {
-                    "lengthMenu": "",
-                    "zeroRecords": "Không có dữ liệu",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                    "search": "",
-                    "searchPlaceholder": "Tìm kiếm",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                },
+        (function () {
+            $(function () {
+                //init datatable
+                var table = new CustomTable("example1", '', '');
+                table.Init();
+                //
             });
-        });
+        })();
 
         </script>
     }

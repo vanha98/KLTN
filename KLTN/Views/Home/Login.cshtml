@@ -1,4 +1,4 @@
-﻿
+﻿@model LoginRequest
 @{
     Layout = null;
 }
@@ -36,9 +36,10 @@
                 <!-- /.login-logo -->
                 <div class="card">
                     <div class="card-body login-card-body">
-                        <form action="../../index3.html" method="post">
+                        <form method="post" asp-controller="Home" asp-action="Login" asp-route-returnurl = "@Model.ReturnUrl">
+                            <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
                             <div class="input-group mb-3">
-                                <input type="email" class="form-control" placeholder="Tài khoản">
+                                <input type="text" class="form-control" placeholder="Tài khoản" asp-for="Username">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-user"></span>
@@ -46,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="password" class="form-control" placeholder="Mật khẩu">
+                                <input type="password" class="form-control" placeholder="Mật khẩu" asp-for="Password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-lock"></span>
@@ -56,7 +57,7 @@
                             <div class="row">
                                 <div class="col-7">
                                     <div class="icheck-primary">
-                                        <input type="checkbox" id="remember">
+                                        <input type="checkbox" id="remember" asp-for="RememberMe">
                                         <label for="remember">
                                             Ghi nhớ
                                         </label>
@@ -64,7 +65,7 @@
                                 </div>
                                 <!-- /.col -->
                                 <div class="col-5">
-                                    <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                                    <button type="submit" class="btn btn-primary btn-block" value="Login">Đăng nhập</button>
                                 </div>
                                 <!-- /.col -->
                             </div>

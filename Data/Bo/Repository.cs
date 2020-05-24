@@ -18,10 +18,18 @@ namespace Data.Bo
         {
             _context = context;
         }
-        public async Task Add(T entity)
+        public async Task<bool> Add(T entity)
         {
-            _context.Set<T>().Add(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<T>().Add(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task Delete(T entity)

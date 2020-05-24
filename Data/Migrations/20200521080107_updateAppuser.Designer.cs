@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200521080107_updateAppuser")]
+    partial class updateAppuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +119,7 @@ namespace Data.Migrations
                     b.Property<DateTime?>("NgayPost")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("NoiDung")
+                    b.Property<DateTime?>("NoiDung")
                         .HasColumnType("date");
 
                     b.Property<int?>("Status")
@@ -352,11 +354,8 @@ namespace Data.Migrations
                     b.Property<string>("TenDeTai")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenTep")
+                    b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("TepDinhKem")
-                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -372,6 +371,13 @@ namespace Data.Migrations
                     b.Property<long>("Id")
                         .HasColumnName("ID")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnName("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("AppUserId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DiaChi")
                         .HasColumnType("nvarchar(max)");
@@ -405,6 +411,10 @@ namespace Data.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId1")
+                        .IsUnique()
+                        .HasFilter("[AppUserId1] IS NOT NULL");
 
                     b.ToTable("GiangVien");
                 });
@@ -571,6 +581,13 @@ namespace Data.Migrations
                         .HasColumnName("ID")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("AppUserId")
+                        .HasColumnName("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("AppUserId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("DiaChi")
                         .HasColumnType("nvarchar(max)");
 
@@ -604,6 +621,10 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppUserId1")
+                        .IsUnique()
+                        .HasFilter("[AppUserId1] IS NOT NULL");
+
                     b.ToTable("QuanLy");
                 });
 
@@ -612,6 +633,13 @@ namespace Data.Migrations
                     b.Property<long>("Mssv")
                         .HasColumnName("MSSV")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnName("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("AppUserId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DiaChi")
                         .HasColumnType("nvarchar(max)");
@@ -646,6 +674,10 @@ namespace Data.Migrations
 
                     b.HasKey("Mssv")
                         .HasName("PK__SinhVien__6CB3B7F96B8F18DF");
+
+                    b.HasIndex("AppUserId1")
+                        .IsUnique()
+                        .HasFilter("[AppUserId1] IS NOT NULL");
 
                     b.ToTable("SinhVien");
                 });
@@ -861,6 +893,13 @@ namespace Data.Migrations
                         .HasConstraintName("FK__DeTaiNghi__IDNho__4F7CD00D");
                 });
 
+            modelBuilder.Entity("Data.Models.GiangVien", b =>
+                {
+                    b.HasOne("Data.Models.AppUser", "AppUser")
+                        .WithOne("GiangVien")
+                        .HasForeignKey("Data.Models.GiangVien", "AppUserId1");
+                });
+
             modelBuilder.Entity("Data.Models.KenhThaoLuan", b =>
                 {
                     b.HasOne("Data.Models.GiangVien", "IdgiangVienNavigation")
@@ -903,6 +942,20 @@ namespace Data.Migrations
                         .HasForeignKey("IdsinhVien")
                         .HasConstraintName("FK__Nhom_Sinh__IDSin__403A8C7D")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Data.Models.QuanLy", b =>
+                {
+                    b.HasOne("Data.Models.AppUser", "AppUser")
+                        .WithOne("QuanLy")
+                        .HasForeignKey("Data.Models.QuanLy", "AppUserId1");
+                });
+
+            modelBuilder.Entity("Data.Models.SinhVien", b =>
+                {
+                    b.HasOne("Data.Models.AppUser", "AppUser")
+                        .WithOne("SinhVien")
+                        .HasForeignKey("Data.Models.SinhVien", "AppUserId1");
                 });
 
             modelBuilder.Entity("Data.Models.XetDuyetVaDanhGia", b =>

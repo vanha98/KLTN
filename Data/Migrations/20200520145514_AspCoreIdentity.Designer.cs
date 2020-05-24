@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200520145514_AspCoreIdentity")]
+    partial class AspCoreIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,6 +62,9 @@ namespace Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Ho")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -82,6 +87,9 @@ namespace Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ten")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -117,7 +125,7 @@ namespace Data.Migrations
                     b.Property<DateTime?>("NgayPost")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("NoiDung")
+                    b.Property<DateTime?>("NoiDung")
                         .HasColumnType("date");
 
                     b.Property<int?>("Status")
@@ -352,11 +360,8 @@ namespace Data.Migrations
                     b.Property<string>("TenDeTai")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TenTep")
+                    b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("TepDinhKem")
-                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 

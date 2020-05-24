@@ -1,19 +1,34 @@
-﻿
-
+﻿@using KLTN.Areas.GVHD.Models
+@model DeTaiNghienCuuViewModel
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Tạo mới</h4>
+                <h4 class="modal-title titleHeader"></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                @await Component.InvokeAsync("TenDeTai")
-                @await Component.InvokeAsync("Mota")
-            </div>
-            @await Component.InvokeAsync("LuuHuyFooter")
+            <form enctype="multipart/form-data" id="mainForm" class="mt-3">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Tên đề tài</label>
+                        <input type="text" id="InputTenDeTai" name="TenDeTai" class="form-control" placeholder="Nhập tên đề tài">
+                    </div>
+
+                    <div class="form-group">
+                        <!-- <label for="customFile">Custom File</label> -->
+                        <label>Mô tả</label>
+                        <textarea class="form-control" id="InputMoTa" name="MoTa" placeholder="Nhập mô tả"></textarea>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="Files" name="Files">
+                            <label class="custom-file-label" for="customFile">Chọn tệp</label>
+                        </div>
+                    </div>
+
+                </div>
+                @await Component.InvokeAsync("LuuHuyFooter")
+            </form>
         </div>
         <!-- /.modal-content -->
     </div>

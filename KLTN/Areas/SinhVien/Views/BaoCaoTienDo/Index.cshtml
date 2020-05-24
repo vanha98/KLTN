@@ -1,29 +1,26 @@
 ﻿
 @section Script{
     <script>
-        $(document).ready(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                pageLength: 10,
-                language: {
-                    "lengthMenu": "<button type='button' class='btn btn-success btn-sm' id='btnDeXuat'>Đề xuất đề tài</button>",
-                    "zeroRecords": "Không có dữ liệu",
-                    "info": "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                    "search": "",
-                    "searchPlaceholder": "Tìm kiếm",
-                    "paginate": {
-                        "first": "<<",
-                        "last": ">>",
-                        "next": ">",
-                        "previous": "<"
-                    },
-                },
-            });
-        });
+      (function () {
+            $(function () {
+                //init datatable
+                var btnCreate = "<button type='button' class='btn btn-success btn-sm' id='btnCreate' data-toggle='modal' data-target='#modal-lg'>Tạo báo cáo</button>";
+                var btnSave = "";
+                var table = new CustomTable("example1", btnCreate, btnSave);
+                table.Init();
 
+                //
+                $("#btnCreate").on('click', function () {
+                    $(".titleHeader").text("Nội dung báo cáo");
+                    $("#btnLuu").on('click', function () {
+                        var TenDeTai = $("#InputTenDeTai").val();
+                        var MoTa = $("#InputMoTa").val();
+                        var FileMoTa = $("#customFile").val();
+                        CreateNew(TenDeTai, MoTa, FileMoTa);
+                    });
+                });
+            });
+        })();
     </script>
 }
 <div class="content-header">
@@ -33,4 +30,4 @@
     <hr />
 </div>
 
-@await Component.InvokeAsync("NoiDungThaoLuan")
+@await Component.InvokeAsync("ListBaoCao")

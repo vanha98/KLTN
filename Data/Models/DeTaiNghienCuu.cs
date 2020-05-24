@@ -15,7 +15,8 @@ namespace Data.Models
         public long Id { get; set; }
         public string TenDeTai { get; set; }
         public string MoTa { get; set; }
-        public string TepDinhKem { get; set; }
+        public string TenTep { get; set; }
+        public byte[] TepDinhKem { get; set; }
         public long? IdgiangVien { get; set; }
         public int? Idnhom { get; set; }
         public DateTime? NgayLap { get; set; }
