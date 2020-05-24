@@ -54,8 +54,6 @@ namespace Data.Models
 
                 entity.Property(e => e.NgayPost).HasColumnType("datetime");
 
-                entity.Property(e => e.NoiDung).HasColumnType("date");
-
                 entity.Property(e => e.TieuDe).HasMaxLength(150);
 
                 entity.HasOne(d => d.IdctkenhThaoLuanNavigation)

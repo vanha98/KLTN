@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Data.Enum
 {
-    public enum View
+    public enum ViewType
     {
         ThaoLuanGV,
         XetDuyetGV,

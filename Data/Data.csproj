@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\BaiPost.Partial.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="Models\BaiPost.cs" />
     <Compile Include="Models\BaoCaoTienDo.cs" />
     <Compile Include="Models\BoNhiem.cs" />

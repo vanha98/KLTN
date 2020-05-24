@@ -31,6 +31,7 @@ namespace KLTN
             services.AddDbContext<KLTNContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("KLTN")));
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>() ;
             services.AddScoped<ISinhVien, SinhVienBo>();
+            services.AddScoped<IBaiPost, BaiPostBo>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
 
 
