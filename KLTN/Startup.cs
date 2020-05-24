@@ -40,8 +40,7 @@ namespace KLTN
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
 
             services.AddControllersWithViews();
-            services.AddRazorPages();
-            //services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
+            services.AddScoped<ISinhVien, SinhVienBo>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
 
 

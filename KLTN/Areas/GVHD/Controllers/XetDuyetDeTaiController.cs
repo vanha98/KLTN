@@ -4,15 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Data.Models;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
     [Area("GVHD")]
-    public class HomeController : Controller
+    public class XetDuyetDeTaiController : Controller
     {
         private readonly ISinhVien _service;
-        public HomeController(ISinhVien service)
+        public XetDuyetDeTaiController(ISinhVien service)
         {
             _service = service;
         }

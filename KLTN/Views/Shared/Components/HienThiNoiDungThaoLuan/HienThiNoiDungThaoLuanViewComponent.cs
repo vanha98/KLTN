@@ -10,7 +10,8 @@ namespace KLTN.Views.Shared.Components.HienThiNoiDungThaoLuan
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            Models.Views views = new Models.Views();
+            return View(views);
         }
     }
 }
