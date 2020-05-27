@@ -13,7 +13,7 @@
             @await Component.InvokeAsync("TimKiem")
             <br />
             <label class="text-center">Đề tài xét duyệt</label>
-            @await Component.InvokeAsync("ListBaiPost", new { ViewX = (int)Data.Enum.View.XetDuyetGV })
+            @await Component.InvokeAsync("ListBaiPost", new { ViewX = (int)Data.Enum.ViewType.XetDuyetGV })
         </div>
         <div class="col-md-8 card">
             <div class="container">
@@ -32,7 +32,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.View.XetDuyetGV })
+                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.XetDuyetGV })
                     </div>
 
                 </div>

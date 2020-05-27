@@ -41,6 +41,7 @@ namespace KLTN
 
             services.AddControllersWithViews();
             services.AddScoped<ISinhVien, SinhVienBo>();
+            services.AddScoped<IBaiPost, BaiPostBo>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
 
 

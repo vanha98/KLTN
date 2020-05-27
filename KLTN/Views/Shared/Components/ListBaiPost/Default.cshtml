@@ -1,11 +1,11 @@
-﻿@model Views
+﻿@model TabListViewModel
 
 <div class="row">
     <div class="col">
         <div class="card card-navy card-tabs">
             <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                    @if (Model.ViewType == (int)Data.Enum.View.ThaoLuanGV)
+                    @if (Model.ViewType == (int)Data.Enum.ViewType.ThaoLuanGV)
                     {
                         <li class="nav-item">
                             <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
@@ -18,7 +18,7 @@
                             </a>
                         </li>
                     }
-                    else if(Model.ViewType == (int)Data.Enum.View.XetDuyetGV)
+                    else if(Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
                     {
                         <li class="nav-item">
                             <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
@@ -35,31 +35,35 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                    @if (Model.ViewType == (int)Data.Enum.View.ThaoLuanGV)
+                    @if (Model.ViewType == (int)Data.Enum.ViewType.ThaoLuanGV)
                     {
                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
 
-                            <table class="table table-borderless table-hover dataTable table-sm" role="grid">
+                            <table id="tblCongKhai" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @foreach (var item in Model.tabCongKhai)
+                                {
 
-                                <tr>
-                                    <td><label class="text-truncate" style="max-width: 190px">Tiêu đề bài post 1 fasdfafasdfsd</label></td>
-                                    <td>02/02/2020</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="text-truncate" style="max-width: 190px">Tiêu đề bài post 2 thật là dài</label></td>
-                                    <td>01/02/2020</td>
-                                </tr>
-                                <tr>
-                                    <td><label class="text-truncate" style="max-width: 190px">Tiêu đề bài post 3</label></td>
-                                    <td>30/01/2020</td>
-                                </tr>
+                                    <tr>
+                                        <td><label class="text-truncate" style="max-width: 190px">@item.TieuDe</label></td>
+                                        <td>@item.NgayPost.Value.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                }
                             </table>
                         </div>
                         <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                            Tiêu đề bài post 2
+                            <table id="tblRiengTu" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @foreach (var item in Model.tabRiengTu)
+                                {
+
+                                    <tr>
+                                        <td><label class="text-truncate" style="max-width: 190px">@item.TieuDe</label></td>
+                                        <td>@item.NgayPost.Value.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                }
+                            </table>
                         </div>
                     }
-                    else if(Model.ViewType == (int)Data.Enum.View.XetDuyetGV)
+                    else if(Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
                     {
                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
 

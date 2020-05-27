@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200524062638_updatedata")]
-    partial class updatedata
+    [Migration("20200524092049_Update")]
+    partial class Update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,8 +119,8 @@ namespace Data.Migrations
                     b.Property<DateTime?>("NgayPost")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("NoiDung")
-                        .HasColumnType("date");
+                    b.Property<string>("NoiDung")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -353,6 +353,12 @@ namespace Data.Migrations
 
                     b.Property<string>("TenDeTai")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenTep")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("TepDinhKem")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 

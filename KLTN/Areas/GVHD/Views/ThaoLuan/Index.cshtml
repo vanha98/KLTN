@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<Data.Models.BaiPost>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
@@ -11,7 +11,7 @@
             <br />
             @await Component.InvokeAsync("TimKiem")
             <br />
-            @await Component.InvokeAsync("ListBaiPost", new { ViewX = (int)Data.Enum.View.ThaoLuanGV})
+            @await Component.InvokeAsync("ListBaiPost", new KLTN.Models.TabListViewModel() { ViewType = (int)Data.Enum.ViewType.ThaoLuanGV, ListBaiPostThaoLuan = Model})
         </div>
         <div class="col-md-8 card">
             <div class="container">
@@ -27,7 +27,7 @@
 
                 <div class="row">
                     <div class="col">
-                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.View.ThaoLuanGV})
+                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV})
                     </div>
 
                 </div>
@@ -42,5 +42,76 @@
         </div>
     </div>
 </div>
-
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function ()
+    {
+        $("#btnSearch").click(function ()
+        {
+            var SearchString = $("#txtSearch").val();
+            
+            var CongKhaiTab = $("#custom-tabs-one-home-tab").hasClass("active");
+            if (CongKhaiTab)
+            {
+                var SetBaiPostCongKhai = $("#tblCongKhai");
+                SetBaiPostCongKhai.html("");
+            }
+            else
+            {
+                var SetBaiPostRiengTu = $("#tblRiengTu");
+                SetBaiPostRiengTu.html("");
+            }
+            
+            $.ajax({
+                url: "/GVHD/ThaoLuan/SearchBaiPost",
+                type: "post",
+                data: {
+                    SearchString: SearchString,
+                    CongKhaiTab: CongKhaiTab
+                },
+                dataType: "json",
+                success: function (response)
+                {
+                    if (response.status)
+                    {
+                        if (CongKhaiTab)
+                        {
+                            $.each(response.data, function (i, item)
+                            {
+                                var Data = '<tr>' +
+                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
+                                    '<td>' + item.ngayPost + '</td>' +
+                                    '</tr>';
+                                SetBaiPostCongKhai.append(Data);
+                            });
+                        }
+                        else
+                        {
+                            $.each(response.data, function (i, item)
+                            {
+                                var Data = '<tr>' +
+                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
+                                    '<td>' + item.ngayPost + '</td>' +
+                                    '</tr>';
+                                SetBaiPostRiengTu.append(Data);
+                            });
+                        }
+                    }
+                    else
+                    {
+                        if (CongKhaiTab)
+                        {
+                            SetBaiPostCongKhai.append('<tr><td colspan="2">Không tìm thấy tiêu đề</td></tr>');
+                        }
+                        else
+                        {
+                            SetBaiPostRiengTu.append('<tr><td colspan="2">Không tìm thấy tiêu đề</td></tr>');
+                        }
+                        
+                    }
+                }
+            })
+        });
+    });
+</script>
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class AspCoreIdentity : Migration
+    public partial class Update : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -196,9 +196,7 @@ namespace Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    Ho = table.Column<string>(nullable: true),
-                    Ten = table.Column<string>(nullable: true)
+                    AccessFailedCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -319,7 +317,8 @@ namespace Data.Migrations
                     ID = table.Column<long>(nullable: false),
                     TenDeTai = table.Column<string>(nullable: true),
                     MoTa = table.Column<string>(nullable: true),
-                    TepDinhKem = table.Column<string>(nullable: true),
+                    TenTep = table.Column<string>(nullable: true),
+                    TepDinhKem = table.Column<byte[]>(nullable: true),
                     IDGiangVien = table.Column<long>(nullable: true),
                     IDNhom = table.Column<int>(nullable: true),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -467,7 +466,7 @@ namespace Data.Migrations
                     IDCTKenhThaoLuan = table.Column<int>(nullable: true),
                     NgayPost = table.Column<DateTime>(type: "datetime", nullable: true),
                     TieuDe = table.Column<string>(maxLength: 150, nullable: true),
-                    NoiDung = table.Column<DateTime>(type: "date", nullable: true),
+                    NoiDung = table.Column<string>(nullable: true),
                     Loai = table.Column<int>(nullable: true),
                     Status = table.Column<int>(nullable: true)
                 },
