@@ -8,6 +8,7 @@ namespace Data.Interfaces
 {
     public interface IDeTaiNghienCuu : IRepository<DeTaiNghienCuu>
     {
-        long KhoiTaoMa(string MaHienTai);
+        long KhoiTaoMa(DeTaiNghienCuu entity);
+
     }
 }

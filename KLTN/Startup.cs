@@ -86,7 +86,6 @@ namespace KLTN
                     name: "default",
                     pattern: "{controller=Home}/{action=Login}/{id?}");
 
-                endpoints.MapRazorPages();
             });
             
             

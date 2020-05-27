@@ -25,38 +25,89 @@ namespace KLTN.Areas.GVHD.Controllers
             return View(await _service.GetAll());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(DeTaiNghienCuuViewModel vmodel)
+        [NonAction]
+        public async Task<bool> UpLoadFile(IFormFile file, DeTaiNghienCuu model)
         {
+            if (file == null) return true;
+            string[] permittedExtensions = { ".txt", ".pdf",".doc",".docx",".xlsx" };
+
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                return false;
+            }
             using (var memoryStream = new MemoryStream())
             {
-                await vmodel.Files.CopyToAsync(memoryStream);
+                await file.CopyToAsync(memoryStream);
 
                 // Upload the file if less than 2 MB
                 if (memoryStream.Length < 2097152)
                 {
-                    var model = new DeTaiNghienCuu()
-                    {
-                        Id = 2020001,
-                        TenDeTai = vmodel.TenDeTai,
-                        MoTa = vmodel.MoTa,
-                        TenTep = vmodel.Files.FileName,
-                        NgayLap = DateTime.Now,
-                        TepDinhKem = memoryStream.ToArray(),
-                        Status = 1
-                    };
-
-                    if(await _service.Add(model) == true)
-                        return Json(new {status = 1 });
-                    else
-                        return Json(new { status = 0});
+                    model.TenTep = file.FileName;
+                    model.TepDinhKem = memoryStream.ToArray();
+                    return true;
+                }
+                else return false;
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> Create(DeTaiNghienCuuViewModel vmodel)
+        {
+            if (ModelState.IsValid)
+            {
+                IEnumerable<DeTaiNghienCuu> list = await _service.GetAll();
+                if (list.Count() != 0)
+                {
+                    DeTaiNghienCuu LastE = list.OrderBy(x=>x.Id).LastOrDefault();
+                    vmodel.Id = _service.KhoiTaoMa(LastE);
                 }
                 else
+                    vmodel.Id = long.Parse(DateTime.Now.Year.ToString() + "001");
+                var model = new DeTaiNghienCuu()
                 {
-                    ModelState.AddModelError("File", "The file is too large.");
-                    return Json(new { status = 0 });
+                    Id = vmodel.Id,
+                    TenDeTai = vmodel.TenDeTai,
+                    MoTa = vmodel.MoTa,
+                    NgayLap = DateTime.Now,
+                    TinhTrangDangKy = (int)StatusDangKyDeTai.Con,
+                    TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui,
+                    Loai = LoaiDeTai.CoSan
+                };
+                if (await UpLoadFile(vmodel.Files, model) == false)
+                {
+                    return Json(new { status = 0, mess = "Tệp sai định dạng hoặc kích thước quá lớn" });
+                }
+                try
+                {
+                    await _service.Add(model);
+                    return Json(new { status = 1, data = new { NgayLap = DateTime.Now.ToString("dd/MM/yyyy"), Id = vmodel.Id, TenTep = model.TenTep }, mess = "Thêm thành công" });
+                }
+                catch
+                {
+                    return Json(new { status = 0, mess = "Thêm thất bại" });
                 }
             }
+            else
+            {
+                return this.View();
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit (long? id)
+        {
+            DeTaiNghienCuuViewModel model = new DeTaiNghienCuuViewModel();
+            if (id.HasValue)
+            {
+                var entity = await _service.GetById(id.Value);
+                model.Id = entity.Id;
+                model.TenDeTai = entity.TenDeTai;
+                model.MoTa = entity.MoTa;
+                model.TenTep = entity.TenTep;
+            }
+            return PartialView("_CreateEditPopup",model);
         }
     }
 }

@@ -18,18 +18,10 @@ namespace Data.Bo
         {
             _context = context;
         }
-        public async Task<bool> Add(T entity)
+        public async Task Add(T entity)
         {
-            try
-            {
-                _context.Set<T>().Add(entity);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _context.Set<T>().Add(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task Delete(T entity)
@@ -48,7 +40,7 @@ namespace Data.Bo
             return await _context.Set<T>().Where(expression).ToListAsync();
         }
 
-        public async Task<T> GetBy(int id)
+        public async Task<T> GetById(long id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

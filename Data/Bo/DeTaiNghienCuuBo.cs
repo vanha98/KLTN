@@ -15,11 +15,27 @@ namespace Data.Bo
         {
         }
 
-        public long KhoiTaoMa(string maht)
+        public long KhoiTaoMa(DeTaiNghienCuu deTaiNghienCuu)
         {
-            string nam = DateTime.Now.Year.ToString();
-            string kq = nam + maht;
-            return long.Parse(kq);
+            long id = deTaiNghienCuu.Id;
+            string nam = id.ToString().Substring(0, 4);// xac dinh 4 ki tu dau
+            int stt = int.Parse(id.ToString().Substring(4));
+            string namht = DateTime.Now.Year.ToString();
+            if (nam == namht && stt != 999)
+                return id + 1;
+            else
+            {
+                if (stt == 999)
+                    return long.Parse(namht + "001");
+                stt++;
+                if (stt >= 10)
+                    return long.Parse(namht + "0" + stt.ToString());
+                else if (stt >= 100)
+                    return long.Parse(namht + stt.ToString());
+                else
+                    return long.Parse(namht + "00" + stt.ToString());
+            }
+            
         }
     }
 }
