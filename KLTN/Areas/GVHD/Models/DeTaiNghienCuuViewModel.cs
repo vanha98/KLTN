@@ -16,8 +16,6 @@ namespace KLTN.Areas.GVHD.Models
         public string NgayLap { get; set; }
         public string TenTep { get; set; }
 
-        //[Required(ErrorMessage ="Chưa chọn tệp")]
-        //[AllowedExtensions(new string[] { ".doc", ".docx",".txt", ".xlsx" },ErrorMessage ="Chọn tệp")]
         public IFormFile Files { get; set; }
     }
 }

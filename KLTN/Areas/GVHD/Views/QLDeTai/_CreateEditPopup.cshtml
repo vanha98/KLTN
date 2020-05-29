@@ -1,29 +1,30 @@
 ﻿@using KLTN.Areas.GVHD.Models
 @model DeTaiNghienCuuViewModel
 
-            <form method="post" enctype="multipart/form-data" onsubmit="return false;">
-                
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Tên đề tài</label>
-                        <input type="text" asp-for="TenDeTai" id="InputTenDeTai" name="TenDeTai" class="form-control" placeholder="Nhập tên đề tài">
-                        <span asp-validation-for="TenDeTai" class="text-danger"></span>
-                    </div>
+    <form method="post" enctype="multipart/form-data" onsubmit="return false;">
+        <input class="form-control" id="InputId" type="number" asp-for="Id" hidden />
+        
+        <div class="form-group">
+            <label for="exampleInputEmail1">Tên đề tài</label>
+            <input type="text" asp-for="TenDeTai" id="InputTenDeTai" name="TenDeTai" class="form-control" placeholder="Nhập tên đề tài">
+            <span asp-validation-for="TenDeTai" class="text-danger lblTenDeTai"></span>
+        </div>
 
-                    <div class="form-group">
-                        <!-- <label for="customFile">Custom File</label> -->
-                        <label>Mô tả</label>
-                        <textarea class="form-control" id="InputMoTa" name="MoTa" placeholder="Nhập mô tả"></textarea>
-                        <div class="custom-file">
-                            <input asp-for="Files" type="file" class="custom-file-input" id="Files" name="Files">
-                            @if (Model.TenTep != null)
-                            {
-                                <label class="custom-file-label" for="customFile">@Model.TenTep</label>
-                            }
-                            else
-                            {<label class="custom-file-label" for="customFile">Chọn tệp</label>}
-                            <span asp-validation-for="Files" class="text-danger"></span>
-                        </div>
-                    </div>
-                @await Component.InvokeAsync("LuuHuyFooter")
-            </form>
+        <div class="form-group">
+            <!-- <label for="customFile">Custom File</label> -->
+            <label>Mô tả</label>
+            <textarea class="form-control" asp-for="MoTa" id="InputMoTa" name="MoTa" placeholder="Nhập mô tả"></textarea>
+            <div class="custom-file">
+                <input asp-for="Files" type="file"  id="Files" class="custom-file-input" name="Files">
+                @if (Model != null && Model.TenTep != null)
+                {
+                    <label class="custom-file-label" for="customFile">@Model.TenTep</label>
+                }
+                else
+                {<label class="custom-file-label" for="customFile">Chọn tệp</label>}
+                <span asp-validation-for="Files" class="text-danger lblFiles"></span>
+            </div>
+        </div>
+        @await Component.InvokeAsync("LuuHuyFooter")
+    </form>
         
