@@ -5,169 +5,28 @@
     ViewData["Title"] = "Index";
 }
 <style type="text/css">
-    .custom-file-upload {
-  border: 1px solid #ccc;
-  display: inline-block;
-  padding: 6px 12px;
-  cursor: pointer;
+   .changeRowColor{
+       background: #DCFEF6  
+   }
 }
 </style>
 @section Script{
+    <script src="~/Resources/GVHD/DeTaiNghienCuu.js"></script>
     <script>
-        (function () {
-            $(function () {
-
-                //bsCustomFileInput.init();
-                //init datatable
-                var btnCreate = "<button class='btn btn-success btn-sm btnCreate' onclick='CreateAction()'>Tạo đề tài</button>";
-                var btnSave = "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>";
-                var table = new CustomTable("example1", btnCreate, btnSave);
-                table.Init();
-                //
-                if (localStorage.getItem("Message"))
-                {
-                    toastr.success(localStorage.getItem("Message"));
-                    localStorage.clear();
-                }
-
-                //Refresh Value
-                function Refresh() {
-                    $("#InputTenDeTai").val('');
-                    $("#InputMoTa").val('');
-                    $("#Files").val("");
-                    $(".custom-file-label").text("Chọn tệp");
-                    $('.lblFiles').text('');
-                    $('.lblTenDeTai').text('');
-                };
-
-                //Create Data
-                function Create(data, TenDeTai, MoTa, CheckType) {
-                    var url = '/GVHD/QLDeTai/Edit';
-                    if (CheckType == "" || CheckType == null) {
-                        url = '/GVHD/QLDeTai/Create';   
-                    }
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        processData: false,
-                        contentType: false,
-                        data: data,
-                        //async: false,
-                        success: function (response) {
-                            if (response.status == true && response.create == true) {
-                                var table = $("#example1").DataTable();
-                                var temp = '<a href="/GVHD/QLDeTai/DownLoadFile/' + response.data.id + '">' + response.data.tenTep + '</a>';
-                                if (response.data.tenTep == null)
-                                    temp = '<a></a>';
-                                table.row.add(
-                                    ['<input class="form-check-inline" type="checkbox" />',
-                                        response.data.id,
-                                        TenDeTai,
-                                        MoTa,
-                                        response.data.ngayLap,
-                                        '',
-                                        temp,
-                                        "Chưa gửi",
-                                        '<button class="btn btn-sm btn-default" id="btnXemNhom" data-id=""><i class="fas fa-eye"></i></button><button class="btn btn-sm btn-default" id="btnSua" data-id=' + response.data.id + ' onclick="EditAction(' + response.data.id + ')"><i class="far fa-edit"></i></button><button class="btn btn-sm btn-default" id="btnXoa" data-id="' + response.data.id + '"><i class="far fa-trash-alt"></i></button>']
-                                ).node().id = 'row_' + response.data.id;
-                                table.draw();
-                                toastr.success(response.mess);
-                                $("#modal-lg").modal('hide');
-                                Refresh();
-                            }
-                            else if (response.status == true) {
-                                localStorage.setItem("Message",response.mess)
-                                window.location.reload();
-                            }
-                            else {
-                                $('.lblFiles').text(response.mess);
-                                //toastr.error(response.mess);
-                            }
-                        }
-                    });
-                };
-                //Select Row
-                $("#btnGui").on('click', function () {
-                    var data = $("#example1 input:checkbox:checked").map(function(){
-                      return $(this).data('id');
-                    }).get(); // <----
-                    console.log(data);
-                    $.ajax({
-                        type: 'POST',
-                        url: '/GVHD/QLDeTai/GuiDeTai',
-                        data: { data:data },
-                        success: function (response) {
-                            if (response.status == true)
-                            {
-                                localStorage.setItem("Message",response.mess)
-                                window.location.reload();
-                            }
-                            else
-                                toastr.error(response.mess);
-                        }
-                    });
-                })
-                
-                
-                // Add the following code if you want the name of the file appear on select
-                $(document).delegate('.custom-file-input','change', function () {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                });
-
-                //Open Model Create new object
-                $(".btnCreate").on('click', function () {
-                    $(".titleHeader").text("Tạo mới");
-                    Refresh();
-                    
-                });
-
-                //Open Model Edit object
-                $(document).delegate('#btnSua', 'click', function () {
-                    $(".titleHeader").text("Chỉnh sửa");
-                    $("#CheckType").val(1);
-                });
-
-                //Save
-                $(document).delegate('#btnLuu', 'click', function () {
-                    var CheckType = $("#CheckType").val();
-                    var Id = $("#InputId").val();
-                    var TenDeTai = $("#InputTenDeTai").val();
-                    if (TenDeTai == "") {
-                        $('.lblTenDeTai').text('Tên đề tài không được trống');
-                        return;
-                    } else {$('.lblTenDeTai').text('');}
-                    var MoTa = $("#InputMoTa").val();
-                    var files = $("#Files").get(0).files;
-                    var data = new FormData();
-                    for (var i = 0; i < files.length; i++) {
-                        data.append('Files', files[i]);
-                    }
-                    data.append('Id', Id);
-                    data.append('TenDeTai', TenDeTai);
-                    data.append('MoTa', MoTa);
-                    Create(data, TenDeTai, MoTa, CheckType);
-                });
-
-                //Delete Object
-                $(document).delegate('#btnXoa', 'click', function () {
-                    var id = $(this).data('id');
-                });
-
-            });
-        })();
         // func test
         var EditAction = function (id) {
             url = "/GVHD/QLDeTai/Edit/" + id;
             $(".modal-body").load(url, function () {
+                $("#CheckType").val(1);
                 $("#modal-lg").modal();
                 //$("#modal-lg").html("");
             });
         }
 
-        var CreateAction = function (id) {
+        var CreateAction = function () {
             url = "/GVHD/QLDeTai/Create/";
             $(".modal-body").load(url, function () {
+                $("#CheckType").val("");
                 $("#modal-lg").modal();
                 //$("#modal-lg").html("");
             });
@@ -176,20 +35,20 @@
 }
 <div class="content-header">
     <h1 class="text-center">
-        Danh sách đề tài
+        Danh sách đề tài nghiên cứu khoa học
     </h1>
     <hr />
 </div>
-<div class="card">
+<div class="card" id="refreshTable">
     <div class="card-body">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
-                    <thead>
+                <table id="example1" class="table table-bordered compact table-hover table-sm" role="grid" aria-describedby="example1_info">
+                    <thead >
                         <tr role="row">
                             <th rowspan="1"></th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            <th tabindex="0" aria-controls="example1" rowspan="1">
                                 Mã đề tài
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
@@ -207,7 +66,7 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                 Tệp đính kèm
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            <th tabindex="0" aria-controls="example1" rowspan="1">
                                 Tình trạng
                             </th>
                             <th>
@@ -216,59 +75,7 @@
                         </tr>
 
                     </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                        <tr id="row_@item.Id">
-                            @if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui)
-                            {
-                                <td><input class="form-check-inline " name="SelectRow" type="checkbox" data-id="@item.Id" /></td>
-                            }
-                            else
-                            {
-                                <td><input class="form-check-inline " name="SelectRow" type="checkbox" disabled/></td>
-                            }
-                            <td>@item.Id</td>
-                            <td>@item.TenDeTai</td>
-                            <td>@item.MoTa</td>
-                            <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                            <td>@item.Idnhom</td>
-                            <td>
-                                @*<a href="@Url.Action("DownLoadFile","QLDeTai",new {id = item.Id })">@item.TenTep</a>*@
-                                <a href="/GVHD/QLDeTai/DownLoadFile/@item.Id">@item.TenTep</a>
-                            </td>
-                            @if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui)
-                            {
-                                <td>Chưa gửi</td>
-                            }
-                            else if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaGui)
-                            {
-                                <td>Đã gửi</td>
-                            }
-                            else if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DangThucHien)
-                            {
-                                <td>Đang thực hiện</td>
-                            }
-                            else if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.HoanThanh)
-                            {
-                                <td>Hoàn thành</td>
-                            }
-                            else if (item.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet)
-                            {
-                                <td>Đã duyệt</td>
-                            }
-                            else
-                            {
-                                <td>Hủy</td>
-                            }
-                            <td>
-                                <button class="btn btn-sm btn-default" id="btnXemNhom" data-id="@item.Idnhom"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-default" id="btnSua" data-id="@item.Id" onclick="EditAction(@item.Id)"><i class="far fa-edit"></i></button>
-                                <button class="btn btn-sm btn-default" id="btnXoa" data-id="@item.Id"><i class="far fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -299,3 +106,22 @@
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal" id="ConfirmDelete">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận hủy đề tài?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+
+        </div>
+    </div>
+</div>

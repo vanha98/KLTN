@@ -9,13 +9,18 @@ namespace KLTN.Areas.GVHD.Models
 {
     public class DeTaiNghienCuuViewModel
     {
+        public string NgayLap { get; set; }
+
         public long Id { get; set; }
         [Required(ErrorMessage = "Tên đề tài không được trống")]
         public string TenDeTai { get; set; }
+        public int? Idnhom { get; set; }
         public string MoTa { get; set; }
-        public string NgayLap { get; set; }
         public string TenTep { get; set; }
+        public string TinhTrangPheDuyet { get; set; }
 
         public IFormFile Files { get; set; }
+
+        
     }
 }

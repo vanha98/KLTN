@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
@@ -16,14 +18,104 @@ namespace KLTN.Areas.GVHD.Controllers
     public class QLDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
-        public QLDeTaiController(IDeTaiNghienCuu service)
+        private readonly IMapper _mapper;
+        public QLDeTaiController(IDeTaiNghienCuu service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            IEnumerable<DeTaiNghienCuu> model = await _service.GetAll();
-            return View(model.OrderBy(x=>x.TinhTrangPheDuyet));
+            //IEnumerable<DeTaiNghienCuu> model = await _service.GetAll();
+            return View(/*model.OrderBy(x=>x.TinhTrangPheDuyet)*/);
+        }
+
+        public async Task<IActionResult> LoadData()
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+
+                // Skip number of Rows count  
+                var start = Request.Form["start"].FirstOrDefault();
+
+                // Paging Length 10,20  
+                var length = Request.Form["length"].FirstOrDefault();
+
+                // Sort Column Name  
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+
+                // Sort Column Direction (asc, desc)  
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+
+                // Search Value from (Search box)  
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+
+                //Paging Size (10, 20, 50,100)  
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+
+                int recordsTotal = 0;
+
+                // getting all Customer data  
+                var entity = await _service.GetAll();
+                
+                //Sorting  
+                if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+                {
+                    PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DeTaiNghienCuu)).Find(sortColumn,false);
+                    if (sortColumnDirection.Equals("asc"))
+                        entity = entity.OrderBy(x=>prop.GetValue(x));
+                    else
+                        entity = entity.OrderByDescending(x => prop.GetValue(x));
+                }
+
+                //Mapping
+                var list = _mapper.Map<IEnumerable<DeTaiNghienCuu>, IEnumerable<DeTaiNghienCuuViewModel>>(entity);
+                foreach (var item in list)
+                {
+                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.ChuaGui)
+                    {
+                        item.TinhTrangPheDuyet = "Chưa gửi";
+                    }
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaGui)
+                        item.TinhTrangPheDuyet = "Đã gửi";
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaDuyet)
+                        item.TinhTrangPheDuyet = "Đã duyệt";
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DangThucHien)
+                        item.TinhTrangPheDuyet = "Đang thực hiện";
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.HoanThanh)
+                        item.TinhTrangPheDuyet = "Hoàn thành";
+                    else
+                        item.TinhTrangPheDuyet = "Đã hủy";
+                }
+
+            //Search  
+            if (!string.IsNullOrEmpty(searchValue))
+                {
+                    list = list.Where(x => x.Id.ToString().Contains(searchValue)
+                    || x.TenDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    || x.NgayLap.ToString().Contains(searchValue)
+                    || x.TinhTrangPheDuyet.IndexOf(searchValue,StringComparison.OrdinalIgnoreCase)>=0
+                    || x.MoTa.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    || x.TenTep.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    );
+                }
+                
+                //total number of rows counts   
+                recordsTotal = list.Count();
+                //Paging   
+                var data = list.Skip(skip).Take(pageSize).ToList();
+                //Returning Json Data  
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data
+            });
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [NonAction]
@@ -164,20 +256,28 @@ namespace KLTN.Areas.GVHD.Controllers
             return File(entity.TepDinhKem, GetMyTypes()[ext], entity.TenTep);
         }
 
+        //Gửi đề tài (status: đã gửi) - Hủy đề tài (hủy)
         [HttpPost]
-        public async Task<IActionResult> GuiDeTai(long[] data)
+        public async Task<IActionResult> ChangeStatus(long[] data, int type)
         {
             if (data.Count() == 0)
                 return Ok(new
                 {
                     status = false,
-                    mess = MessageResult.Fail
+                    mess = MessageResult.NotSelectDeTai
                 }) ;          
             DeTaiNghienCuu entity = new DeTaiNghienCuu();
             foreach (long item in data)
             {
                 entity = await _service.GetById(item);
-                entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaGui;
+                if(type == 2)
+                {
+                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.Huy;
+                }
+                else if( type == 0)
+                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaGui;
+                else
+                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
             }
             await _service.Update(entity);
             return Ok(new
