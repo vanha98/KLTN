@@ -79,5 +79,75 @@ namespace KLTN.Areas.GVHD.Controllers
                 });
 
         }
+        public async Task<JsonResult> RefreshList(bool CongKhaiTab)
+        {
+            List<BaiPost> listBaiPost = new List<BaiPost>();
+            if (CongKhaiTab)
+            {
+                IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.CongKhai);
+                listBaiPost = result.ToList();
+            }
+            else
+            {
+                IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.RiengTu);
+                listBaiPost = result.ToList();
+            }
+
+            if (listBaiPost.Any() && listBaiPost != null)
+            {
+                List<BaiPostDTO> datas = new List<BaiPostDTO>();
+                foreach (BaiPost item in listBaiPost)
+                {
+                    BaiPostDTO bai = new BaiPostDTO();
+                    bai.Id = item.Id;
+                    bai.IdctkenhThaoLuan = item.Id;
+                    bai.IdnguoiTao = item.IdnguoiTao;
+                    bai.TieuDe = item.TieuDe;
+                    bai.NgayPost = item.NgayPost.Value.ToString("dd/MM/yyyy");
+
+                    datas.Add(bai);
+                }
+
+                return Json(new
+                {
+                    status = true,
+                    loai = CongKhaiTab,
+                    data = datas
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    status = false
+                });
+            }
+        }
+        public async Task<JsonResult> NoiDungBaiPost(int idbaipost)
+        {
+            try
+            {
+                BaiPost baiPost = await _service.GetBy(idbaipost);
+                BaiPostDTO baiPostDTO = new BaiPostDTO();
+                baiPostDTO.Id = baiPost.Id;
+                baiPostDTO.IdctkenhThaoLuan = baiPost.IdctkenhThaoLuan;
+                baiPostDTO.IdnguoiTao = baiPost.IdnguoiTao;
+                baiPostDTO.TieuDe = baiPost.TieuDe;
+                baiPostDTO.NoiDung = baiPost.NoiDung;
+                return Json(new
+                {
+                    status = true,
+                    data = baiPostDTO
+                });
+            }
+            catch
+            {
+                return Json(new
+                {
+                    status = false
+                });
+            }
+            
+        }
     }
 }
