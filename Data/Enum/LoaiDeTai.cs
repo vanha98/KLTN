@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Data.Enum
 {
-    public enum LoaiDeTai
+    public static class LoaiDeTai
     {
-        CoSan = 0,
-        DeXuat = 1
+        public const bool CoSan = true;
+        public const bool DeXuat = false;
 
     }
 }

@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="~/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="../../plugins/toastr/toastr.min.css">
     <!-- JQVMap -->
     <link rel="stylesheet" href="~/plugins/jqvmap/jqvmap.min.css">
     <!-- Theme style -->
@@ -30,7 +32,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">  @*sidebar-collapse*@
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -307,6 +309,7 @@
     <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
     <!-- ChartJS -->
     <script src="~/plugins/chart.js/Chart.min.js"></script>
     <!-- Sparkline -->
@@ -321,6 +324,8 @@
     <script src="~/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="~/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Toastr -->
+    <script src="../../plugins/toastr/toastr.min.js"></script>
     <!-- Summernote -->
     <script src="~/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- overlayScrollbars -->
@@ -334,13 +339,9 @@
 
     <script src="~/Resources/CustomTable.js"></script>
 
-    <script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            bsCustomFileInput.init();
-        });
-    </script>
-
+    @*<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>*@
+    
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 
 
     @RenderSection("Script", false)

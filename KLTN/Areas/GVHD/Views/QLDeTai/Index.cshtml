@@ -1,87 +1,54 @@
 ﻿@using KLTN.Areas.GVHD.Models
+@using Data.Enum
 @model IEnumerable<Data.Models.DeTaiNghienCuu>
 @{
     ViewData["Title"] = "Index";
 }
+<style type="text/css">
+   .changeRowColor{
+       background: #DCFEF6  
+   }
+}
+</style>
 @section Script{
-
+    <script src="~/Resources/GVHD/DeTaiNghienCuu.js"></script>
     <script>
-        (function () {
-            $(function () {
-                //init datatable
-                var btnCreate = "<button class='btn btn-success btn-sm' id='btnCreate' data-toggle='modal' data-target='#modal-lg'>Tạo đề tài</button>";
-                var btnSave = "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>";
-                var table = new CustomTable("example1", btnCreate, btnSave);
-                table.Init();
+        // func test
+        var EditAction = function (id) {
+            url = "/GVHD/QLDeTai/Edit/" + id;
+            $(".modal-body").load(url, function () {
+                $("#CheckType").val(1);
+                $("#modal-lg").modal();
+                //$("#modal-lg").html("");
+            });
+        }
 
-                //Create new object
-                $("#btnCreate").on('click', function () {
-                    $(".titleHeader").text("Tạo mới");
-                    $("#btnLuu").on('click', function () {
-                        var TenDeTai = $("#InputTenDeTai").val();
-                        var MoTa = $("#InputMoTa").val();
-                        var files = $("#Files").get(0).files;
-                        var data = new FormData();
-                        for (var i = 0; i < files.length; i++) {
-                            data.append('Files', files[i]);
-                        }
-                        data.append('TenDeTai', TenDeTai);
-                        data.append('MoTa', MoTa);
-                        $.ajax({
-                            type: 'POST',
-                            url: '/GVHD/QLDeTai/Create',
-                            processData: false,
-                            contentType: false,
-                            data: data,
-                            //async: false,
-                            success: function (response) {
-                                if (response.status == 1) {
-                                    $("#example1").ajax.reload();
-                                }
-                            }
-                        });
-                        //var TenDeTai = $("#InputTenDeTai").val();
-                        //var MoTa = $("#InputMoTa").val();
-                        //var FileMoTa = document.getElementById("files").files;
-                        ////CreateNew(TenDeTai, MoTa, FileMoTa);
-                    });
-                });
+        var CreateAction = function () {
+            url = "/GVHD/QLDeTai/Create/";
+            $(".modal-body").load(url, function () {
+                $("#CheckType").val("");
+                $("#modal-lg").modal();
+                //$("#modal-lg").html("");
             });
-        })();
-        function CreateNew(TenDeTai,MoTa,FileMoTa) {
-            var formData = new FormData();
-            for (var i = 0; i != FileMoTa.length; i++) {
-                formData.append("files",FileMoTa[i]);
-            }
-            $.ajax({
-            url: '/GVHD/QLDeTai/CreateNew',
-            type: 'POST',
-                //datatype: 'json',
-                data: { TenDeTai: TenDeTai, MoTa: MoTa, formData: formData },
-            processData: false,
-            contentType:false,
-            success: function (response) {
-                alert("OK");
-            }
-            });
-        }   
+        }
     </script>
 }
 <div class="content-header">
     <h1 class="text-center">
-        Danh sách đề tài
+        Danh sách đề tài nghiên cứu khoa học
     </h1>
     <hr />
 </div>
-<div class="card">
+<div class="card" id="refreshTable">
     <div class="card-body">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
-                    <thead>
+                <table id="example1" class="table table-bordered compact table-hover table-sm" role="grid" aria-describedby="example1_info">
+                    <thead >
                         <tr role="row">
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            <th rowspan="1"></th>
+                            <th tabindex="0" aria-controls="example1" rowspan="1">
                                 Mã đề tài
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
@@ -99,7 +66,7 @@
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                 Tệp đính kèm
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                            <th tabindex="0" aria-controls="example1" rowspan="1">
                                 Tình trạng
                             </th>
                             <th>
@@ -108,23 +75,7 @@
                         </tr>
 
                     </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr id="row_@item.Id">
-                                <td>@item.Id</td>
-                                <td>@item.TenDeTai</td>
-                                <td>@item.MoTa</td>
-                                <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                                <td>@item.Idnhom</td>
-                                <td>
-                                    @item.TenTep
-                                </td>
-                                <td>@item.Status</td>
-                                <td></td>
-                            </tr>
-                        }
-                    </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -132,7 +83,45 @@
     </div>
     @*@await  Component.InvokeAsync("DangKySV")*@
 </div>
-@ViewBag.Enum
 
-@await Html.PartialAsync("_CreateEditPopup", new DeTaiNghienCuuViewModel { })
+<input class="form-control" id="CheckType" type="number" hidden />
 
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_CreateEditPopup", new DeTaiNghienCuuViewModel { })
+            </div>
+                @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal" id="ConfirmDelete">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận hủy đề tài?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+
+        </div>
+    </div>
+</div>

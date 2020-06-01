@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Data.Bo;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace KLTN
 {
@@ -35,6 +36,8 @@ namespace KLTN
                     .AddEntityFrameworkStores<KLTNContext>()
                     .AddDefaultTokenProviders();
 
+            services.AddAutoMapper(typeof(Startup));
+            
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();

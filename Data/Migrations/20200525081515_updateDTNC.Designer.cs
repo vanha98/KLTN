@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200525081515_updateDTNC")]
+    partial class updateDTNC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,8 +119,8 @@ namespace Data.Migrations
                     b.Property<DateTime?>("NgayPost")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("NoiDung")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("NoiDung")
+                        .HasColumnType("date");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
