@@ -7,14 +7,16 @@ namespace Data.Models
     {
         public KenhThaoLuan()
         {
-            CtkenhThaoLuan = new HashSet<CtkenhThaoLuan>();
+            BaiPost = new HashSet<BaiPost>();
         }
 
         public int Id { get; set; }
         public long? IdgiangVien { get; set; }
+        public long? IddeTai { get; set; }
         public int? Status { get; set; }
 
         public virtual GiangVien IdgiangVienNavigation { get; set; }
-        public virtual ICollection<CtkenhThaoLuan> CtkenhThaoLuan { get; set; }
+        public virtual DeTaiNghienCuu IddeTaiNavigation { get; set; }
+        public virtual ICollection<BaiPost> BaiPost { get; set; }
     }
 }

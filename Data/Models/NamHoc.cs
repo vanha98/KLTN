@@ -13,7 +13,7 @@ namespace Data.Models
 
         public int Id { get; set; }
         public string HocKy { get; set; }
-        public int? Nam { get; set; }
+        public string Nam { get; set; }
         public int? Status { get; set; }
 
         public virtual ICollection<MoDot> MoDot { get; set; }

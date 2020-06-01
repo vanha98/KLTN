@@ -12,14 +12,14 @@ namespace Data.Models
 
         public int Id { get; set; }
         public int IdnguoiTao { get; set; }
-        public int? IdctkenhThaoLuan { get; set; }
+        public int? IdKenhThaoLuan { get; set; }
         public DateTime? NgayPost { get; set; }
         public string TieuDe { get; set; }
         public string NoiDung { get; set; }
         public int? Loai { get; set; }
         public int? Status { get; set; }
 
-        public virtual CtkenhThaoLuan IdctkenhThaoLuanNavigation { get; set; }
+        public virtual KenhThaoLuan IdKenhThaoLuanNavigation { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }
     }
 }

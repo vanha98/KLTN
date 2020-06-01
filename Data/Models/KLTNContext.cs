@@ -21,7 +21,6 @@ namespace Data.Models
         public virtual DbSet<BaoCaoTienDo> BaoCaoTienDo { get; set; }
         public virtual DbSet<BoNhiem> BoNhiem { get; set; }
         public virtual DbSet<Comments> Comments { get; set; }
-        public virtual DbSet<CtkenhThaoLuan> CtkenhThaoLuan { get; set; }
         public virtual DbSet<CtxetDuyetVaDanhGia> CtxetDuyetVaDanhGia { get; set; }
         public virtual DbSet<DeTaiNghienCuu> DeTaiNghienCuu { get; set; }
         public virtual DbSet<GiangVien> GiangVien { get; set; }
@@ -57,7 +56,7 @@ namespace Data.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.IdctkenhThaoLuan).HasColumnName("IDCTKenhThaoLuan");
+                entity.Property(e => e.IdKenhThaoLuan).HasColumnName("IDCTKenhThaoLuan");
 
                 entity.Property(e => e.IdnguoiTao).HasColumnName("IDNguoiTao");
 
@@ -65,9 +64,9 @@ namespace Data.Models
 
                 entity.Property(e => e.TieuDe).HasMaxLength(150);
 
-                entity.HasOne(d => d.IdctkenhThaoLuanNavigation)
+                entity.HasOne(d => d.IdKenhThaoLuanNavigation)
                     .WithMany(p => p.BaiPost)
-                    .HasForeignKey(d => d.IdctkenhThaoLuan)
+                    .HasForeignKey(d => d.IdKenhThaoLuan)
                     .HasConstraintName("FK__BaiPost__IDCTKen__6754599E");
             });
 
@@ -137,27 +136,6 @@ namespace Data.Models
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.IdbaiPost)
                     .HasConstraintName("FK__Comments__IDBaiP__6A30C649");
-            });
-
-            modelBuilder.Entity<CtkenhThaoLuan>(entity =>
-            {
-                entity.ToTable("CTKenhThaoLuan");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
-
-                entity.Property(e => e.IdkenhThaoLuan).HasColumnName("IDKenhThaoLuan");
-
-                entity.HasOne(d => d.IddeTaiNavigation)
-                    .WithMany(p => p.CtkenhThaoLuan)
-                    .HasForeignKey(d => d.IddeTai)
-                    .HasConstraintName("FK__CTKenhTha__IDDeT__6477ECF3");
-
-                entity.HasOne(d => d.IdkenhThaoLuanNavigation)
-                    .WithMany(p => p.CtkenhThaoLuan)
-                    .HasForeignKey(d => d.IdkenhThaoLuan)
-                    .HasConstraintName("FK__CTKenhTha__IDKen__6383C8BA");
             });
 
             modelBuilder.Entity<CtxetDuyetVaDanhGia>(entity =>
@@ -286,15 +264,6 @@ namespace Data.Models
             modelBuilder.Entity<Nhom>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.IdnamHoc).HasColumnName("IDNamHoc");
-
-                entity.Property(e => e.TenNhom).HasMaxLength(50);
-
-                entity.HasOne(d => d.IdnamHocNavigation)
-                    .WithMany(p => p.Nhom)
-                    .HasForeignKey(d => d.IdnamHoc)
-                    .HasConstraintName("FK__Nhom__IDNamHoc__3A81B327");
             });
 
             modelBuilder.Entity<NhomSinhVien>(entity =>

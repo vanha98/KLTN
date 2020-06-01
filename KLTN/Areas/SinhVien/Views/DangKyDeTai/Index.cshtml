@@ -1,32 +1,29 @@
-﻿@model IEnumerable<Data.Models.DeTaiNghienCuu>
+﻿@using KLTN.Areas.GVHD.Models
+@model IEnumerable<Data.Models.DeTaiNghienCuu>
+
 @{
     ViewData["Title"] = "Index";
 }
 @section Script{
+    <script src="~/Resources/SinhVien/DangKyDeTai.js"></script>
     <script>
-        (function () {
-            $(function () {
-                //init datatable
-                var btnCreate = "<button type='button' class='btn btn-success btn-sm' id='btnCreate' data-toggle='modal' data-target='#modal-lg'>Đề xuất đề tài</button>";
-                var btnSave = "<button class='btn btn-primary btn-sm' id='btnLuu'>Lưu</button>";
-                var table = new CustomTable("example1", btnCreate, btnSave);
-                table.Init();
-
-                //
-                $("#btnCreate").on('click', function () {
-                    $(".titleHeader").text("Đề xuất đề tài");
-                    $("#btnLuu").on('click', function () {
-                        var TenDeTai = $("#InputTenDeTai").val();
-                        var MoTa = $("#InputMoTa").val();
-                        var FileMoTa = $("#customFile").val();
-                        CreateNew(TenDeTai, MoTa, FileMoTa);
-                    });
-                });
+        // func
+        var EditAction = function (id) {
+            url = "/SinhVien/DangKyDeTai/Edit/" + id;
+            $(".modal-body").load(url, function () {
+                $("#CheckType").val(1);
+                $("#modal-lg").modal();
+                //$("#modal-lg").html("");
             });
-        })();
-        
-        function CreateNew(TenDeTai, MoTa, FileMoTa) {
+        }
 
+        var CreateAction = function () {
+            url = "/SinhVien/DangKyDeTai/Create/";
+            $(".modal-body").load(url, function () {
+                $("#CheckType").val("");
+                $("#modal-lg").modal();
+                //$("#modal-lg").html("");
+            });
         }
     </script>
 }
@@ -41,59 +38,59 @@
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                <table id="example1" class="table table-bordered table-sm dataTable dtr-inline" style="width:100%" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
-                            <th rowspan="2">
-
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th rowspan="2"></th>
+                            <th rowspan="2" class="text-center">
                                 Mã đề tài
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th rowspan="2" class="text-center">
                                 Tên đề tài
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th rowspan="2" class="text-center">
                                 Tự đề xuất
                             </th>
-                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th rowspan="2" class="text-center">
                                 Mô tả
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
+                            <th rowspan="2" class="text-center">
+                                Tệp mô tả
+                            </th>
+                            <th rowspan="2" class="text-center">
                                 Tình trạng
                             </th>
-                            <th colspan="3">Giảng viên hướng dẫn</th>
-                            @*<th></th>*@
+                            <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
+
+                            <th rowspan="2"></th>
                         </tr>
                         <tr>
-                            <th class="sorting" tabindex="0" aria-controls="example1">
+                            <th class="text-center">
                                 Họ tên
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1">
+                            <th class="text-center">
                                 SDT
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1">
+                            <th class="text-center">
                                 Email
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr id="row_@item.Id">
-                                <td><input class="form-check-inline" type="checkbox" /></td>
-                                <td>@item.Id</td>
-                                <td>@item.TenDeTai</td>
-                                <td>@item.Loai</td>
-                                <td>@item.MoTa</td>
-                                @*<td>@item.Status</td>*@
-                                <td>@item.Id</td>
-                                <td>@item.IdgiangVien</td>
-                                <td>@item.IdgiangVien</td>
-                                @*<td><button class="btn"><i class="fas fa-edit"></i></button></td>*@
-                            </tr>
-                        }
-                    </tbody>
+                    <tfoot id="Idfooter">
+                        @*<tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>*@
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -101,5 +98,25 @@
     </div>
     @*@await  Component.InvokeAsync("DangKySV")*@
 </div>
-@await Html.PartialAsync("_CreateEditPopup")
 
+<input class="form-control" id="CheckType" type="number" hidden />
+
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader">Đề xuất đề tài</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_CreateEditPopup")
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

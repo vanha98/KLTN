@@ -160,7 +160,7 @@
             var url = '/GVHD/QLDeTai/ChangeStatus';
             ChangeStatus(url, data, 0);
         })
-
+        //Huy gui de tai
         $(document).delegate("#btnHuyGui", 'click', function () {
             var data = $("#example1 input:checkbox:checked").map(function () {
                 return $(this).data('id');
@@ -219,8 +219,6 @@
             data.append('MoTa', MoTa);
             CreateEdit(data, CheckType);
         });
-
-        
 
     });
 })();

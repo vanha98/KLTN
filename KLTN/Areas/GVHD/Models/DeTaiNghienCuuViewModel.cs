@@ -16,7 +16,12 @@ namespace KLTN.Areas.GVHD.Models
         public string TenDeTai { get; set; }
         public int? Idnhom { get; set; }
         public string MoTa { get; set; }
+        public bool? Loai { get; set; }
         public string TenTep { get; set; }
+        public string HoTenGVHD { get; set; }
+        public string SDT { get; set; }
+        public string Email { get; set; }
+        public string TinhTrangDangKy { get; set; }
         public string TinhTrangPheDuyet { get; set; }
 
         public IFormFile Files { get; set; }

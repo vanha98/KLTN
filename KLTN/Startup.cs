@@ -42,7 +42,8 @@ namespace KLTN
             services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<ISinhVien, SinhVienBo>();
             services.AddScoped<IBaiPost, BaiPostBo>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();

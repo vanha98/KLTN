@@ -17,7 +17,6 @@
     <Compile Include="Models\BaoCaoTienDo.cs" />
     <Compile Include="Models\BoNhiem.cs" />
     <Compile Include="Models\Comments.cs" />
-    <Compile Include="Models\CtkenhThaoLuan.cs" />
     <Compile Include="Models\CtxetDuyetVaDanhGia.cs" />
     <Compile Include="Models\DeTaiNghienCuu.cs" />
     <Compile Include="Models\GiangVien.cs" />

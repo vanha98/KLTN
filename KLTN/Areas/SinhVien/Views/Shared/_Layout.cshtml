@@ -38,7 +38,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -199,16 +199,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-                        with font-awesome or any other icon font library -->
-
-                        <li class="nav-item">
-                            <a asp-area="SinhVien" asp-controller="DangKyDeTai" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-feather-alt"></i>
-                                <p>
-                                    Đăng ký đề tài
-                                </p>
-                            </a>
-                        </li>
+    with font-awesome or any other icon font library -->
 
                         <li class="nav-item">
                             <a asp-area="SinhVien" asp-controller="DeTaiDaDangKy" asp-action="Index" class="nav-link">
@@ -233,6 +224,15 @@
                                 <i class="nav-icon fas fa-comment"></i>
                                 <p>
                                     Thảo luận với GVHD
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-area="SinhVien" asp-controller="DangKyDeTai" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-feather-alt"></i>
+                                <p>
+                                    Đăng ký đề tài
                                 </p>
                             </a>
                         </li>
@@ -369,16 +369,15 @@
     <script src="~/dist/js/adminlte.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/dist/js/pages/dashboard.js"></script>
-    <script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="~/Resources/CustomTable.js"></script>
+    @*<script src="~/Resources/CustomTable.js"></script>*@
 
     <script src="~/dist/js/demo.js"></script>
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         $(document).ready(function () {
             bsCustomFileInput.init();
         });
-    </script>
+    </script>*@
     @RenderSection("Script", false)
 
 </body>
