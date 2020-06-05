@@ -1,7 +1,13 @@
-﻿@model IEnumerable<Data.Models.BaiPost>
+﻿@using KLTN.Areas.GVHD.Models
+@model IEnumerable<Data.Models.BaiPost>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Script{
+    <script src="~/Resources/GVHD/ThaoLuan.js"></script>
 }
 
 <div class="container">
@@ -11,7 +17,7 @@
             <br />
             @await Component.InvokeAsync("TimKiem")
             <br />
-            @await Component.InvokeAsync("ListBaiPost", new KLTN.Models.TabListViewModel() { ViewType = (int)Data.Enum.ViewType.ThaoLuanGV, ListBaiPostThaoLuan = Model})
+            @await Component.InvokeAsync("ListBaiPost", new KLTN.Models.TabListViewModel() { ViewType = (int)Data.Enum.ViewType.ThaoLuanGV, ListBaiPostThaoLuan = Model })
         </div>
         <div class="col-md-8 card">
             <div hidden id="wait" class="overlay">
@@ -46,187 +52,23 @@
     </div>
 </div>
 
-<script src="~/plugins/jquery/jquery.min.js"></script>
-<script>
-    $(document).ready(function ()
-    {
-     
-        $("#btnSearch").click(function ()
-        {
-            var SearchString = $("#txtSearch").val();
-            
-            var CongKhaiTab = $("#custom-tabs-one-home-tab").hasClass("active");
-            if (CongKhaiTab)
-            {
-                var SetBaiPostCongKhai = $("#tblCongKhai");
-                SetBaiPostCongKhai.html("");
-            }
-            else
-            {
-                var SetBaiPostRiengTu = $("#tblRiengTu");
-                SetBaiPostRiengTu.html("");
-            }
-            
-            $.ajax({
-                url: "/GVHD/ThaoLuan/SearchBaiPost",
-                type: "post",
-                data: {
-                    SearchString: SearchString,
-                    CongKhaiTab: CongKhaiTab
-                },
-                dataType: "json",
-                success: function (response)
-                {
-                    if (response.status)
-                    {
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader">Tạo bài đăng mới</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_CreatePopup",new BaiPostViewModel { })
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
 
-                        if (CongKhaiTab)
-                        {
-                            $.each(response.data, function (i, item)
-                            {
-                                var Data = '<tr id="' + item.id + '">' +
-                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
-                                    '<td>' + item.ngayPost + '</td>' +
-                                    '</tr>';
-                                SetBaiPostCongKhai.append(Data);
-                            });
-                        }
-                        else
-                        {
-                            $.each(response.data, function (i, item)
-                            {
-                                var Data = '<tr id="' + item.id + '">' +
-                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
-                                    '<td>' + item.ngayPost + '</td>' +
-                                    '</tr>';
-                                SetBaiPostRiengTu.append(Data);
-                            });
-                        }
-                    }
-                    else
-                    {
-                        if (CongKhaiTab)
-                        {
-                            SetBaiPostCongKhai.append('<tr><td colspan="2">Không tìm thấy tiêu đề</td></tr>');
-                        }
-                        else
-                        {
-                            SetBaiPostRiengTu.append('<tr><td colspan="2">Không tìm thấy tiêu đề</td></tr>');
-                        }
-                        
-                    }
-                }
-            })
-        });
 
-        $("#LkRefreshList").click(function ()
-        {
-            var CongKhaiTab = $("#custom-tabs-one-home-tab").hasClass("active");
-            if (CongKhaiTab)
-            {
-                var SetBaiPostCongKhai = $("#tblCongKhai");
-                SetBaiPostCongKhai.html("");
-            }
-            else
-            {
-                var SetBaiPostRiengTu = $("#tblRiengTu");
-                SetBaiPostRiengTu.html("");
-            }
-
-            $.ajax({
-                url: "/GVHD/ThaoLuan/RefreshList",
-                type: "post",
-                data: {
-                    CongKhaiTab: CongKhaiTab
-                },
-                dataType: "json",
-                success: function (response)
-                {
-                    if (response.status)
-                    {
-                        if (CongKhaiTab)
-                        {
-                            $.each(response.data, function (i, item)
-                            {
-                                var Data = '<tr id="' + item.id + '">' +
-                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
-                                    '<td>' + item.ngayPost + '</td>' +
-                                    '</tr>';
-                                SetBaiPostCongKhai.append(Data);
-                            });
-                        }
-                        else
-                        {
-                            $.each(response.data, function (i, item)
-                            {
-                                var Data = '<tr id="' + item.id + '">' +
-                                    '<td><label class="text-truncate" style="max-width: 190px">' + item.tieuDe + '</label ></td >' +
-                                    '<td>' + item.ngayPost + '</td>' +
-                                    '</tr>';
-                                SetBaiPostRiengTu.append(Data);
-                            });
-                        }
-                    }
-                }
-            })
-        });
-
-        $(document).on("click", "#tblCongKhai tr",function ()
-        {
-            $('#tblCongKhai tr').removeClass("table-info");
-            $(this).toggleClass("table-info");
-
-            var idbaipost = $(this).attr("id");
-            var SetNoiDung = $("#txtNoiDungBaiPost");
-            var SetTieuDe = $("#txtTieuDeBaiPost");
-            SetTieuDe.html("");
-            SetNoiDung.html("");
-
-            $.ajax({
-                url: "/GVHD/ThaoLuan/NoiDungBaiPost",
-                type: "post",
-                data: {
-                    idbaipost: idbaipost
-                },
-                dataType: "json",
-                success: function (response)
-                {
-                    if (response.status)
-                    {
-                        var datatieude = '<h3 class="col text-center">' + response.data.tieuDe + '</h3>';
-                        SetTieuDe.append(datatieude);
-                    }
-                }
-            })
-        });
-
-        $(document).on("click", "#tblRiengTu tr", function ()
-        {
-            $('#tblRiengTu tr').removeClass("table-info");
-            $(this).toggleClass("table-info");
-
-            var idbaipost = $(this).attr("id");
-            var SetNoiDung = $("#txtNoiDungBaiPost");
-            var SetTieuDe = $("#txtTieuDeBaiPost");
-            SetTieuDe.html("");
-            SetNoiDung.html("");
-
-            $.ajax({
-                url: "/GVHD/ThaoLuan/NoiDungBaiPost",
-                type: "post",
-                data: {
-                    idbaipost: idbaipost
-                },
-                dataType: "json",
-                success: function (response)
-                {
-                    if (response.status)
-                    {
-                        var datatieude = '<h3 class="col text-center">' + response.data.tieuDe + '</h3>';
-                        SetTieuDe.append(datatieude);
-                    }
-                }
-            })
-        });
-    });
-</script>

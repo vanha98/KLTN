@@ -25,6 +25,7 @@ namespace Data.Models
         public virtual DbSet<DeTaiNghienCuu> DeTaiNghienCuu { get; set; }
         public virtual DbSet<GiangVien> GiangVien { get; set; }
         public virtual DbSet<HoiDong> HoiDong { get; set; }
+        public virtual DbSet<ImgBaiPost> ImgBaiPost { get; set; }
         public virtual DbSet<KenhThaoLuan> KenhThaoLuan { get; set; }
         public virtual DbSet<MoDot> MoDot { get; set; }
         public virtual DbSet<NamHoc> NamHoc { get; set; }
@@ -54,9 +55,11 @@ namespace Data.Models
 
             modelBuilder.Entity<BaiPost>(entity =>
             {
+                entity.HasIndex(e => e.IdkenhThaoLuan);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.IdKenhThaoLuan).HasColumnName("IDCTKenhThaoLuan");
+                entity.Property(e => e.IdkenhThaoLuan).HasColumnName("IDKenhThaoLuan");
 
                 entity.Property(e => e.IdnguoiTao).HasColumnName("IDNguoiTao");
 
@@ -64,14 +67,16 @@ namespace Data.Models
 
                 entity.Property(e => e.TieuDe).HasMaxLength(150);
 
-                entity.HasOne(d => d.IdKenhThaoLuanNavigation)
+                entity.HasOne(d => d.IdkenhThaoLuanNavigation)
                     .WithMany(p => p.BaiPost)
-                    .HasForeignKey(d => d.IdKenhThaoLuan)
+                    .HasForeignKey(d => d.IdkenhThaoLuan)
                     .HasConstraintName("FK__BaiPost__IDCTKen__6754599E");
             });
 
             modelBuilder.Entity<BaoCaoTienDo>(entity =>
             {
+                entity.HasIndex(e => e.IddeTai);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.HanNop).HasColumnType("date");
@@ -92,9 +97,9 @@ namespace Data.Models
 
             modelBuilder.Entity<BoNhiem>(entity =>
             {
-                entity.HasIndex(e => new { e.IdgiangVien, e.IdquanLy, e.IdhoiDong })
-                    .HasName("UNI_BoNhiem")
-                    .IsUnique();
+                entity.HasIndex(e => e.IdhoiDong);
+
+                entity.HasIndex(e => e.IdquanLy);
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -124,6 +129,8 @@ namespace Data.Models
 
             modelBuilder.Entity<Comments>(entity =>
             {
+                entity.HasIndex(e => e.IdbaiPost);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IdbaiPost).HasColumnName("IDBaiPost");
@@ -142,6 +149,8 @@ namespace Data.Models
             {
                 entity.ToTable("CTXetDuyetVaDanhGia");
 
+                entity.HasIndex(e => e.IdxetDuyet);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IdnguoiTao).HasColumnName("IDNguoiTao");
@@ -158,6 +167,10 @@ namespace Data.Models
 
             modelBuilder.Entity<DeTaiNghienCuu>(entity =>
             {
+                entity.HasIndex(e => e.IdgiangVien);
+
+                entity.HasIndex(e => e.Idnhom);
+
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
@@ -199,7 +212,6 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
-
             });
 
             modelBuilder.Entity<HoiDong>(entity =>
@@ -209,11 +221,38 @@ namespace Data.Models
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
             });
 
-            modelBuilder.Entity<KenhThaoLuan>(entity =>
+            modelBuilder.Entity<ImgBaiPost>(entity =>
             {
+                entity.ToTable("imgBaiPost");
+
+                entity.HasIndex(e => e.IdbaiPost);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.IdbaiPost).HasColumnName("IDBaiPost");
+
+                entity.HasOne(d => d.IdbaiPostNavigation)
+                    .WithMany(p => p.ImgBaiPost)
+                    .HasForeignKey(d => d.IdbaiPost)
+                    .HasConstraintName("FK__imgBaiPost__IDBaiP__6A30C649");
+            });
+
+            modelBuilder.Entity<KenhThaoLuan>(entity =>
+            {
+                entity.HasIndex(e => e.IddeTai);
+
+                entity.HasIndex(e => e.IdgiangVien);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
+
                 entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
+
+                entity.HasOne(d => d.IddeTaiNavigation)
+                    .WithMany(p => p.KenhThaoLuan)
+                    .HasForeignKey(d => d.IddeTai)
+                    .HasConstraintName("FK__KenhThaoL__IDDeTai__60A75C0F");
 
                 entity.HasOne(d => d.IdgiangVienNavigation)
                     .WithMany(p => p.KenhThaoLuan)
@@ -223,6 +262,10 @@ namespace Data.Models
 
             modelBuilder.Entity<MoDot>(entity =>
             {
+                entity.HasIndex(e => e.IdnamHoc);
+
+                entity.HasIndex(e => e.IdquanLy);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IdnamHoc).HasColumnName("IDNamHoc");
@@ -250,15 +293,7 @@ namespace Data.Models
 
             modelBuilder.Entity<NamHoc>(entity =>
             {
-                entity.HasIndex(e => new { e.HocKy, e.Nam })
-                    .HasName("UNI_NamHoc")
-                    .IsUnique();
-
                 entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.HocKy)
-                    .HasMaxLength(3)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Nhom>(entity =>
@@ -272,6 +307,8 @@ namespace Data.Models
                     .HasName("PK__Nhom_Sin__CD149E43F71CE773");
 
                 entity.ToTable("Nhom_SinhVien");
+
+                entity.HasIndex(e => e.IdsinhVien);
 
                 entity.Property(e => e.Idnhom).HasColumnName("IDNhom");
 
@@ -310,8 +347,8 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
-
             });
+
             modelBuilder.Entity<SinhVien>(entity =>
             {
                 entity.HasKey(e => e.Mssv)
@@ -335,11 +372,16 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
-                
-
             });
+
             modelBuilder.Entity<XetDuyetVaDanhGia>(entity =>
             {
+                entity.HasIndex(e => e.IddeTai);
+
+                entity.HasIndex(e => e.IdhoiDong);
+
+                entity.HasIndex(e => e.IdmoDot);
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");

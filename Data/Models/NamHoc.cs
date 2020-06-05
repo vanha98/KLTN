@@ -8,7 +8,6 @@ namespace Data.Models
         public NamHoc()
         {
             MoDot = new HashSet<MoDot>();
-            Nhom = new HashSet<Nhom>();
         }
 
         public int Id { get; set; }
@@ -17,6 +16,5 @@ namespace Data.Models
         public int? Status { get; set; }
 
         public virtual ICollection<MoDot> MoDot { get; set; }
-        public virtual ICollection<Nhom> Nhom { get; set; }
     }
 }

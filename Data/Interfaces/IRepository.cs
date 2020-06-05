@@ -12,7 +12,9 @@ namespace Data.Interfaces
     {
         Task<IEnumerable<T>> GetAll();
         Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> expression);
+        Task<T> GetEntity(Expression<Func<T, bool>> expression);
         Task<T> GetById(long id);
+        Task<T> GetById(int id);
         Task Add(T entity);
         Task Update(T entity);
         Task Delete(T entity);

@@ -21,6 +21,7 @@ namespace Data.Models
         public string Sdt { get; set; }
         public string Email { get; set; }
         public int? Status { get; set; }
+
         public virtual ICollection<BoNhiem> BoNhiem { get; set; }
         public virtual ICollection<DeTaiNghienCuu> DeTaiNghienCuu { get; set; }
         public virtual ICollection<KenhThaoLuan> KenhThaoLuan { get; set; }

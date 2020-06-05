@@ -14,6 +14,9 @@ using Data.Bo;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using KLTN.Authorization.Handlers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace KLTN
 {
@@ -41,11 +44,28 @@ namespace KLTN
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
+            services.AddScoped<ISinhVien, SinhVienBo>();
+            services.AddScoped<IBaiPost, BaiPostBo>();
+            services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
+            services.AddScoped<IKenhThaoLuan, KenhThaoLuanBo>();
+            services.AddScoped<IIdentity, Identity>();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddScoped<ISinhVien, SinhVienBo>();
-            services.AddScoped<IBaiPost, BaiPostBo>();
+
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                //options.AccessDeniedPath = "/Account/AccessDenied";
+                options.Cookie.Name = "Cookie";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+                options.LoginPath = "/Home/Login";
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
+
+            services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
 
 

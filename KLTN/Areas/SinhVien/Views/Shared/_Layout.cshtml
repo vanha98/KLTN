@@ -183,11 +183,14 @@
                             @if (SignInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item">
-                                    <a id="manage" class="nav-link" title="Sinh viên">@*@Model.Ho + @Model.Ten*@ @UserManager.GetUserName(User)</a>
+                                    <a id="SV" class="nav-link" title="Sinh viên"> @*@UserManager.GetUserName(User)*@ @User.FindFirst("Name").Value </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-area="SinhVien" asp-controller="ThongTinCaNhan" asp-action="Index" class="d-block">Thông tin cá nhân</a>
                                 </li>
                                 <li class="nav-item">
                                     <form id="logoutForm" class="form-inline" asp-area="" asp-controller="Home" asp-action="Logout">
-                                        <button id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+                                        <button id="logout" type="submit" class="nav-link btn btn-link">Đăng xuất</button>
                                     </form>
                                 </li>
                             }

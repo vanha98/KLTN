@@ -5,34 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <None Remove="Models\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Models\AppRole.cs" />
-    <Compile Include="Models\AppUser.cs" />
-    <Compile Include="Models\BaiPost.cs" />
-    <Compile Include="Models\BaoCaoTienDo.cs" />
-    <Compile Include="Models\BoNhiem.cs" />
-    <Compile Include="Models\Comments.cs" />
-    <Compile Include="Models\CtxetDuyetVaDanhGia.cs" />
-    <Compile Include="Models\DeTaiNghienCuu.cs" />
-    <Compile Include="Models\GiangVien.cs" />
-    <Compile Include="Models\HoiDong.cs" />
-    <Compile Include="Models\KenhThaoLuan.cs" />
-    <Compile Include="Models\KLTNContext.cs" />
-    <Compile Include="Models\MoDot.cs" />
-    <Compile Include="Models\NamHoc.cs" />
-    <Compile Include="Models\Nhom.cs" />
-    <Compile Include="Models\NhomSinhVien.cs" />
-    <Compile Include="Models\QuanLy.cs" />
-    <Compile Include="Models\SinhVien.cs" />
-    <Compile Include="Models\XetDuyetVaDanhGia.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.4">
       <PrivateAssets>all</PrivateAssets>

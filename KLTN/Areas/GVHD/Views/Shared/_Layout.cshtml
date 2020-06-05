@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿
+@using Microsoft.AspNetCore.Identity
+@using Data.Models
+@*@model Data.Models.SinhVien*@
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -32,7 +40,8 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">  @*sidebar-collapse*@
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+    @*sidebar-collapse*@
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -173,7 +182,23 @@
                         <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a asp-area="GVHD" asp-controller="ThongTinCaNhan" asp-action="Index" class="d-block">Tên giảng viên</a>
+                        <ul class="navbar-nav">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a id="GVHD" class="nav-link" title="Giảng viên"> @*@UserManager.GetUserName(User)*@ @User.FindFirst("Name").Value </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-area="GVHD" asp-controller="ThongTinCaNhan" asp-action="Index" class="d-block">Thông tin cá nhân</a>
+                                </li>
+                                <li class="nav-item">
+                                    <form id="logoutForm" class="form-inline" asp-area="" asp-controller="Home" asp-action="Logout">
+                                        <button id="logout" type="submit" class="nav-link btn btn-link">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                        
                     </div>
                 </div>
 
@@ -340,7 +365,7 @@
     <script src="~/Resources/CustomTable.js"></script>
 
     @*<script src="../../plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>*@
-    
+
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
 

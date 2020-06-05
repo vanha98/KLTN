@@ -40,11 +40,19 @@ namespace Data.Bo
             return await _context.Set<T>().Where(expression).ToListAsync();
         }
 
+        public async Task<T> GetEntity(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().Where(expression).FirstOrDefaultAsync();
+        }
+
         public async Task<T> GetById(long id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
-
+        public async Task<T> GetById(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
         public async Task Update(T entity)
         {
             _context.Set<T>().Update(entity);

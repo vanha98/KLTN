@@ -15,13 +15,13 @@
             <label>Mô tả</label>
             <textarea class="form-control" asp-for="MoTa" id="InputMoTa" name="MoTa" placeholder="Nhập mô tả"></textarea>
             <div class="custom-file">
-                <input asp-for="Files" type="file"  id="Files" class="custom-file-input" name="Files">
+                <input asp-for="Files" type="file"  id="Files" class="custom-file-input" name="Files"/> 
                 @if (Model != null && Model.TenTep != null)
                 {
                     <label class="custom-file-label" for="customFile">@Model.TenTep</label>
                 }
                 else
-                {<label class="custom-file-label" for="customFile">Chọn tệp</label>}
+                {<label class="custom-file-label" for="customFile">Chọn tệp </label>}
                 <span asp-validation-for="Files" class="text-danger lblFiles"></span>
             </div>
         </div>

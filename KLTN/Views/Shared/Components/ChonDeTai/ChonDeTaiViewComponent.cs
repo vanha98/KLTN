@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Data.Interfaces;
+using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +10,17 @@ namespace KLTN.Views.Shared.Components.ChonDeTai
 {
     public class ChonDeTaiViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        private readonly IDeTaiNghienCuu _service;
+        public ChonDeTaiViewComponent(IDeTaiNghienCuu service)
         {
-            return View();
+            _service = service;
+        }
+        public async Task<IViewComponentResult> InvokeAsync(string ma)
+        {
+            long id;
+            long.TryParse(ma,out id);
+            IEnumerable<DeTaiNghienCuu> model = await _service.GetAll(x=>x.IdgiangVien == id && x.Idnhom != null || x.Idnhom == id);
+            return await Task.FromResult<IViewComponentResult>(View(model));
         }
     }
 }

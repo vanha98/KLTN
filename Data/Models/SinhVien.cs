@@ -9,6 +9,7 @@ namespace Data.Models
         {
             NhomSinhVien = new HashSet<NhomSinhVien>();
         }
+
         public long Mssv { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }

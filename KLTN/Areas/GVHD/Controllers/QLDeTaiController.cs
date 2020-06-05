@@ -9,20 +9,25 @@ using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
 using KLTN.Areas.GVHD.Models;
+using KLTN.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
     [Area("GVHD")]
+    [Authorize]
     public class QLDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
         private readonly IMapper _mapper;
-        public QLDeTaiController(IDeTaiNghienCuu service, IMapper mapper)
+        private readonly IAuthorizationService _authorizationService;
+        public QLDeTaiController(IDeTaiNghienCuu service, IMapper mapper, IAuthorizationService authorizationService)
         {
             _service = service;
             _mapper = mapper;
+            _authorizationService = authorizationService;
         }
         public IActionResult Index()
         {
@@ -161,7 +166,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     Id = vmodel.Id,
                     TenDeTai = vmodel.TenDeTai,
                     MoTa = vmodel.MoTa,
-                    //IdgiangVien = 
+                    IdgiangVien = long.Parse(User.Identity.Name),
                     NgayLap = DateTime.Now,
                     TinhTrangDangKy = (int)StatusDangKyDeTai.Con,
                     TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui,
@@ -173,6 +178,13 @@ namespace KLTN.Areas.GVHD.Controllers
                 }
                 try
                 {
+                    var isAuthorize = await _authorizationService.AuthorizeAsync(User, model, DeTaiNghienCuuOperation.Create);
+                    if (!isAuthorize.Succeeded)
+                        return Ok(new
+                        {
+                            status = false,
+                            toastr = MessageResult.AccessDenied
+                        });
                     await _service.Add(model);
                     return Json(new { status = true, create=true, data = new { NgayLap = DateTime.Now.ToString("dd/MM/yyyy"), Id = vmodel.Id, TenTep = model.TenTep }, mess = MessageResult.CreateSuccess });
                 }
@@ -215,23 +227,37 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             if (ModelState.IsValid)
             {
-                DeTaiNghienCuu entity = new DeTaiNghienCuu();
-                if (model.Id != 0)
+                var entity = await _service.GetById(model.Id);
+                if (entity == null)
                 {
-                    entity = await _service.GetById(model.Id);
-                    entity.TenDeTai = model.TenDeTai;
-                    entity.MoTa = model.MoTa;
-                }
-                if (await UpLoadFile(model.Files, entity) == false)
-                {
-                    return Ok(new 
-                    { 
-                        status = false, 
-                        mess = MessageResult.UpLoadFileFail
+                    return Ok(new
+                    {
+                        status = false,
+                        toastr = MessageResult.NotFoundObject
                     });
                 }
-                await _service.Update(entity);
-                return Ok(new { status = true, mess = MessageResult.UpdateSuccess});
+                var isAuthorize = await _authorizationService.AuthorizeAsync(User, entity, DeTaiNghienCuuOperation.Update);
+                if (!isAuthorize.Succeeded)
+                    return Ok(new
+                    {
+                        status = false,
+                        toastr = MessageResult.AccessDenied
+                    });
+                else
+                {
+                    entity.TenDeTai = model.TenDeTai;
+                    entity.MoTa = model.MoTa;
+                    if (await UpLoadFile(model.Files, entity) == false)
+                    {
+                        return Ok(new
+                        {
+                            status = false,
+                            mess = MessageResult.UpLoadFileFail
+                        });
+                    }
+                    await _service.Update(entity);
+                    return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
+                }
             }
             else { return Ok(new { status = false, mess = MessageResult.Fail }); }
         }
@@ -271,7 +297,14 @@ namespace KLTN.Areas.GVHD.Controllers
             foreach (long item in data)
             {
                 entity = await _service.GetById(item);
-                if(type == 2)
+                var isAuthorize = await _authorizationService.AuthorizeAsync(User, entity, DeTaiNghienCuuOperation.Update);
+                if (!isAuthorize.Succeeded)
+                    return Ok(new
+                    {
+                        status = false,
+                        toastr = MessageResult.AccessDenied
+                    });
+                if (type == 2)
                 {
                     entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.Huy;
                 }

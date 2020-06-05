@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Data.DTO;
 using Data.Enum;
 using Data.Models;
 using System;
@@ -20,7 +21,6 @@ namespace KLTN.Areas.GVHD.Models
                 .ForMember(dest => dest.HoTenGVHD, options => options.MapFrom(orderitem => orderitem.IdgiangVienNavigation.Ho +" "+ orderitem.IdgiangVienNavigation.Ten))
                 .ForMember(dest => dest.TenTep, options => options.MapFrom(orderitem => orderitem.TenTep == null ? "" : orderitem.TenTep));
 
-            //CreateMap<DeTaiNghienCuu, DeTaiNghienCuuViewModel>().ReverseMap();
         }
     }
 }

@@ -111,7 +111,7 @@
                         //window.location.reload();
                     }
                     else
-                        toastr.error(response.mess);
+                        toastr.error(response.toastr);
                 }
             });
         };
@@ -145,7 +145,8 @@
                     }
                     else {
                         $('.lblFiles').text(response.mess);
-                        //toastr.error(response.mess);
+                        if (response.toastr != "")
+                            toastr.error(response.toastr);
                     }
                 }
             });
