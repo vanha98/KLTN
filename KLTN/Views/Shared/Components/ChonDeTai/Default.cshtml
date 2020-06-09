@@ -3,10 +3,11 @@
 <div class="form-group">
     <label>Chọn đề tài</label>
     <select id="SelectDeTai" class="form-control">
-        <option>Chọn đề tài</option>
+        <option></option>
         @foreach (var item in Model)
         {
             <option value="@item.Id">@item.TenDeTai</option>
         }
     </select>
+    <span class="text-danger lblChonDeTai"></span>
 </div>

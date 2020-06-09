@@ -9,6 +9,7 @@ namespace KLTN.Areas.GVHD.Models
 {
     public class BaiPostViewModel
     {
+        public int Id { get; set; }
         public string TieuDe { get; set; }
         public string NoiDung { get; set; }
         public int Loai { get; set; }

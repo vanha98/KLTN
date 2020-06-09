@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
+using KLTN.Models;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
@@ -42,7 +43,7 @@ namespace KLTN.Areas.GVHD.Controllers
         }
 
         [NonAction]
-        public async Task<bool> UpLoadFile(List<IFormFile> files, BaiPost model, IImgBaiPost service)
+        public async Task<bool> UpLoadFile(List<IFormFile> files, BaiPost model)
         {
             if (files == null) return true;
             string[] permittedExtensions = { ".png", ".jpeg", ".jpg" };
@@ -62,9 +63,11 @@ namespace KLTN.Areas.GVHD.Controllers
                 await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
                 ImgBaiPost imgBaiPost = new ImgBaiPost {
                     IdbaiPost = model.Id,
+                    TenAnh = file.FileName,
+                    KichThuoc = FileSizeFormatter.FormatSize(file.Length),
                     AnhDinhKem = uniqueFileName
                 };
-                await service.Add(imgBaiPost);
+                model.ImgBaiPost.Add(imgBaiPost);
             }
             return true;
         }
@@ -92,9 +95,9 @@ namespace KLTN.Areas.GVHD.Controllers
                 entity.IdkenhThaoLuan = kenhThaoLuan.Id;
             }
             entity.Status = (int)BaseStatus.Active;
-            await _service.Update(entity);
-            if (await UpLoadFile(vmodel.Files,entity,_serviceimgBaiPost))
+            if (await UpLoadFile(vmodel.Files,entity))
             {
+                await _service.Update(entity);
                 return Ok(new
                 {
                     status = true,
@@ -103,7 +106,12 @@ namespace KLTN.Areas.GVHD.Controllers
                     mess = MessageResult.CreateSuccess
                 });
             }
-            return Ok();
+            else
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.UpLoadFileFail
+                });
         }
 
         public List<BaiPostDTO> LoadBaiPost(List<BaiPost> listBaiPost,bool CongKhaiTab)
@@ -124,61 +132,63 @@ namespace KLTN.Areas.GVHD.Controllers
             return datas;
         }
 
-        public async Task<JsonResult> SearchBaiPost (string SearchString, bool CongKhaiTab)
+        public async Task<List<BaiPost>> LoadData(IBaiPost _service, string SearchString, bool CongKhaiTab)
         {
-            if(!String.IsNullOrEmpty(SearchString))
+            List<BaiPost> listBaiPost = new List<BaiPost>();
+            if (!String.IsNullOrEmpty(SearchString))
             {
-                List<BaiPost> listBaiPost = new List<BaiPost>();
                 if (CongKhaiTab)
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.CongKhai);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
-                    
+
                 }
                 else
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.RiengTu);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
-                }
-                if (listBaiPost.Any() && listBaiPost != null)
-                {
-                    var datas = LoadBaiPost(listBaiPost,CongKhaiTab);
-                    return Json(new
-                    {
-                        status = true,
-                        loai = CongKhaiTab,
-                        data = datas
-                    });
-                }
-                else
-                {
-                    return Json(new
-                    {
-                        status = false
-                    });
                 }
             }
             else
+            {
+                if (CongKhaiTab)
+                {
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
+                    listBaiPost = result.ToList();
+                }
+                else
+                {
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
+                    listBaiPost = result.ToList();
+                }
+            }
+            return listBaiPost;
+        }
+
+        public async Task<JsonResult> SearchBaiPost (string SearchString, bool CongKhaiTab)
+        {
+            List<BaiPost> listBaiPost = await LoadData(_service, SearchString, CongKhaiTab);
+            if (listBaiPost.Any() && listBaiPost != null)
+            {
+                var datas = LoadBaiPost(listBaiPost,CongKhaiTab);
+                return Json(new
+                {
+                    status = true,
+                    loai = CongKhaiTab,
+                    data = datas
+                });
+            }
+            else
+            {
                 return Json(new
                 {
                     status = false
                 });
-
+            }
         }
         public async Task<JsonResult> RefreshList(bool CongKhaiTab)
         {
-            List<BaiPost> listBaiPost = new List<BaiPost>();
-            if (CongKhaiTab)
-            {
-                IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.CongKhai);
-                listBaiPost = result.ToList();
-            }
-            else
-            {
-                IEnumerable<BaiPost> result = await _service.GetAll(x => x.Loai == (int)BaiPostType.RiengTu);
-                listBaiPost = result.ToList();
-            }
-
+            List<BaiPost> listBaiPost = await LoadData(_service, null, CongKhaiTab);
             if (listBaiPost.Any() && listBaiPost != null)
             {
                 var datas = LoadBaiPost(listBaiPost, CongKhaiTab);
@@ -199,13 +209,84 @@ namespace KLTN.Areas.GVHD.Controllers
         }
         public async Task<JsonResult> NoiDungBaiPost(int idbaipost)
         {
-                BaiPost baiPost = await _service.GetById(idbaipost);
-                return Json(new
-                {
-                    status = true,
-                    data = baiPost
-                });
+            BaiPost baiPost = await _service.GetById(idbaipost);
+            List<ImgBaiPost> listImg = baiPost.ImgBaiPost.ToList();
+            return Json(new
+            {
+                status = true,
+                data = baiPost,
+                listImg=listImg
+            });
         }
             
+        [HttpPost]
+        public async Task<IActionResult> GoAnh(int id)
+        {
+            ImgBaiPost imgBaiPost = await _serviceimgBaiPost.GetById(id);
+            if (imgBaiPost != null)
+            {
+                await _serviceimgBaiPost.Delete(imgBaiPost);
+                return Ok(new
+                {
+                    status = true,
+                });
+            }
+            return Ok(new
+            {
+                status = false,
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(BaiPostViewModel data)
+        {
+            if(data != null)
+            {
+                var BaiPost = await _service.GetById(data.Id);
+                BaiPost.TieuDe = data.TieuDe;
+                BaiPost.NoiDung = data.NoiDung;
+                if(await UpLoadFile(data.Files,BaiPost))
+                {
+                    await _service.Update(BaiPost);
+                    return Ok(new
+                    {
+                        status = true,
+                        mess = MessageResult.UpdateSuccess
+                    });
+                }
+                else
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.UpLoadFileFail
+                    });
+            }
+            else
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.Fail
+                });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> XoaBaiPost(int id)
+        {
+            BaiPost baiPost = await _service.GetById(id);
+            if (baiPost != null)
+            {
+                baiPost.Status = (int)BaseStatus.Disable;
+                await _service.Update(baiPost);
+                return Ok(new
+                {
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
+                });
+            }
+            return Ok(new
+            {
+                status = false,
+            });
+        }
     }
 }

@@ -6,7 +6,7 @@
         <div class="form-group">
             <label>Tên tiêu đề</label>
             <input type="text" id="InputTieuDe" asp-for="TieuDe" name="TieuDe" class="form-control" placeholder="Nhập tên tiêu đề">
-            <span asp-validation-for="TieuDe" class="text-danger"></span>
+            <span asp-validation-for="TieuDe" class="text-danger lblTieuDe"></span>
         </div>
 
         <div class="form-group">
@@ -14,9 +14,9 @@
             <label>Nội dung bài đăng</label>
             <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập nội dung"></textarea>
             <div class="custom-file">
-                <input asp-for="Files" type="file" id="Files" class="custom-file-input" name="Files" multiple />
+                <input asp-for="Files" type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
                 <label class="custom-file-label" for="customFile">Chọn hình ảnh </label>
-                <span asp-validation-for="Files" class="text-danger"></span>
+                <span asp-validation-for="Files" class="text-danger lblFiles"></span>
             </div>
         </div>
 
@@ -31,8 +31,9 @@
                     <div class="col text-center">
                         <input type="checkbox" class="form-check-input privateCheck"><label>Riêng tư</label>
                     </div>
+                </div>
+                <div class="row">
                     <span class="text-danger textCheckbox"></span>
-
                 </div>
             </div>
             <div class="col-6" id="divChonDeTai" hidden>@await Component.InvokeAsync("ChonDeTai", User.Identity.Name)</div>
