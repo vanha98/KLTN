@@ -1,0 +1,100 @@
+﻿@model IEnumerable<BaiPost>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/SinhVien/Views/Shared/_Layout.cshtml";
+}
+
+@section Script{
+    <script src="~/Resources/SinhVien/ThaoLuan.js"></script>
+}
+
+<div class="container" id="mydiv">
+    <div class="row">
+        <div class="col-md-4 p-3 card">
+            @await Component.InvokeAsync("BtnTaoBaiDang")
+            <br />
+            @await Component.InvokeAsync("TimKiem")
+            <br />
+            <div class="form-group">
+                <label>Đề tài nghiên cứu</label>
+                <select class="form-control select2 " data-placeholder="Select a State" style="width: 100%;">
+                    <option>Đề tài 1</option>
+                    <option>Đề tài 2</option>
+                    <option>Đề tài 3</option>
+                    <option>Đề tài 4</option>
+                    <option>Đề tài 5</option>
+                    <option>Đề tài 6</option>
+                    <option>Đề tài 7</option>
+                </select>
+            </div>
+            @await Component.InvokeAsync("ListBaiPosts", new { listbaipost = Model })
+        </div>
+        <div class="col-md-8 card">
+            <div hidden id="wait" class="overlay">
+                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+            </div>
+            <div class="container">
+                <div class="row justify-content-end">
+                    @await Component.InvokeAsync("MarkEditDelete")
+                </div>
+                <div id="txtTieuDeBaiPost" class="row">
+                    <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col" align="center">
+                        <input type="text" class="form-control w-50 align-items-center" id="inputTieuDe" hidden />
+                    </div>
+                </div>
+
+                @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
+
+                <div class="row">
+                    <div class="col">
+                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
+                    </div>
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col">
+                        @await Component.InvokeAsync("ListBinhLuan")
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="text" id="valueIdBaiPost" hidden />
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader">Tạo bài đăng mới</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @*@await Html.PartialAsync("_CreatePopup", new BaiPostViewModel { })*@
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="modalImg">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img class="img-responsive" style="width:100%;height:500px" id="LargeImg" />
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

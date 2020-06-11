@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Data.Models.BaiPost>
+
+<table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblSinhVien">
+    @foreach (var item in Model)
+    {
+
+        <tr id="@item.Id">
+            <td><label class="text-truncate" style="max-width: 190px">@item.TieuDe</label></td>
+            <td>@item.NgayPost.Value.ToString("dd/MM/yyyy")</td>
+        </tr>
+    }
+</table>
