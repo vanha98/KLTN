@@ -65,13 +65,12 @@
         if (listImg != null || listImg != '') {
             $.each(listImg, function (i, item) {
                 var li = '<li class="img_'+item.id+'">' +
-                    '<div class="img-wrap"><span class="close" title="Gỡ ảnh"><a class="DeleteImg" hidden href="#" data-id="' + item.id +'">&times;</a></span>' +
-                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" src="/../../img/ThaoLuan/' + item.anhDinhKem + '" alt="Attachment"></span></div>'+
+                    '<div class="img-fluid"><span class="close" title="Gỡ ảnh"><a class="DeleteImg" hidden href="#" data-id="' + item.id +'">&times;</a></span>' +
+                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" data-src="/../../img/ThaoLuan/' + item.anhDinhKem + '" src="/../../img/ThaoLuan/' + item.anhDinhKem + '" alt="Attachment"></span></div>'+
                     '<div class="mailbox-attachment-info">' +
-                    '<a href="#" class="mailbox-attachment-name"><i class="fas fa-camera"></i>'+item.tenAnh+'</a>' +
+                    '<a href="/../../img/ThaoLuan/' + item.anhDinhKem + '" download="' + item.tenAnh + '" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + item.tenAnh + '</a>' +
                     '<span class="mailbox-attachment-size clearfix mt-1">' +
                     '<span>'+item.kichThuoc+'</span>' +
-                    '<a href="#" class="btn btn-default btn-sm float-right"><i class="fas fa-cloud-download-alt"></i></a>' +
                     '</span>' +
                     '</div>' +
                     '</li>';
@@ -94,76 +93,21 @@
         $('.addImg').prop('hidden', true);
     }
 
-    var arrayImg = Array();
+    var arrayImg = new CustomArrayImg("imgFile", "imgAttach");
     //Delete imgTemp
     $(document).delegate('.DeleteImgTemp', 'click', function () {
         var filename = $(this).data('id');
-        $.each(arrayImg, function (i, item) {
-            if (item.name === filename) {
-                arrayImg.splice(i, 1);
-                $(".img_" + filename.split('.')[0]).remove();
-                return false;
-            }
-        });
-        console.log(arrayImg);
+        arrayImg.DeleteImgTemp(filename);
     });
 
     //Save data Edit
-    
-
     //add Img when Edit
     $(document).delegate('.btnaddImg', 'click', function () {
         $('#imgFile').trigger('click');
 
     });
     $('#imgFile').change(function () {
-        var files = $(this)[0].files;
-        $.each(files, function (i, item) {
-            arrayImg.push(item);
-        });
-        console.log(arrayImg);
-        if (files.length > 1) {
-            for (i = 0; i < files.length; i++) {
-                var reader = new FileReader();
-                reader.fileName = files[i].name;
-                reader.index = i;
-                reader.onload = function (e) {
-                    var li = '<li class="img_' + e.target.fileName.split('.')[0] + '">' +
-                        '<div class="img-wrap"><span class="close" title="Gỡ ảnh"><a class="DeleteImgTemp" data-id="' + e.target.fileName + '" href="#">&times;</a></span>' +
-                        '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" src="' + e.target.result + '" alt="Attachment"></span></div>' +
-                        '<div class="mailbox-attachment-info">' +
-                        '<a href="#" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + e.target.fileName + '</a>' +
-                        '<span class="mailbox-attachment-size clearfix mt-1">' +
-                        '<span></span>' +
-                        '<a href="#" class="btn btn-default btn-sm float-right"><i class="fas fa-cloud-download-alt"></i></a>' +
-                        '</span>' +
-                        '</div>' +
-                        '</li>';
-                    ulImg.prepend(li);
-                };
-                reader.readAsDataURL(files[i]);
-            }
-        }
-        else {
-            var reader = new FileReader();
-            reader.fileName = files[0].name;
-            reader.onload = function (e) {
-                var li = '<li class="img_' + e.target.fileName.split('.')[0] + '">' +
-                    '<div class="img-wrap"><span class="close" title="Gỡ ảnh"><a class="DeleteImgTemp" data-id="' + e.target.fileName + '" href="#">&times;</a></span>' +
-                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" src="' + e.target.result + '" alt="Attachment"></span></div>' +
-                    '<div class="mailbox-attachment-info">' +
-                    '<a href="#" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + files[0].name + '</a>' +
-                    '<span class="mailbox-attachment-size clearfix mt-1">' +
-                    '<span></span>' +
-                    '<a href="#" class="btn btn-default btn-sm float-right"><i class="fas fa-cloud-download-alt"></i></a>' +
-                    '</span>' +
-                    '</div>' +
-                    '</li>';
-                ulImg.prepend(li);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-        //$('#imgFile').val('');
+        arrayImg.pushImgToArray();
     });
 
     function DeleteImg(id) {
@@ -201,8 +145,8 @@
         var NoiDung = $('#inputNoiDung').val();
         var TieuDe = $('#inputTieuDe').val();
         var data = new FormData();
-        for (var i = 0; i < arrayImg.length; i++) {
-            data.append('Files', arrayImg[i]);
+        for (var i = 0; i < arrayImg.array.length; i++) {
+            data.append('Files', arrayImg.array[i]);
         }
         data.append('NoiDung', NoiDung);
         data.append('Id', id);
@@ -251,7 +195,7 @@
                     else
                         $("#tblCongKhai").load(window.location.href + " #tblCongKhai");
                     LoadNoiDung(id);
-                    arrayImg = [];
+                    arrayImg.array = [];
                 }
                 else {
                     toastr.error(response.mess);
@@ -375,7 +319,7 @@
         $('#InputTieuDe').val('');
         $('#InputNoiDung').val('');
         $('#SelectDeTai option:selected').val('');
-        $('#SelectDeTai').prop('hidden',true);
+        $('#divChonDeTai').prop('hidden',true);
         $('.publicCheck').prop('checked', false);
         $('.privateCheck').prop('checked', false);
         $("#Files").val("");
@@ -463,4 +407,10 @@
         data.append('Loai', Type);
         Create(data);
     })
+
+    $(document).delegate('img','click', function () {
+        src = $(this).data('src');
+        $("#LargeImg").attr('src', src);
+    });
+
 });

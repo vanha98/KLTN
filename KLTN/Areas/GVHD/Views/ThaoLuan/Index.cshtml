@@ -19,8 +19,8 @@
 
 @section Script{
     <script src="~/Resources/GVHD/ThaoLuan.js"></script>
-
-
+    <script src="~/Resources/GVHD/Comments.js"></script>
+    <script src="~/Resources/CustomArrayImg.js"></script>
 }
 
 <div class="container" id="mydiv">
@@ -46,7 +46,7 @@
 
                 <div class="row mb-2">
                     <div class="col" align="center">
-                        <input type="text" class="form-control w-50 align-items-center" id="inputTieuDe" hidden />
+                        <input type="text" class="form-control w-50 align-items-center" placeholder="Tiêu đề" id="inputTieuDe" hidden />
                     </div>
                 </div>
                 
@@ -56,7 +56,6 @@
                     <div class="col">
                         @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
                     </div>
-
                 </div>
                 <br />
                 <div class="row">
