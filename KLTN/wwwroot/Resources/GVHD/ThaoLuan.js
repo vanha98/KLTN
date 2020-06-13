@@ -36,9 +36,16 @@
     function LoadNoiDung(idbaipost) {
         var SetNoiDung = $("#txtNoiDungBaiPost");
         var SetTieuDe = $("#txtTieuDeBaiPost");
+        $('#valueIdBaiPost').val(idbaipost);
         SetTieuDe.html("");
         SetNoiDung.html("");
         ulImg.html("");
+        $('#showMore').prop('hidden', true);
+        $('#inputComments').val('');
+        $("#imgCommentFile").val('');
+        $("#imgComment").empty();
+        $('#bodyComments').empty();
+        $('#loadUser').empty();
         $.ajax({
             url: "/GVHD/ThaoLuan/NoiDungBaiPost",
             type: "post",
@@ -52,6 +59,10 @@
                     SetTieuDe.append(datatieude);
                     if (response.data.noiDung != null)
                         SetNoiDung.append("<p style='white-space: pre-line'>" + response.data.noiDung + "</p>");
+                    var user = '<img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image">' +
+                        '<span class="username"><a href="#">' + response.userName + '</a></span>' +
+                        '<span class="description">' + response.ngayPostToString + '</span>';
+                    $('#loadUser').append(user);
                     $(".btnEdit").attr("data-id", idbaipost);
                     $(".btnDelete").attr("data-id", idbaipost);
                     LoadImg(response.listImg);
@@ -66,9 +77,9 @@
             $.each(listImg, function (i, item) {
                 var li = '<li class="img_'+item.id+'">' +
                     '<div class="img-fluid"><span class="close" title="Gỡ ảnh"><a class="DeleteImg" hidden href="#" data-id="' + item.id +'">&times;</a></span>' +
-                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" data-src="/../../img/ThaoLuan/' + item.anhDinhKem + '" src="/../../img/ThaoLuan/' + item.anhDinhKem + '" alt="Attachment"></span></div>'+
+                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" data-src="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" src="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" alt="Attachment"></span></div>'+
                     '<div class="mailbox-attachment-info">' +
-                    '<a href="/../../img/ThaoLuan/' + item.anhDinhKem + '" download="' + item.tenAnh + '" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + item.tenAnh + '</a>' +
+                    '<a href="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" download="' + item.tenAnh + '" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + item.tenAnh + '</a>' +
                     '<span class="mailbox-attachment-size clearfix mt-1">' +
                     '<span>'+item.kichThuoc+'</span>' +
                     '</span>' +
@@ -96,8 +107,10 @@
     var arrayImg = new CustomArrayImg("imgFile", "imgAttach");
     //Delete imgTemp
     $(document).delegate('.DeleteImgTemp', 'click', function () {
-        var filename = $(this).data('id');
-        arrayImg.DeleteImgTemp(filename);
+        var file = $(this).data('id');
+        var li = $(this).closest("li");
+        li.remove();
+        arrayImg.DeleteImgTemp(file);
     });
 
     //Save data Edit
@@ -137,6 +150,7 @@
     $('.btnHuyEdit').on('click', function () {
         var id = $('#valueIdBaiPost').val();
         LoadNoiDung(id);
+        LoadComments(id);
     });
 
     //Luu
@@ -156,9 +170,6 @@
 
     //Edit BaiPost
     $('.btnEdit').on('click', function () {
-        var id = $(this).attr('data-id');
-        $('#valueIdBaiPost').val(id);
-
         var txtNoiDung = $('#txtNoiDungBaiPost');
         txtNoiDung.prop('hidden', true);
         var txtTieuDe = $('#txtTieuDeBaiPost');
@@ -196,6 +207,7 @@
                         $("#tblCongKhai").load(window.location.href + " #tblCongKhai");
                     LoadNoiDung(id);
                     arrayImg.array = [];
+                    LoadComments(id);
                 }
                 else {
                     toastr.error(response.mess);
@@ -205,8 +217,8 @@
     };
 
        //Delete BaiPost
-    $(document).delegate('.btnDelete','click', function () {
-        var id = $(this).data('id');
+    $(document).delegate('.btnDelete', 'click', function () {
+        var id = $("#valueIdBaiPost").val();
         $.ajax({
             url: '/GVHD/ThaoLuan/XoaBaiPost',
             type: 'POST',

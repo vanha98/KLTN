@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
+using KLTN.Areas.GVHD.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KLTN.Areas.SinhVien.Controllers
@@ -35,36 +36,36 @@ namespace KLTN.Areas.SinhVien.Controllers
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Edit(BaiPostViewModel data)
-        {
-            if (data != null)
-            {
-                var BaiPost = await _service.GetById(data.Id);
-                BaiPost.TieuDe = data.TieuDe;
-                BaiPost.NoiDung = data.NoiDung;
-                if (await UpLoadFile(data.Files, BaiPost))
-                {
-                    await _service.Update(BaiPost);
-                    return Ok(new
-                    {
-                        status = true,
-                        mess = MessageResult.UpdateSuccess
-                    });
-                }
-                else
-                    return Ok(new
-                    {
-                        status = false,
-                        mess = MessageResult.UpLoadFileFail
-                    });
-            }
-            else
-                return Ok(new
-                {
-                    status = false,
-                    mess = MessageResult.Fail
-                });
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(BaiPostViewModel data)
+        //{
+        //    if (data != null)
+        //    {
+        //        var BaiPost = await _service.GetById(data.Id);
+        //        BaiPost.TieuDe = data.TieuDe;
+        //        BaiPost.NoiDung = data.NoiDung;
+        //        if (await UpLoadFile(data.Files, BaiPost))
+        //        {
+        //            await _service.Update(BaiPost);
+        //            return Ok(new
+        //            {
+        //                status = true,
+        //                mess = MessageResult.UpdateSuccess
+        //            });
+        //        }
+        //        else
+        //            return Ok(new
+        //            {
+        //                status = false,
+        //                mess = MessageResult.UpLoadFileFail
+        //            });
+        //    }
+        //    else
+        //        return Ok(new
+        //        {
+        //            status = false,
+        //            mess = MessageResult.Fail
+        //        });
+        //}
     }
 }

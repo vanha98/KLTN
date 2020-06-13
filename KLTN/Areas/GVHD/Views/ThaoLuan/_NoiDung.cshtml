@@ -1,0 +1,35 @@
+﻿<div class="card card-widget">
+    <div class="card-header">
+        @await Component.InvokeAsync("MarkEditDelete")
+    </div>
+    <div class="card-body">
+        <div id="txtTieuDeBaiPost">
+            <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col" align="center">
+                <input type="text" class="form-control w-50 text-center" placeholder="Tiêu đề" id="inputTieuDe" hidden />
+            </div>
+        </div>
+
+        @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
+        <div class="row">
+            <div class="col">
+                @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
+            </div>
+        </div>
+
+    </div>
+    <div class="card card-default w-100">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-comments"></i>
+                <b>Bình luận</b>
+            </h3>
+        </div>
+    </div>
+    <div class="card-footer">
+        @await Component.InvokeAsync("ListBinhLuan")
+    </div>
+</div>

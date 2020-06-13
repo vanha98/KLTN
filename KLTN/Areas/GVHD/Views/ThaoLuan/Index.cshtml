@@ -14,6 +14,8 @@
     right: 2px;
     z-index: 100;
 }
+.nondisplay{ display:none;
+}
 
 </style>
 
@@ -21,6 +23,42 @@
     <script src="~/Resources/GVHD/ThaoLuan.js"></script>
     <script src="~/Resources/GVHD/Comments.js"></script>
     <script src="~/Resources/CustomArrayImg.js"></script>
+    <script type="text/javascript">
+        var LoadComments = function (id) {
+            var cardbody = $('#bodyComments');
+            $.get('/GVHD/ThaoLuan/LoadComments/' + id, function (data) {
+                $.each(data, function (i, item) {
+                    var img = '';
+                    if (item.anhDinhKem != null)
+                        img = '<img style="width:30%; height:30%" data-toggle="modal" data-target="#modalImg" data-src="/../../img/GVHD/Comments/'+item.anhDinhKem+'" src="/../../img/GVHD/Comments/'+item.anhDinhKem+'" alt="Attachment">';
+                    var html = '<div class="card-comment">'+
+                                '<img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">'+
+                                '<div class="comment-text">'+
+                                    '<span class="username">'+item.nguoiComment+'<span class="text-muted float-right">'+item.ngayPost+'</span>'+
+                                    '</span><!-- /.username -->'+
+                                    item.noiDungComment + 
+                                        '</div>' +
+                                        '<span class="mailbox-attachment-icon has-img">'+
+                                    img +
+                                    '</span>' +
+                                        '</div>';
+                    cardbody.prepend(html);
+                })
+                var length = $('#bodyComments .card-comment').length;
+                if (length > 6) {
+                    $('#bodyComments .card-comment').slice(5).addClass('nondisplay');
+                    $('#showMore').prop("hidden", false);
+                }
+            });
+            
+            //var countDiv = $('#bodyComments div').length;
+            //$.ajax({
+            //    url: '/GVHD/ThaoLuan/LoadComments',
+            //    type: 'POST',
+            //    data: { id: id },
+            //});
+        }
+    </script>
 }
 
 <div class="container" id="mydiv">
@@ -32,43 +70,17 @@
             <br />
             @await Component.InvokeAsync("ListBaiPost", new KLTN.Models.TabListViewModel() { ViewType = (int)Data.Enum.ViewType.ThaoLuanGV, ListBaiPostThaoLuan = Model })
         </div>
-        <div class="col-md-8 card">
+        <div class="col-md-8">
             <div hidden id="wait" class="overlay">
                 <i class="fas fa-2x fa-sync-alt fa-spin"></i>
             </div>
-            <div class="container">
-                <div class="row justify-content-end">
-                    @await Component.InvokeAsync("MarkEditDelete")
-                </div>
-                <div id="txtTieuDeBaiPost" class="row">
-                    <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col" align="center">
-                        <input type="text" class="form-control w-50 align-items-center" placeholder="Tiêu đề" id="inputTieuDe" hidden />
-                    </div>
-                </div>
-                
-                @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
-
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("ListBinhLuan")
-                    </div>
-                </div>
-
-            </div>
+            @await Html.PartialAsync("_NoiDung")
         </div>
     </div>
 </div>
+
 <input type="text" id="valueIdBaiPost" hidden/>
+
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

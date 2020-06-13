@@ -1,8 +1,9 @@
 ﻿@model TabListViewModel
 
-<div class="row" >
-    <div class="col" >
-        <div class="card card-navy card-tabs" >
+
+<div class="row">
+    <div class="col">
+        <div class="card card-navy card-tabs">
             <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                     @if (Model.ViewType == (int)Data.Enum.ViewType.ThaoLuanGV)
@@ -18,7 +19,7 @@
                             </a>
                         </li>
                     }
-                    else if(Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
+                    else if (Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
                     {
                         <li class="nav-item">
                             <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
@@ -43,7 +44,7 @@
                                 @foreach (var item in Model.tabCongKhai)
                                 {
 
-                                    <tr id="@item.Id">
+                                    <tr id="@item.Id" onclick="LoadComments(@item.Id)">
                                         <td><label class="text-truncate" style="max-width: 190px">@item.TieuDe</label></td>
                                         <td>@item.NgayPost.Value.ToString("dd/MM/yyyy")</td>
                                     </tr>
@@ -55,7 +56,7 @@
                                 @foreach (var item in Model.tabRiengTu)
                                 {
 
-                                    <tr id="@item.Id">
+                                    <tr id="@item.Id" onclick="LoadComments(@item.Id)">
                                         <td><label class="text-truncate" style="max-width: 190px">@item.TieuDe</label></td>
                                         <td>@item.NgayPost.Value.ToString("dd/MM/yyyy")</td>
                                         <td>@item.IdkenhThaoLuanNavigation.IddeTai</td>
@@ -64,7 +65,7 @@
                             </table>
                         </div>
                     }
-                    else if(Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
+                    else if (Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
                     {
                         <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
 

@@ -14,6 +14,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
 using KLTN.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
@@ -25,10 +26,12 @@ namespace KLTN.Areas.GVHD.Controllers
         private readonly IKenhThaoLuan _serviceKenhThaoLuan;
         private readonly IImgBaiPost _serviceimgBaiPost;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
-        public ThaoLuanController(IBaiPost service, IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
+        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
         {
+            _userManager = userManager;
             _service = service;
             _serviceimgBaiPost = imgBaiPost;
             _serviceKenhThaoLuan = serviceKenhThaoLuan;
@@ -57,7 +60,7 @@ namespace KLTN.Areas.GVHD.Controllers
                 {
                     return false;
                 }
-                string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/ThaoLuan");
+                string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/GVHD/ThaoLuan");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string filePath = Path.Combine(UploadsFolder, uniqueFileName);
                 await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
@@ -210,12 +213,17 @@ namespace KLTN.Areas.GVHD.Controllers
         public async Task<JsonResult> NoiDungBaiPost(int idbaipost)
         {
             BaiPost baiPost = await _service.GetById(idbaipost);
+            string ngayPost = baiPost.NgayPost.Value.ToString("HH:mm dd/MM/yyyy");
+            var user = await _userManager.FindByNameAsync(baiPost.IdnguoiTao.ToString());
+            var claim = await _userManager.GetClaimsAsync(user);
             List<ImgBaiPost> listImg = baiPost.ImgBaiPost.ToList();
             return Json(new
             {
                 status = true,
                 data = baiPost,
-                listImg=listImg
+                listImg=listImg,
+                userName = claim[0].Value,
+                ngayPostToString = ngayPost,
             });
         }
             
@@ -287,6 +295,77 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 status = false,
             });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LoadComments(int id)
+        {
+            BaiPost BaiPost = await _service.GetEntity(x=>x.Id == id);
+            var Comments = BaiPost.Comments.ToList();
+            List<LoadCommentModel> data = new List<LoadCommentModel>();
+            foreach(var item in Comments)
+            {
+                var user = await _userManager.FindByNameAsync(item.IdnguoiTao.ToString());
+                var claim = await _userManager.GetClaimsAsync(user);
+                LoadCommentModel model = new LoadCommentModel {
+                    NoiDungComment = item.NoiDungComment,
+                    NgayPost = item.NgayPost.Value.ToString("HH:mm dd/MM/yyyy"),
+                    NguoiComment = claim[0].Value,
+                    AnhDinhKem = item.AnhDinhKem
+                };
+                data.Add(model);
+            }
+            return Json(data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendComment(CommentsViewModel data)
+        {
+            var BaiPost = await _service.GetById(data.IdbaiPost);
+            var files = data.Files;
+            string uniqueFileName = null;
+            if (files != null)
+            {
+                string[] permittedExtensions = { ".png", ".jpeg", ".jpg" };
+                var ext = Path.GetExtension(files.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.UpLoadFileFail
+                    });
+                }
+                else
+                {
+                    string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/GVHD/Comments");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + files.FileName;
+                    string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+                    await files.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                }
+            }
+            Comments cmt = new Comments
+                {
+                    IdnguoiTao = long.Parse(User.Identity.Name),
+                    NgayPost = DateTime.Now,
+                    NoiDungComment=data.NoiDungComment,
+                    AnhDinhKem = uniqueFileName,
+                    Status = (int)BaseStatus.Active
+                };
+            BaiPost.Comments.Add(cmt);
+            await _service.Update(BaiPost);
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var role = await _userManager.GetRolesAsync(user);
+            LoadCommentModel model = new LoadCommentModel
+            {
+                NguoiComment = User.FindFirst("Name").Value,
+                NgayPost = DateTime.Now.ToString("HH:mm dd/MM/yyyy"),
+                NoiDungComment = data.NoiDungComment,
+                AnhDinhKem = uniqueFileName,
+            };
+            
+            return Ok(new { status = true, data = model });
         }
     }
 }

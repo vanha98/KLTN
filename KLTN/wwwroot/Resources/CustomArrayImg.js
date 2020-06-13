@@ -1,5 +1,5 @@
 ﻿class CustomArrayImg {
-    constructor(fileImgName, ulName, array) {
+    constructor(fileImgName, ulName) {
         this.fileImgName = fileImgName;
         this.ulName = ulName;
         this.array = [];
@@ -29,6 +29,22 @@
             '</li>';
         return li;
     };
+
+    replaceImg() {
+        var obj = this;
+        var ul = $('#' + obj.ulName);
+        var files = this.getInstance()[0].files;
+        obj.array = [];
+        obj.array.push(files);
+        var reader = new FileReader();
+        reader.fileName = files[0].name;
+        reader.onload = function (e) {
+            var li = obj.makeTagli(e.target.fileName.split('.')[0], e.target.fileName, e.target.result, e.target.fileName);
+            ul.empty().append(li);
+        };
+        reader.readAsDataURL(files[0]);
+        console.log(obj.array);
+    }
 
     pushImgToArray() {
         var obj = this;
@@ -68,7 +84,6 @@
         $.each(obj.array, function (i, item) {
             if (item.name === filename) {
                 obj.array.splice(i, 1);
-                $(".img_" + filename.split('.')[0]).remove();
                 return false;
             }
         });

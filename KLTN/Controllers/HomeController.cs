@@ -43,17 +43,17 @@ namespace KLTN.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username,model.Password,model.RememberMe,false);
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.Username);
-                    var role = await _userManager.GetRolesAsync(user);
+                    //var user = await _userManager.FindByNameAsync(model.Username);
+                    //var role = await _userManager.GetRolesAsync(user);
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
                     }
-                    else if(role[0] == "SinhVien")
+                    else if(User.IsInRole("SinhVien"))
                     {
                         return RedirectToAction("Index", "Home", new {area="SinhVien" });
                     }
-                    else if(role[0] == "GVHD")
+                    else if(User.IsInRole("GVHD"))
                     {
                         return RedirectToAction("Index", "Home", new { area = "GVHD" });
                     }
