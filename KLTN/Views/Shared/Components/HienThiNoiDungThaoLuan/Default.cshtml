@@ -1,7 +1,8 @@
-﻿@model Views
+﻿@model Data.Models.BaiPost
+
 <div class="row">
-    <div class="mailbox-read-message" id="txtNoiDungBaiPost">
-       
+    <div class="mailbox-read-message">
+        <p style="white-space: pre-line" id="txtNoiDungBaiPost">@Model.NoiDung</p>
     </div>
     
     <textarea type="text" class="form-control" id="inputNoiDung" placeholder="Nội dung" hidden></textarea>
@@ -11,6 +12,22 @@
 <!-- /.card-body -->
 <div class="card-footer bg-white">
     <ul class="mailbox-attachments d-flex align-items-stretch clearfix h-100" id="imgAttach">
+        @foreach (var item in ViewBag.listImg)
+        {
+            <li class="img_@item.Id">
+                <div class="img-fluid">
+                    <span class="close" title="Gỡ ảnh"><a class="DeleteImg" hidden href="#" data-id="@item.Id">&times;</a></span>
+                    <span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" data-src="/../../img/ThaoLuan/@item.AnhDinhKem" src="/../../img/ThaoLuan/@item.AnhDinhKem" alt="Attachment"></span>
+                </div>
+                <div class="mailbox-attachment-info">
+                    <a href="/../../img/ThaoLuan/@item.AnhDinhKem" download="@item.AnhDinhKem" class="mailbox-attachment-name"><i class="fas fa-camera"></i>@item.TenAnh</a>
+                    <span class="mailbox-attachment-size clearfix mt-1">
+                        <span>@item.KichThuoc</span>
+                    </span>
+                </div>
+            </li>
+        }
+        <li class="addImg" hidden><button class="btn-block h-100 btn btnaddImg"><i style="font-size:86px">+</i></button></li>
     </ul>
     <input type="file" id="imgFile" accept="image/jpeg, image/png, image/jpg" hidden multiple/>
 </div>

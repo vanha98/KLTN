@@ -1,8 +1,47 @@
-﻿
-    
+﻿@model List<KLTN.Areas.GVHD.Models.LoadCommentModel>
+
+<script type="text/javascript">
+    var length = $('#bodyComments .card-comment').length;
+    var temp = 0;
+    if (length > 6) {
+        $('#bodyComments .card-comment').slice(5).addClass('nondisplay');
+        $('#showMore').prop("hidden", false);
+    }
+    function showMore(value) {
+        temp = temp + 1;
+        value = value * temp;
+        if (length - value <= 5) {
+            $('#bodyComments .card-comment').slice(value, length + 1).removeClass('nondisplay');
+            $('#showMore').prop('hidden', true);
+        }
+        else {
+            $('#bodyComments .card-comment').slice(value, value + 5).removeClass('nondisplay');
+        }
+    };
+</script>    
+
 <div class="card-comments" id="bodyComments">
+    @foreach (var item in Model)
+    {
+        <div class="card-comment">
+            <img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">
+            <div class="comment-text">
+                <span class="username">
+                    @item.NguoiComment
+                    <span class="text-muted float-right">@item.NgayPost</span>
+                </span><!-- /.username -->
+                <p style="white-space: pre-line">@item.NoiDungComment</p>
+            </div>
+            <span class="mailbox-attachment-icon has-img">
+               @if(item.AnhDinhKem != null)
+               {
+                   <img style="width:30%; height:30%" data-toggle="modal" data-target="#modalImg" data-src="/../../img/GVHD/Comments/@item.AnhDinhKem" src="/../../img/GVHD/Comments/@item.AnhDinhKem" alt="Attachment">
+               }
+            </span>
+        </div>
+    }
 </div>
-<div class="text-info" align="center" id="showMore" hidden>
-    <a href="#">Xem thêm bình luận</>
+<div class="text-info" align="center" id="showMore" onclick="showMore(5)" hidden>
+    <button class="btn w-100 btn-outline-secondary btn-sm">Xem thêm bình luận</button>
 </div>
         <!-- /.card-body -->

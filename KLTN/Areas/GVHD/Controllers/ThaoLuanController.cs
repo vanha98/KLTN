@@ -15,11 +15,12 @@ using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
 using KLTN.Models;
 using Microsoft.AspNetCore.Identity;
+using KLTN.Authorization;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
-    [Authorize]
     [Area("GVHD")]
+    [Authorize(Roles ="GVHD")]
     public class ThaoLuanController : Controller
     {
         private readonly IBaiPost _service;
@@ -29,7 +30,9 @@ namespace KLTN.Areas.GVHD.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
-        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
+        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, 
+            IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, 
+            IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
         {
             _userManager = userManager;
             _service = service;
@@ -60,7 +63,7 @@ namespace KLTN.Areas.GVHD.Controllers
                 {
                     return false;
                 }
-                string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/GVHD/ThaoLuan");
+                string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/ThaoLuan");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
                 string filePath = Path.Combine(UploadsFolder, uniqueFileName);
                 await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
@@ -210,39 +213,25 @@ namespace KLTN.Areas.GVHD.Controllers
                 });
             }
         }
-        public async Task<JsonResult> NoiDungBaiPost(int idbaipost)
+        public async Task<IActionResult> NoiDungBaiPost(int id)
         {
-            BaiPost baiPost = await _service.GetById(idbaipost);
-            string ngayPost = baiPost.NgayPost.Value.ToString("HH:mm dd/MM/yyyy");
-            var user = await _userManager.FindByNameAsync(baiPost.IdnguoiTao.ToString());
-            var claim = await _userManager.GetClaimsAsync(user);
-            List<ImgBaiPost> listImg = baiPost.ImgBaiPost.ToList();
-            return Json(new
-            {
-                status = true,
-                data = baiPost,
-                listImg=listImg,
-                userName = claim[0].Value,
-                ngayPostToString = ngayPost,
-            });
+            BaiPost baiPost = await _service.GetById(id);
+            return PartialView("_NoiDung", baiPost);
         }
-            
-        [HttpPost]
-        public async Task<IActionResult> GoAnh(int id)
+
+        [NonAction]
+        public bool DeleteImg(int[] idImg, BaiPost model)
         {
-            ImgBaiPost imgBaiPost = await _serviceimgBaiPost.GetById(id);
-            if (imgBaiPost != null)
+            foreach (int i in idImg)
             {
-                await _serviceimgBaiPost.Delete(imgBaiPost);
-                return Ok(new
+                ImgBaiPost imgBaiPost = model.ImgBaiPost.SingleOrDefault(x => x.Id == i);
+                if (imgBaiPost == null)
                 {
-                    status = true,
-                });
+                    return false;
+                }
+                model.ImgBaiPost.Remove(imgBaiPost);
             }
-            return Ok(new
-            {
-                status = false,
-            });
+            return true;
         }
 
         [HttpPost]
@@ -251,9 +240,24 @@ namespace KLTN.Areas.GVHD.Controllers
             if(data != null)
             {
                 var BaiPost = await _service.GetById(data.Id);
+                var isAuthorize = await _authorizationService.AuthorizeAsync(User, BaiPost, ThaoLuanOperation.Update);
+                if (!isAuthorize.Succeeded)
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.AccessDenied
+                    });
                 BaiPost.TieuDe = data.TieuDe;
                 BaiPost.NoiDung = data.NoiDung;
-                if(await UpLoadFile(data.Files,BaiPost))
+                if (!DeleteImg(data.currentImg, BaiPost))
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.Fail
+                    });
+                }
+                if (await UpLoadFile(data.Files,BaiPost))
                 {
                     await _service.Update(BaiPost);
                     return Ok(new
@@ -281,6 +285,13 @@ namespace KLTN.Areas.GVHD.Controllers
         public async Task<IActionResult> XoaBaiPost(int id)
         {
             BaiPost baiPost = await _service.GetById(id);
+            var isAuthorize = await _authorizationService.AuthorizeAsync(User, baiPost, ThaoLuanOperation.Delete);
+            if (!isAuthorize.Succeeded)
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.AccessDenied
+                });
             if (baiPost != null)
             {
                 baiPost.Status = (int)BaseStatus.Disable;
@@ -297,26 +308,26 @@ namespace KLTN.Areas.GVHD.Controllers
             });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LoadComments(int id)
-        {
-            BaiPost BaiPost = await _service.GetEntity(x=>x.Id == id);
-            var Comments = BaiPost.Comments.ToList();
-            List<LoadCommentModel> data = new List<LoadCommentModel>();
-            foreach(var item in Comments)
-            {
-                var user = await _userManager.FindByNameAsync(item.IdnguoiTao.ToString());
-                var claim = await _userManager.GetClaimsAsync(user);
-                LoadCommentModel model = new LoadCommentModel {
-                    NoiDungComment = item.NoiDungComment,
-                    NgayPost = item.NgayPost.Value.ToString("HH:mm dd/MM/yyyy"),
-                    NguoiComment = claim[0].Value,
-                    AnhDinhKem = item.AnhDinhKem
-                };
-                data.Add(model);
-            }
-            return Json(data);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> LoadComments(int id)
+        //{
+        //    BaiPost BaiPost = await _service.GetEntity(x=>x.Id == id);
+        //    var Comments = BaiPost.Comments.ToList();
+        //    List<LoadCommentModel> data = new List<LoadCommentModel>();
+        //    foreach(var item in Comments)
+        //    {
+        //        var user = await _userManager.FindByNameAsync(item.IdnguoiTao.ToString());
+        //        var claim = await _userManager.GetClaimsAsync(user);
+        //        LoadCommentModel model = new LoadCommentModel {
+        //            NoiDungComment = item.NoiDungComment,
+        //            NgayPost = item.NgayPost.Value.ToString("HH:mm dd/MM/yyyy"),
+        //            NguoiComment = claim[0].Value,
+        //            AnhDinhKem = item.AnhDinhKem
+        //        };
+        //        data.Add(model);
+        //    }
+        //    return Json(data);
+        //}
 
         [HttpPost]
         public async Task<IActionResult> SendComment(CommentsViewModel data)

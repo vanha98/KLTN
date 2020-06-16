@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,11 @@ namespace KLTN.Views.Shared.Components.HienThiNoiDungThaoLuan
 {
     public class HienThiNoiDungThaoLuanViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(BaiPost model)
         {
-            Models.Views views = new Models.Views();
-            return View(views);
+            List<ImgBaiPost> listImg = model.ImgBaiPost.Reverse().ToList();
+            ViewBag.listImg = listImg;
+            return View(model);
         }
     }
 }

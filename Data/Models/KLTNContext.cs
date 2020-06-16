@@ -169,15 +169,12 @@ namespace Data.Models
             {
                 entity.HasIndex(e => e.IdgiangVien);
 
-                entity.HasIndex(e => e.Idnhom);
 
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
-
-                entity.Property(e => e.Idnhom).HasColumnName("IDNhom");
 
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
 
@@ -186,10 +183,6 @@ namespace Data.Models
                     .HasForeignKey(d => d.IdgiangVien)
                     .HasConstraintName("FK__DeTaiNghi__IDGia__4E88ABD4");
 
-                entity.HasOne(d => d.IdnhomNavigation)
-                    .WithMany(p => p.DeTaiNghienCuu)
-                    .HasForeignKey(d => d.Idnhom)
-                    .HasConstraintName("FK__DeTaiNghi__IDNho__4F7CD00D");
             });
 
             modelBuilder.Entity<GiangVien>(entity =>
@@ -241,23 +234,15 @@ namespace Data.Models
             {
                 entity.HasIndex(e => e.IddeTai);
 
-                entity.HasIndex(e => e.IdgiangVien);
-
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
-
-                entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
 
                 entity.HasOne(d => d.IddeTaiNavigation)
                     .WithMany(p => p.KenhThaoLuan)
                     .HasForeignKey(d => d.IddeTai)
                     .HasConstraintName("FK__KenhThaoL__IDDeTai__60A75C0F");
 
-                entity.HasOne(d => d.IdgiangVienNavigation)
-                    .WithMany(p => p.KenhThaoLuan)
-                    .HasForeignKey(d => d.IdgiangVien)
-                    .HasConstraintName("FK__KenhThaoL__IDGia__60A75C0F");
             });
 
             modelBuilder.Entity<MoDot>(entity =>
@@ -303,7 +288,7 @@ namespace Data.Models
 
             modelBuilder.Entity<NhomSinhVien>(entity =>
             {
-                entity.HasKey(e => new { e.Idnhom, e.IdsinhVien })
+                entity.HasKey(e => new { e.Idnhom, e.IdsinhVien, e.IddeTai })
                     .HasName("PK__Nhom_Sin__CD149E43F71CE773");
 
                 entity.ToTable("Nhom_SinhVien");
@@ -314,11 +299,19 @@ namespace Data.Models
 
                 entity.Property(e => e.IdsinhVien).HasColumnName("IDSinhVien");
 
+                entity.Property(e => e.IddeTai).HasColumnName("IDDeTaiNghienCuu");
+
                 entity.HasOne(d => d.IdnhomNavigation)
                     .WithMany(p => p.NhomSinhVien)
                     .HasForeignKey(d => d.Idnhom)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Nhom_Sinh__Statu__3F466844");
+
+                entity.HasOne(d => d.IddeTaiNavigation)
+                    .WithMany(p => p.NhomSinhVien)
+                    .HasForeignKey(d => d.IddeTai)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Nhom_Sinh__IDDet__3F416244");
 
                 entity.HasOne(d => d.IdsinhVienNavigation)
                     .WithMany(p => p.NhomSinhVien)

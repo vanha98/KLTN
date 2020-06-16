@@ -12,7 +12,7 @@
 </style>
 @section Script{
     <script src="~/Resources/GVHD/DeTaiNghienCuu.js"></script>
-    <script>
+    <script type="text/javascript">
         // func test
         var EditAction = function (id) {
             url = "/GVHD/QLDeTai/Edit/" + id;
@@ -20,6 +20,14 @@
                 $("#CheckType").val(1);
                 $("#modal-lg").modal();
                 //$("#modal-lg").html("");
+            });
+        }
+
+        var XemNhom = function (id) {
+            $("#modal-NhomSV .modal-body").html("");
+            $.get('/GVHD/QLDeTai/XemNhom/' + id, function (content) {
+                $("#modal-NhomSV .modal-body").html(content);
+                $("#modal-NhomSV").modal();
             });
         }
 
@@ -31,9 +39,6 @@
                 //$("#modal-lg").html("");
             });
         }
-
-        
-    };
     </script>
 }
 <div class="content-header">
@@ -42,12 +47,13 @@
     </h1>
     <hr />
 </div>
-<div class="card" id="refreshTable">
+
+<div class="card" >
     <div class="card-body">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered compact table-hover table-sm" role="grid" aria-describedby="example1_info">
+                <table id="example1" class="table table-bordered dataTable table-hover table-sm nowrap" role="grid" aria-describedby="example1_info">
                     <thead >
                         <tr role="row">
                             <th rowspan="1"></th>
@@ -64,7 +70,7 @@
                                 Ngày lập
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                Nhóm sinh viên
+                                Sinh viên thực hiện
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                 Tệp đính kèm
@@ -127,4 +133,22 @@
 
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="modal-NhomSV">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-navy">
+                <h3 class="card-title">Thông tin nhóm thực hiện</h3>
+                <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>

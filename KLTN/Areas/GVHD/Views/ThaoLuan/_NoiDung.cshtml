@@ -1,10 +1,11 @@
-﻿<div class="card card-widget">
+﻿@model Data.Models.BaiPost
+
     <div class="card-header">
-        @await Component.InvokeAsync("MarkEditDelete")
+        @await Component.InvokeAsync("MarkEditDelete", Model)
     </div>
-    <div class="card-body">
-        <div id="txtTieuDeBaiPost">
-            <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
+    <div class="card-body" id="NoiDung">
+        <div >
+            <h3 class="col text-center" id="txtTieuDeBaiPost">@Model.TieuDe</h3>
         </div>
 
         <div class="row mb-2">
@@ -13,7 +14,7 @@
             </div>
         </div>
 
-        @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
+        @await Component.InvokeAsync("HienThiNoiDungThaoLuan",Model)
         <div class="row">
             <div class="col">
                 @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
@@ -30,6 +31,5 @@
         </div>
     </div>
     <div class="card-footer">
-        @await Component.InvokeAsync("ListBinhLuan")
+        @await Component.InvokeAsync("ListBinhLuan",Model)
     </div>
-</div>

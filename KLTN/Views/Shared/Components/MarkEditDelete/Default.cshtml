@@ -1,16 +1,22 @@
-﻿    <div class="user-block" id="loadUser">
-        
-    </div>
+﻿
+<div class="user-block" id="loadUser">
+    <img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image">
+    <span class="username"><a href="#">@ViewBag.Claim</a></span>
+    <span class="description">@ViewBag.NgayPost</span>
+</div>
     <!-- /.user-block -->
     <div class="card-tools">
         <button type="button" class="btn btn-tool" data-toggle="tooltip" title="Mark as read">
             <i class="far fa-star"></i>
         </button>
-        <button type="button" class="btn btn-tool btnEdit">
-            <i class="fas fa-pencil-alt"></i>
-        </button>
-        <button type="button" class="btn btn-tool btnDelete">
-            <i class="fas fa-times"></i>
-        </button>
+        @if (User.Identity.Name == ViewBag.IdnguoiTao)
+        {
+            <button type="button" class="btn btn-tool btnEdit">
+                <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button type="button" class="btn btn-tool btnDelete">
+                <i class="fas fa-times"></i>
+            </button>
+        }
     </div>
     <!-- /.card-tools -->

@@ -13,6 +13,7 @@ using KLTN.Areas.GVHD.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace KLTN.Areas.SinhVien.Controllers
 {
@@ -20,11 +21,15 @@ namespace KLTN.Areas.SinhVien.Controllers
     public class DangKyDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
+        private readonly INhom _serviceNhom;
         private readonly IMapper _mapper;
-        public DangKyDeTaiController (IDeTaiNghienCuu service, IMapper mapper)
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public DangKyDeTaiController (IDeTaiNghienCuu service, INhom serviceNhom, IMapper mapper, IHostingEnvironment hostingEnvironment)
         {
             _mapper = mapper;
             _service = service;
+            _serviceNhom = serviceNhom;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Index()
         {
@@ -60,7 +65,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 int recordsTotal = 0;
 
                 // getting all Customer data  
-                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet);
+                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet || x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DangThucHien);
                 //foreach(var item in entity)
                 //{
                 //    string name = item.IdgiangVienNavigation.Ho +" "+ item.IdgiangVienNavigation.Ten;
@@ -128,6 +133,11 @@ namespace KLTN.Areas.SinhVien.Controllers
             return PartialView("_CreateEditPopup", new DeTaiNghienCuuViewModel { });
         }
 
+        public IActionResult CreateEdit()
+        {
+            return PartialView("_CreateEditPopup");
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(DeTaiNghienCuuViewModel vmodel)
         {
@@ -178,31 +188,41 @@ namespace KLTN.Areas.SinhVien.Controllers
             {
                 return false;
             }
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
 
-                // Upload the file if less than 2 MB
-                if (memoryStream.Length < 2097152)
-                {
-                    model.TenTep = file.FileName;
-                    model.TepDinhKem = memoryStream.ToArray();
-                    return true;
-                }
-                else return false;
-            }
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/DeTaiNghienCuu");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TenTep = uniqueFileName;
+            return true;
         }
 
         [HttpPost]
         public async Task<IActionResult> LuuDeTai(long id)
         {
-            var data = await _service.GetById(id);
-            if(data != null)
+            var DeTai = await _service.GetById(id);
+
+            NhomSinhVien nhomSinhVien = new NhomSinhVien
             {
+                IdsinhVien = long.Parse(User.Identity.Name),
+                IddeTai = DeTai.Id
+            };
+            
+            if(DeTai != null)
+            {
+                Nhom nhom = new Nhom();
+                nhom.Status = (int)BaseStatus.Active;
+                nhom.NhomSinhVien.Add(nhomSinhVien);
+                await _serviceNhom.Add(nhom);
+
+                DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Het;
+                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DangThucHien;
+                //DeTai.NgaySVDangKy = DateTime.Now;
+                await _service.Update(DeTai);
                 return Json(new
                 {
                     status = true,
-                    data = data,
+                    data = DeTai,
                 });
             }
             else

@@ -11,23 +11,28 @@ using Data.Models;
 using KLTN.Areas.GVHD.Models;
 using KLTN.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
     [Area("GVHD")]
-    [Authorize]
+    [Authorize(Roles = "GVHD")]
     public class QLDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
+        private readonly INhomSinhVien _serviceNhomSV;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
-        public QLDeTaiController(IDeTaiNghienCuu service, IMapper mapper, IAuthorizationService authorizationService)
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public QLDeTaiController(IDeTaiNghienCuu service,INhomSinhVien serviceNhomSV, IMapper mapper, IHostingEnvironment hostingEnvironment, IAuthorizationService authorizationService)
         {
             _service = service;
             _mapper = mapper;
+            _serviceNhomSV = serviceNhomSV;
             _authorizationService = authorizationService;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Index()
         {
@@ -64,7 +69,7 @@ namespace KLTN.Areas.GVHD.Controllers
                 int recordsTotal = 0;
 
                 // getting all Customer data  
-                var entity = await _service.GetAll();
+                var entity = await _service.GetAll(x=>x.IdgiangVien == long.Parse(User.Identity.Name));
                 
                 //Sorting  
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
@@ -135,19 +140,13 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 return false;
             }
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-
-                // Upload the file if less than 2 MB
-                if (memoryStream.Length < 2097152)
-                {
-                    model.TenTep = file.FileName;
-                    model.TepDinhKem = memoryStream.ToArray();
-                    return true;
-                }
-                else return false;
-            }
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/DeTaiNghienCuu");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TenTep = file.FileName;
+            model.TepDinhKem = uniqueFileName;
+            return true;
         }
 
         [HttpPost]
@@ -275,13 +274,13 @@ namespace KLTN.Areas.GVHD.Controllers
             };
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DownLoadFile(long id)
-        {
-            DeTaiNghienCuu entity = await _service.GetById(id);
-            var ext = Path.GetExtension(entity.TenTep).ToLowerInvariant();
-            return File(entity.TepDinhKem, GetMyTypes()[ext], entity.TenTep);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> DownLoadFile(long id)
+        //{
+        //    DeTaiNghienCuu entity = await _service.GetById(id);
+        //    var ext = Path.GetExtension(entity.TenTep).ToLowerInvariant();
+        //    return File(entity.TepDinhKem, GetMyTypes()[ext], entity.TenTep);
+        //}
 
         //Gửi đề tài (status: đã gửi) - Hủy đề tài (hủy)
         [HttpPost]
@@ -319,6 +318,13 @@ namespace KLTN.Areas.GVHD.Controllers
                 status = true,
                 mess = MessageResult.UpdateSuccess
             });
+        }
+
+        public async Task<IActionResult> XemNhom(long id)
+        {
+            var DeTai = await _service.GetById(id);
+            var NhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == DeTai.Id);
+            return ViewComponent("ToggleThongTinSinhVien", NhomSV.Select(x => x.IdsinhVienNavigation));
         }
     }
 }

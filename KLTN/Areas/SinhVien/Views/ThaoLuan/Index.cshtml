@@ -2,10 +2,14 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/SinhVien/Views/Shared/_Layout.cshtml";
+    var deTai = ViewBag.DeTai;
+    var listDeTai = ViewBag.ListDeTai;
 }
 
 @section Script{
     <script src="~/Resources/SinhVien/ThaoLuan.js"></script>
+    <script src="~/Resources/CustomArrayImg.js"></script>
+    <script src="~/Resources/SinhVien/Comments.js"></script>
 }
 
 <div class="container" id="mydiv">
@@ -13,61 +17,39 @@
         <div class="col-md-4 p-3 card">
             @await Component.InvokeAsync("BtnTaoBaiDang")
             <br />
-            @await Component.InvokeAsync("TimKiem")
-            <br />
             <div class="form-group">
-                <label>Đề tài nghiên cứu</label>
-                <select class="form-control select2 " data-placeholder="Select a State" style="width: 100%;">
-                    <option>Đề tài 1</option>
-                    <option>Đề tài 2</option>
-                    <option>Đề tài 3</option>
-                    <option>Đề tài 4</option>
-                    <option>Đề tài 5</option>
-                    <option>Đề tài 6</option>
-                    <option>Đề tài 7</option>
+                <select class="form-control select2" data-placeholder="Select a State" style="width: 100%;">
+                    @foreach (var item in listDeTai)
+                    {
+                        if (item.Id == deTai.Id)
+                        {
+                            <option value="@item.Id" selected>@item.TenDeTai</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.TenDeTai</option>
+}
+                    }
                 </select>
             </div>
-            @await Component.InvokeAsync("ListBaiPosts", new { listbaipost = Model })
+            @await Component.InvokeAsync("TimKiem")
+            <div class="form-group" id="listBaiPost">
+                @await Component.InvokeAsync("ListBaiPosts", new { listbaipost = Model })
+            </div>
         </div>
-        <div class="col-md-8 card">
+
+        <div class="col-md-8">
             <div hidden id="wait" class="overlay">
                 <i class="fas fa-2x fa-sync-alt fa-spin"></i>
             </div>
-            <div class="container">
-                <div class="row justify-content-end">
-                    @await Component.InvokeAsync("MarkEditDelete")
-                </div>
-                <div id="txtTieuDeBaiPost" class="row">
-                    <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col" align="center">
-                        <input type="text" class="form-control w-50 align-items-center" id="inputTieuDe" hidden />
-                    </div>
-                </div>
-
-                @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
-
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
-                    </div>
-
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("ListBinhLuan")
-                    </div>
-                </div>
-
+            <div class="card card-widget">
             </div>
         </div>
     </div>
 </div>
 
 <input type="text" id="valueIdBaiPost" hidden />
+
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -78,7 +60,24 @@
                 </button>
             </div>
             <div class="modal-body">
-                @*@await Html.PartialAsync("_CreatePopup", new BaiPostViewModel { })*@
+                <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
+                    <div class="form-group">
+                        <label>Tên tiêu đề</label>
+                        <input type="text" id="InputTieuDe" class="form-control" placeholder="Nhập tên tiêu đề">
+                        <span class="text-danger lblTieuDe"></span>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="customFile">Custom File</label> -->
+                        <label>Nội dung bài đăng</label>
+                        <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập nội dung"></textarea>
+                        <div class="custom-file">
+                            <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
+                            <label class="custom-file-label" for="customFile">Chọn hình ảnh </label>
+                            <span class="text-danger lblFiles"></span>
+                        </div>
+                    </div>
+                    @await Component.InvokeAsync("LuuHuyFooter")
+                </form>
             </div>
         </div>
         <!-- /.modal-content -->

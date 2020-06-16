@@ -35,6 +35,7 @@ namespace KLTN
             
             services.AddDbContext<KLTNContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("KLTN")));
             services.AddIdentity<AppUser, AppRole>()
+                    .AddRoles<AppRole>()
                     // services.AddDefaultIdentity<IdentityUser>()
                     .AddEntityFrameworkStores<KLTNContext>()
                     .AddDefaultTokenProviders();
@@ -45,6 +46,8 @@ namespace KLTN
             services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
             services.AddScoped<ISinhVien, SinhVienBo>();
+            services.AddScoped<INhom, NhomBo>();
+            services.AddScoped<INhomSinhVien, NhomSinhVienBo>();
             services.AddScoped<IBaiPost, BaiPostBo>();
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
             services.AddScoped<IKenhThaoLuan, KenhThaoLuanBo>();
@@ -66,8 +69,9 @@ namespace KLTN
             });
 
             services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
+            services.AddScoped<IAuthorizationHandler, OwnerThaoLuanAuthorization>();
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
-
+            
 
             //services.AddMvc(options => options.EnableEndpointRouting = false);
         }

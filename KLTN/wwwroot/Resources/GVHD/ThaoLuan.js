@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
-
-    var ulImg = $('#imgAttach');
-
+    var currentImg = [];
     function CheckTab(CongKhaiTab, SetBaiPostCongKhai, SetBaiPostRiengTu) {
         if (CongKhaiTab) {
             SetBaiPostCongKhai.html("");
@@ -33,80 +31,10 @@
         }
     };
 
-    function LoadNoiDung(idbaipost) {
-        var SetNoiDung = $("#txtNoiDungBaiPost");
-        var SetTieuDe = $("#txtTieuDeBaiPost");
-        $('#valueIdBaiPost').val(idbaipost);
-        SetTieuDe.html("");
-        SetNoiDung.html("");
-        ulImg.html("");
-        $('#showMore').prop('hidden', true);
-        $('#inputComments').val('');
-        $("#imgCommentFile").val('');
-        $("#imgComment").empty();
-        $('#bodyComments').empty();
-        $('#loadUser').empty();
-        $.ajax({
-            url: "/GVHD/ThaoLuan/NoiDungBaiPost",
-            type: "post",
-            data: {
-                idbaipost: idbaipost
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.status) {
-                    var datatieude = '<h3 class="col text-center">' + response.data.tieuDe + '</h3>';
-                    SetTieuDe.append(datatieude);
-                    if (response.data.noiDung != null)
-                        SetNoiDung.append("<p style='white-space: pre-line'>" + response.data.noiDung + "</p>");
-                    var user = '<img class="img-circle" src="../dist/img/user1-128x128.jpg" alt="User Image">' +
-                        '<span class="username"><a href="#">' + response.userName + '</a></span>' +
-                        '<span class="description">' + response.ngayPostToString + '</span>';
-                    $('#loadUser').append(user);
-                    $(".btnEdit").attr("data-id", idbaipost);
-                    $(".btnDelete").attr("data-id", idbaipost);
-                    LoadImg(response.listImg);
-                    DisableEdit();
-                }
-            }
-        })
-    }
-
-    function LoadImg(listImg) {
-        if (listImg != null || listImg != '') {
-            $.each(listImg, function (i, item) {
-                var li = '<li class="img_'+item.id+'">' +
-                    '<div class="img-fluid"><span class="close" title="Gỡ ảnh"><a class="DeleteImg" hidden href="#" data-id="' + item.id +'">&times;</a></span>' +
-                    '<span class="mailbox-attachment-icon has-img"><img data-toggle="modal" data-target="#modalImg" data-src="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" src="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" alt="Attachment"></span></div>'+
-                    '<div class="mailbox-attachment-info">' +
-                    '<a href="/../../img/GVHD/ThaoLuan/' + item.anhDinhKem + '" download="' + item.tenAnh + '" class="mailbox-attachment-name"><i class="fas fa-camera"></i>' + item.tenAnh + '</a>' +
-                    '<span class="mailbox-attachment-size clearfix mt-1">' +
-                    '<span>'+item.kichThuoc+'</span>' +
-                    '</span>' +
-                    '</div>' +
-                    '</li>';
-                ulImg.append(li);
-            });
-            var last = '<li class="addImg" hidden><button class="btn-block h-100 btn btnaddImg"><i style="font-size:86px">+</i></button></li>';
-            ulImg.append(last);
-        }
-    };
-
-    function DisableEdit() {
-        $('#txtNoiDungBaiPost').prop('hidden', false);
-        $('#txtTieuDeBaiPost').prop('hidden', false);
-
-        $('#inputTieuDe').prop('hidden', true);
-        $('#inputNoiDung').prop('hidden', true);
-        $('.btnLuuEdit').prop('hidden', true);
-        $('.btnHuyEdit').prop('hidden', true);
-        $('.DeleteImg').prop('hidden', true);
-        $('.addImg').prop('hidden', true);
-    }
-
     var arrayImg = new CustomArrayImg("imgFile", "imgAttach");
     //Delete imgTemp
-    $(document).delegate('.DeleteImgTemp', 'click', function () {
+    $(document).delegate('.DeleteImgTemp', 'click', function (e) {
+        e.preventDefault();
         var file = $(this).data('id');
         var li = $(this).closest("li");
         li.remove();
@@ -119,42 +47,32 @@
         $('#imgFile').trigger('click');
 
     });
-    $('#imgFile').change(function () {
+    $(document).delegate('#imgFile','change',function () {
         arrayImg.pushImgToArray();
     });
 
-    function DeleteImg(id) {
-        $.ajax({
-            url: "/GVHD/ThaoLuan/GoAnh",
-            type: "post",
-            data: {
-                id: id
-            },
-            dataType: "json",
-            success: function (response) {
-                if (response.status) {
-                    $(".img_" + id).remove();
-                }
-            }
-        });
-    }
-
     //Delete Img
-    $(this).delegate('.DeleteImg','click', function (e) {
+    $(document).delegate('.DeleteImg','click', function (e) {
         e.preventDefault();
         var id = $(this).data('id');
-        DeleteImg(id);
+        currentImg.push(id);
+        console.log(currentImg);
+        var li = $(this).closest("li");
+        li.remove();
     });
 
     //Huy Edit
-    $('.btnHuyEdit').on('click', function () {
+    $(document).delegate('.btnHuyEdit','click', function () {
         var id = $('#valueIdBaiPost').val();
-        LoadNoiDung(id);
-        LoadComments(id);
+        arrayImg.array = [];
+        currentImg = [];
+        ReloadNoiDung(id);
+        //LoadNoiDung(id);
+        //LoadComments(id);
     });
 
-    //Luu
-    $('.btnLuuEdit').on('click', function () {
+    //Luu chinh sửa
+    $(document).delegate('.btnLuuEdit','click', function () {
         var id = $('#valueIdBaiPost').val();
         var NoiDung = $('#inputNoiDung').val();
         var TieuDe = $('#inputTieuDe').val();
@@ -165,11 +83,12 @@
         data.append('NoiDung', NoiDung);
         data.append('Id', id);
         data.append('TieuDe', TieuDe);
+        data.append('currentImg', currentImg);
         Edit(data,id);
     });
 
     //Edit BaiPost
-    $('.btnEdit').on('click', function () {
+    $(document).delegate('.btnEdit','click', function () {
         var txtNoiDung = $('#txtNoiDungBaiPost');
         txtNoiDung.prop('hidden', true);
         var txtTieuDe = $('#txtTieuDeBaiPost');
@@ -205,9 +124,11 @@
                         $("#tblRiengTu").load(window.location.href + " #tblRiengTu");
                     else
                         $("#tblCongKhai").load(window.location.href + " #tblCongKhai");
-                    LoadNoiDung(id);
+                    //LoadNoiDung(id);
                     arrayImg.array = [];
-                    LoadComments(id);
+                    currentImg = [];
+                    ReloadNoiDung(id);
+                    //LoadComments(id);
                 }
                 else {
                     toastr.error(response.mess);
@@ -219,17 +140,19 @@
        //Delete BaiPost
     $(document).delegate('.btnDelete', 'click', function () {
         var id = $("#valueIdBaiPost").val();
-        $.ajax({
-            url: '/GVHD/ThaoLuan/XoaBaiPost',
-            type: 'POST',
-            data: { id: id },
-            success: function (response) {
-                if (response.status) {
-                    toastr.success(response.mess);
-                    $("#mydiv").load(window.location.href + " #mydiv");
+        if (confirm('Xác nhận xóa bài đăng?')) {
+            $.ajax({
+                url: '/GVHD/ThaoLuan/XoaBaiPost',
+                type: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    if (response.status) {
+                        toastr.success(response.mess);
+                        $("#mydiv").load(window.location.href + " #mydiv");
+                    }
                 }
-            }
-        })
+            });
+        }
     })
 
     //Search BaiPost
@@ -288,19 +211,31 @@
         })
     });
 
+    //reLoad
+    function ReloadNoiDung(idbaipost) {
+        $(".card-widget").html("");
+        $.get('/GVHD/ThaoLuan/NoiDungBaiPost/' + idbaipost, function (content) {
+            $(".card-widget").html(content);
+        });
+    }
+
     //Click Row BaiPost hien thi noi dung
     $(document).on("click", "#tblCongKhai tr", function () {
         $('#tblCongKhai tr').removeClass("table-info");
         $(this).toggleClass("table-info");
         var idbaipost = $(this).attr("id");
-        LoadNoiDung(idbaipost);
+        $('#valueIdBaiPost').val(idbaipost);
+        ReloadNoiDung(idbaipost);
+        //LoadNoiDung(idbaipost);
     });
 
     $(document).on("click", "#tblRiengTu tr", function () {
         $('#tblRiengTu tr').removeClass("table-info");
         $(this).toggleClass("table-info");
         var idbaipost = $(this).attr("id");
-        LoadNoiDung(idbaipost);
+        $('#valueIdBaiPost').val(idbaipost);
+        ReloadNoiDung(idbaipost);
+        //LoadNoiDung(idbaipost);
     });
 
     //Click checkbox Public or Private

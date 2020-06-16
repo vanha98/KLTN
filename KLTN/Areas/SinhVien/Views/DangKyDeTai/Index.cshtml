@@ -18,12 +18,12 @@
         }
 
         var CreateAction = function () {
-            url = "/SinhVien/DangKyDeTai/Create/";
-            $(".modal-body").load(url, function () {
-                $("#CheckType").val("");
-                $("#modal-lg").modal();
-                //$("#modal-lg").html("");
-            });
+            url = "/SinhVien/DangKyDeTai/CreateEdit/";
+            $('.modal-body').html('');
+            $.get(url, function (data) {
+                $('.modal-body').html(data);
+                $('#modal-lg').modal();
+            })
         }
     </script>
 }
@@ -34,11 +34,11 @@
     <hr />
 </div>
 <div class="card">
-    <div class="card-body">
+    <div class="card-body" id="refreshTable">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-sm dataTable dtr-inline" style="width:100%" role="grid" aria-describedby="example1_info">
+                <table id="example1" class="table table-bordered table-hover dataTable table-sm dtr-inline" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
                             <th rowspan="2"></th>
@@ -62,7 +62,7 @@
                             </th>
                             <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
 
-                            <th rowspan="2"></th>
+                            @*<th rowspan="2"></th>*@
                         </tr>
                         <tr>
                             <th class="text-center">
@@ -112,7 +112,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @await Html.PartialAsync("_CreateEditPopup")
+                
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
         </div>

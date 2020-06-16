@@ -41,7 +41,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\img\GVHD\Comments\" />
     <Folder Include="wwwroot\img\GVHD\ThaoLuan\" />
-    <Folder Include="wwwroot\img\ThaoLuan\" />
+    <Folder Include="wwwroot\img\SinhVien\ThaoLuan\" />
   </ItemGroup>
 
 

@@ -1,15 +1,16 @@
 ﻿$(document).ready(function () {
     var arrayImgComment = new CustomArrayImg("imgCommentFile", "imgComment");
-    $('.btnOpenImgComment').click(function () {
+    $(document).delegate('.btnOpenImgComment','click',function () {
         $('#imgCommentFile').trigger('click');
     });
 
-    $('#imgCommentFile').change(function () {
+    $(document).delegate('#imgCommentFile','change',function () {
         arrayImgComment.replaceImg();
         //$(this).val('');
     })
 
     
+
     ////Delete imgComments
     //$(document).delegate('.DeleteImgComments', 'click', function () {
     //    var li = $(this).closest("li");
@@ -54,7 +55,7 @@
         });
     }
 
-    $('.btnSendComment').click(function () {
+    $(document).delegate('.btnSendComment','click',function () {
         var comment = $('#inputComments').val();
         var id = $("#valueIdBaiPost").val();
         var data = new FormData();
@@ -64,17 +65,10 @@
         data.append('IdbaiPost', id);
         SendComment(data);
     });
-    var x = 5;
-    $('#showMore').click(function (e) {
-        e.preventDefault();
-        var length = $('#bodyComments .card-comment').length;
-        if (length - x <= 5) {
-            $('#bodyComments .card-comment').slice(x, length + 1).removeClass('nondisplay');
-            $('#showMore').prop('hidden', true);
-        }
-        else {
-            $('#bodyComments .card-comment').slice(x, x + 5).removeClass('nondisplay');
-            x = x + 5;
-        }
-    })
+   
+    //$(document).delegate('#showMore','click',function (e) {
+    //    e.preventDefault();
+    //    var length = $('#bodyComments .card-comment').length;
+        
+    //})
 });
