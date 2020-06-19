@@ -7,15 +7,15 @@
 @section Script{
     <script src="~/Resources/SinhVien/DangKyDeTai.js"></script>
     <script>
-        // func
-        var EditAction = function (id) {
-            url = "/SinhVien/DangKyDeTai/Edit/" + id;
-            $(".modal-body").load(url, function () {
-                $("#CheckType").val(1);
-                $("#modal-lg").modal();
-                //$("#modal-lg").html("");
-            });
-        }
+        //// func
+        //var EditAction = function (id) {
+        //    url = "/SinhVien/DangKyDeTai/Edit/" + id;
+        //    $(".modal-body").load(url, function () {
+        //        $("#CheckType").val(1);
+        //        $("#modal-lg").modal();
+        //        //$("#modal-lg").html("");
+        //    });
+        //}
 
         var CreateAction = function () {
             url = "/SinhVien/DangKyDeTai/CreateEdit/";
@@ -119,4 +119,49 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<div class="modal" id="ConfirmDelete">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận hủy đăng ký đề tài?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="DKNhom">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Đăng ký thành viên</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="text" maxlength="12" class="form-control inputMSSV" placeholder="Nhập MSSV" />
+                </div>
+                <div class="mt-1"><label class="text-red text-bold" id="lblMSSV" hidden></label></div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDKNhom" disabled>Đăng ký</button>
+                
+            </div>
+
+        </div>
+    </div>
 </div>

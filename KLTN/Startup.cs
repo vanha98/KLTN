@@ -50,7 +50,6 @@ namespace KLTN
             services.AddScoped<INhomSinhVien, NhomSinhVienBo>();
             services.AddScoped<IBaiPost, BaiPostBo>();
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
-            services.AddScoped<IKenhThaoLuan, KenhThaoLuanBo>();
             services.AddScoped<IIdentity, Identity>();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>

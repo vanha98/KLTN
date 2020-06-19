@@ -210,7 +210,7 @@
                         '<td><label class="text-truncate" style="max-width: 190px">' + response.data.tieuDe + '</label ></td >' +
                         '<td>' + response.temp + '</td>' +
                         '</tr>';
-                    table.append(Html);
+                    table.prepend(Html);
                 }
                 else {
                     $('.lblFiles').text(response.mess);

@@ -295,15 +295,15 @@
                             '<td><label class="text-truncate" style="max-width: 190px">' + response.data.tieuDe + '</label ></td >' +
                             '<td>' + response.temp + '</td>' +
                             '</tr>';
-                        SetBaiPostCongKhai.append(Html);
+                        SetBaiPostCongKhai.prepend(Html);
                     }
                     else {
                         var Html = '<tr id="' + response.data.id + '">' +
                             '<td><label class="text-truncate" style="max-width: 190px">' + response.data.tieuDe + '</label ></td >' +
                             '<td>' + response.temp + '</td>' +
-                            '<td>' + response.data.idkenhThaoLuanNavigation.iddeTai + '</td>' +
+                            '<td>' + response.data.iddeTaiNghienCuu + '</td>' +
                             '</tr>';
-                        SetBaiPostRiengTu.append(Html);
+                        SetBaiPostRiengTu.prepend(Html);
                     }
                 }
                 else {

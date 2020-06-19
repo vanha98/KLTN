@@ -24,27 +24,26 @@ namespace KLTN.Areas.GVHD.Controllers
     public class ThaoLuanController : Controller
     {
         private readonly IBaiPost _service;
-        private readonly IKenhThaoLuan _serviceKenhThaoLuan;
         private readonly IImgBaiPost _serviceimgBaiPost;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
         public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, 
-            IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, 
+             IImgBaiPost imgBaiPost, 
             IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
         {
             _userManager = userManager;
             _service = service;
             _serviceimgBaiPost = imgBaiPost;
-            _serviceKenhThaoLuan = serviceKenhThaoLuan;
             _mapper = mapper;
             _authorizationService = authorizationService;
             _hostingEnvironment = hostingEnvironment;
         }
         public async Task<IActionResult> Index()
         {
-            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x => x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x =>x.IdnguoiTao == long.Parse(User.Identity.Name) 
+                                            && x.Status.Value == (int)BaseStatus.Active);
             return View(baiPosts);
         }
 
@@ -89,18 +88,19 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             BaiPost entity = new BaiPost();
             string tempNgay = DateTime.Now.ToString("dd/MM/yyyy");
-            await _service.Add(entity);
-            KenhThaoLuan kenhThaoLuan = await _serviceKenhThaoLuan.GetEntity(x=>x.IddeTai == vmodel.IdDeTaiNghienCuu);
             entity.TieuDe = vmodel.TieuDe;
+            if(vmodel.Loai == (int)BaiPostType.CongKhai)
+            {
+                entity.IddeTaiNghienCuu = DefaultValue.IddeTaiNghienCuu;
+            }
+            else
+                entity.IddeTaiNghienCuu = vmodel.IdDeTaiNghienCuu;
             entity.NoiDung = vmodel.NoiDung;
             entity.Loai = vmodel.Loai;
             entity.IdnguoiTao = long.Parse(User.Identity.Name);
             entity.NgayPost = DateTime.Now;
-            if (kenhThaoLuan != null)
-            {
-                entity.IdkenhThaoLuan = kenhThaoLuan.Id;
-            }
             entity.Status = (int)BaseStatus.Active;
+            await _service.Add(entity);
             if (await UpLoadFile(vmodel.Files,entity))
             {
                 await _service.Update(entity);
@@ -127,8 +127,10 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 BaiPostDTO bai = new BaiPostDTO();
                 bai.Id = item.Id;
-                if(CongKhaiTab==false)
-                    bai.IdDeTai = item.IdkenhThaoLuanNavigation.IddeTai;
+                if (CongKhaiTab == false)
+                    bai.IdDeTai = item.IddeTaiNghienCuu;
+                else
+                    bai.IdDeTai = DefaultValue.IddeTaiNghienCuu;
                 bai.IdnguoiTao = item.IdnguoiTao;
                 bai.TieuDe = item.TieuDe;
                 bai.NgayPost = item.NgayPost.Value.ToString("dd/MM/yyyy");
@@ -145,13 +147,13 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 if (CongKhaiTab)
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
 
                 }
                 else
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
                 }
             }

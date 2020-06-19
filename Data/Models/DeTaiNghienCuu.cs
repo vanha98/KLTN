@@ -8,7 +8,7 @@ namespace Data.Models
         public DeTaiNghienCuu()
         {
             BaoCaoTienDo = new HashSet<BaoCaoTienDo>();
-            KenhThaoLuan = new HashSet<KenhThaoLuan>();
+            BaiPost = new HashSet<BaiPost>();
             XetDuyetVaDanhGia = new HashSet<XetDuyetVaDanhGia>();
             NhomSinhVien = new HashSet<NhomSinhVien>();
         }
@@ -29,7 +29,7 @@ namespace Data.Models
         public virtual GiangVien IdgiangVienNavigation { get; set; }
         //public virtual Nhom IdnhomNavigation { get; set; }
         public virtual ICollection<BaoCaoTienDo> BaoCaoTienDo { get; set; }
-        public virtual ICollection<KenhThaoLuan> KenhThaoLuan { get; set; }
+        public virtual ICollection<BaiPost> BaiPost { get; set; }
         public virtual ICollection<XetDuyetVaDanhGia> XetDuyetVaDanhGia { get; set; }
         public virtual ICollection<NhomSinhVien> NhomSinhVien { get; set; }
     }

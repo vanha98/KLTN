@@ -26,7 +26,6 @@ namespace Data.Models
         public virtual DbSet<GiangVien> GiangVien { get; set; }
         public virtual DbSet<HoiDong> HoiDong { get; set; }
         public virtual DbSet<ImgBaiPost> ImgBaiPost { get; set; }
-        public virtual DbSet<KenhThaoLuan> KenhThaoLuan { get; set; }
         public virtual DbSet<MoDot> MoDot { get; set; }
         public virtual DbSet<NamHoc> NamHoc { get; set; }
         public virtual DbSet<Nhom> Nhom { get; set; }
@@ -55,11 +54,9 @@ namespace Data.Models
 
             modelBuilder.Entity<BaiPost>(entity =>
             {
-                entity.HasIndex(e => e.IdkenhThaoLuan);
-
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.IdkenhThaoLuan).HasColumnName("IDKenhThaoLuan");
+                entity.Property(e => e.IddeTaiNghienCuu).HasColumnName("IDDeTaiNghienCuu");
 
                 entity.Property(e => e.IdnguoiTao).HasColumnName("IDNguoiTao");
 
@@ -67,10 +64,10 @@ namespace Data.Models
 
                 entity.Property(e => e.TieuDe).HasMaxLength(150);
 
-                entity.HasOne(d => d.IdkenhThaoLuanNavigation)
+                entity.HasOne(d => d.IddeTaiNghienCuuNavigation)
                     .WithMany(p => p.BaiPost)
-                    .HasForeignKey(d => d.IdkenhThaoLuan)
-                    .HasConstraintName("FK__BaiPost__IDCTKen__6754599E");
+                    .HasForeignKey(d => d.IddeTaiNghienCuu)
+                    .HasConstraintName("FK__BaiPost__IDDeTa__6754599E");
             });
 
             modelBuilder.Entity<BaoCaoTienDo>(entity =>
@@ -228,21 +225,6 @@ namespace Data.Models
                     .WithMany(p => p.ImgBaiPost)
                     .HasForeignKey(d => d.IdbaiPost)
                     .HasConstraintName("FK__imgBaiPost__IDBaiP__6A30C649");
-            });
-
-            modelBuilder.Entity<KenhThaoLuan>(entity =>
-            {
-                entity.HasIndex(e => e.IddeTai);
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
-
-                entity.HasOne(d => d.IddeTaiNavigation)
-                    .WithMany(p => p.KenhThaoLuan)
-                    .HasForeignKey(d => d.IddeTai)
-                    .HasConstraintName("FK__KenhThaoL__IDDeTai__60A75C0F");
-
             });
 
             modelBuilder.Entity<MoDot>(entity =>

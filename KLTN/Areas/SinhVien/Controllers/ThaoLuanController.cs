@@ -24,18 +24,16 @@ namespace KLTN.Areas.SinhVien.Controllers
     {
         private readonly IBaiPost _serviceBaiPost;
         private readonly IDeTaiNghienCuu _serviceDeTai;
-        private readonly IKenhThaoLuan _serviceKenhThaoLuan;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly INhomSinhVien _serviceNhomSV;
         private readonly UserManager<AppUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
-        public ThaoLuanController(IBaiPost serviceBaiPost, IKenhThaoLuan serviceKenhThaoLuan,
+        public ThaoLuanController(IBaiPost serviceBaiPost,
             IDeTaiNghienCuu serviceDeTai, INhomSinhVien serviceNhomSV, UserManager<AppUser> userManager,
             IHostingEnvironment hostingEnvironment, IAuthorizationService authorizationService)
         {
             _serviceBaiPost = serviceBaiPost;
             _serviceDeTai = serviceDeTai;
-            _serviceKenhThaoLuan = serviceKenhThaoLuan;
             _serviceNhomSV = serviceNhomSV;
             _hostingEnvironment = hostingEnvironment;
             _authorizationService = authorizationService;
@@ -45,27 +43,30 @@ namespace KLTN.Areas.SinhVien.Controllers
         {
             var listNhom = await _serviceNhomSV.GetAll(x => x.IdsinhVien == long.Parse(User.Identity.Name));
             NhomSinhVien nhom = listNhom.SingleOrDefault(x => x.IdnhomNavigation.Status == (int)BaseStatus.Active);
-            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x =>x.IdkenhThaoLuanNavigation.IddeTai == nhom.IddeTai && x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPostsRieng = await _serviceBaiPost.GetAll(x =>x.IddeTaiNghienCuu == nhom.IddeTai && x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPostsChung = await _serviceBaiPost.GetAll(x => x.IdnguoiTao == nhom.IddeTaiNavigation.IdgiangVien
+                                                && x.IddeTaiNghienCuu == DefaultValue.IddeTaiNghienCuu
+                                                && x.Status.Value == (int)BaseStatus.Active);
             ViewBag.DeTai = nhom.IddeTaiNavigation;
             ViewBag.ListDeTai = listNhom.Select(x => x.IddeTaiNavigation);
-            return View(baiPosts);
+            return View(baiPostsRieng.Concat(baiPostsChung).OrderByDescending(y=>y.NgayPost));
         }
         
         public async Task<IActionResult> SearchBaiPost(string searchString, long id)
         {
-            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => x.IdkenhThaoLuanNavigation.IddeTai == id && x.Status.Value == (int)BaseStatus.Active);
-            return ViewComponent("ListBaiPosts", baiPosts.Where(x=>x.TieuDe.Contains(searchString) && x.Loai == (int)BaiPostType.RiengTu));
+            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => (x.IddeTaiNghienCuu == id || x.IddeTaiNghienCuu == DefaultValue.IddeTaiNghienCuu) && x.Status.Value == (int)BaseStatus.Active);
+            return ViewComponent("ListBaiPosts", baiPosts.Where(x=>x.TieuDe.ToLower().Contains(searchString.ToLower())));
         }
 
         public async Task<IActionResult> ChangeDeTai(long id)
         {
-            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => x.IdkenhThaoLuanNavigation.IddeTai == id && x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => (x.IddeTaiNghienCuu == id || x.IddeTaiNghienCuu == DefaultValue.IddeTaiNghienCuu) && x.Status.Value == (int)BaseStatus.Active);
             return ViewComponent("ListBaiPosts", baiPosts);
         }
 
         public async Task<IActionResult> RefreshList(long id)
         {
-            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => x.IdkenhThaoLuanNavigation.IddeTai == id && x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPosts = await _serviceBaiPost.GetAll(x => (x.IddeTaiNghienCuu == id || x.IddeTaiNghienCuu == DefaultValue.IddeTaiNghienCuu) && x.Status.Value == (int)BaseStatus.Active);
             return ViewComponent("ListBaiPosts", baiPosts);
         }
 
@@ -131,16 +132,17 @@ namespace KLTN.Areas.SinhVien.Controllers
             entity.Loai = (int)BaiPostType.RiengTu;
             entity.IdnguoiTao = long.Parse(User.Identity.Name);
             entity.NgayPost = DateTime.Now;
-            KenhThaoLuan kenhThaoLuan = await _serviceKenhThaoLuan.GetEntity(x => x.IddeTai == vmodel.IdDeTaiNghienCuu);
-            if (kenhThaoLuan == null)
-            {
-                return Ok(new
-                {
-                    status = false,
-                    mess = MessageResult.Fail
-                });
-            }
-            entity.IdkenhThaoLuan = kenhThaoLuan.Id;
+            entity.IddeTaiNghienCuu = vmodel.IdDeTaiNghienCuu;
+            //KenhThaoLuan kenhThaoLuan = await _serviceKenhThaoLuan.GetEntity(x => x.IddeTai == vmodel.IdDeTaiNghienCuu);
+            //if (kenhThaoLuan == null)
+            //{
+            //    return Ok(new
+            //    {
+            //        status = false,
+            //        mess = MessageResult.Fail
+            //    });
+            //}
+            //entity.IdkenhThaoLuan = kenhThaoLuan.Id;
             entity.Status = (int)BaseStatus.Active;
             await _serviceBaiPost.Add(entity);
             if (await UpLoadFile(vmodel.Files, entity))
