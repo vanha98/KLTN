@@ -19,15 +19,16 @@
 
         var CreateAction = function () {
             url = "/SinhVien/DangKyDeTai/CreateEdit/";
-            $('.modal-body').html('');
+            $('#modal-lg .modal-body').html('');
             $.get(url, function (data) {
-                $('.modal-body').html(data);
+                $('#modal-lg .modal-body').html(data);
                 $('#modal-lg').modal();
             })
         }
     </script>
 }
 <div class="content-header">
+
     <h1 class="text-center">
         Đăng ký đề tài nghiên cứu khoa học
     </h1>
@@ -115,6 +116,7 @@
                 
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+            
         </div>
         <!-- /.modal-content -->
     </div>

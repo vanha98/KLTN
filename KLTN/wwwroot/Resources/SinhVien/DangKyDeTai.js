@@ -108,25 +108,27 @@
             else {
                 $("#example1 input.SelectRow:checkbox").attr("disabled", true);
             }
-            var checkbox = '';
-            if (response.data.loai === false)
-                checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
-            else
-                checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
-            var html = "<tr style='background: #C0C0C0'>" +
-                "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
-                "<th>" + response.data.id + "</th>" +
-                "<th>" + response.data.tenDeTai + "</th>" +
-                "<th class='text-center'>" + checkbox + "</th>" +
-                "<th>" + response.data.moTa + "</th>" +
-                "<th><a href='/../../FileUpload/DeTaiNghienCuu/" + response.data.tepDinhKem + "' download='" + response.data.tepDinhKem + "'>" + response.data.tenTep + "</a></th>" +
-                "<th>Đã đăng ký</th>" +
-                "<th>" + response.data.idgiangVienNavigation.ho + ' ' + response.data.idgiangVienNavigation.ten + "</th>" +
-                "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
-                "<th>" + response.data.idgiangVienNavigation.email + "</th>" +
-                "<th><button class='btn btn-sm btn-default btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
-                "</tr>";
-            $("#Idfooter").html(html);
+            //var checkbox = '';
+            //var huycheckbox = '';
+            //if (response.data.idNguoiDangKy)
+            //if (response.data.loai === false)
+            //    checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
+            //else
+            //    checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
+            //var html = "<tr style='background: #C0C0C0'>" +
+            //    "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
+            //    "<th>" + response.data.id + "</th>" +
+            //    "<th>" + response.data.tenDeTai + "</th>" +
+            //    "<th class='text-center'>" + checkbox + "</th>" +
+            //    "<th>" + response.data.moTa + "</th>" +
+            //    "<th><a href='/../../FileUpload/DeTaiNghienCuu/" + response.data.tepDinhKem + "' download='" + response.data.tepDinhKem + "'>" + response.data.tenTep + "</a></th>" +
+            //    "<th>Đã đăng ký</th>" +
+            //    "<th>" + response.data.idgiangVienNavigation.ho + ' ' + response.data.idgiangVienNavigation.ten + "</th>" +
+            //    "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
+            //    "<th>" + response.data.idgiangVienNavigation.email + "</th>" +
+            //    "<th><button class='btn btn-sm btn-default btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
+            //    "</tr>";
+            $("#Idfooter").html(response);
         });
 
         $(document).delegate(".inputMSSV",'keyup',function () {
@@ -270,6 +272,7 @@
         $(document).delegate('#btnLuu', 'click', function () {
             var CheckType = $("#CheckType").val();
             var Id = $("#InputId").val();
+            var IdGVHD = $("#SelectGVHD option:selected").val();
             var TenDeTai = $("#InputTenDeTai").val();
             if (TenDeTai == "") {
                 $('.lblTenDeTai').text('Tên đề tài không được trống');
@@ -284,19 +287,21 @@
             data.append('Id', Id);
             data.append('TenDeTai', TenDeTai);
             data.append('MoTa', MoTa);
+            data.append('IdgiangVien', IdGVHD);
             CreateEdit(data, CheckType);
         });
 
         function CreateEdit(data, CheckType) {
             $.ajax({
-                url: '/SinhVien/DangKyDeTai/Create',
+                url: '/SinhVien/DangKyDeTai/DeXuatDeTai',
                 type: 'POST',
                 processData: false,
                 contentType: false,
                 data: data,
                 success: function (res) {
                     if (res.status == true) {
-
+                        localStorage.setItem('Message', res.mess);
+                        location.reload();
                     }
                     else
                         toastr.error(res.mess);
@@ -323,26 +328,6 @@
                 data: { id: id },
                 success: function (response) {
                     if (response.status == true) {
-                        //var checkbox = '';
-                        //if (response.data.loai === false)
-                        //    checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
-                        //else
-                        //    checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
-                        //var html = "<tr style='background: #C0C0C0'>" +
-                        //    "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
-                        //    "<th>" + response.data.id + "</th>" +
-                        //    "<th>" + response.data.tenDeTai + "</th>" +
-                        //    "<th class='text-center'>" + checkbox + "</th>" +
-                        //    "<th>" + response.data.moTa + "</th>" +
-                        //    "<th>" + response.data.tenTep + "</th>" +
-                        //    "<th></th>" +
-                        //    "<th>" + response.data.idgiangVienNavigation.ho + ' ' + response.data.idgiangVienNavigation.ten + "</th>" +
-                        //    "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
-                        //    "<th>" + response.data.idgiangVienNavigation.email + "</th>" +
-                        //    "<th><button class='btn btn-sm btn-default' id='btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
-                        //    "</tr>";
-                        //$("#Idfooter").html(html);
-//                        toastr.success(response.mess);
                         localStorage.setItem('Message', response.mess);
                         location.reload();
                     }

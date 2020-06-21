@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200620101433_newidnguoidangky")]
+    partial class newidnguoidangky
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,9 +123,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("TieuDe")
                         .HasColumnType("nvarchar(150)")
@@ -161,9 +161,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
@@ -329,14 +327,10 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TinhTrangDangKy")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<int?>("TinhTrangPheDuyet")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -376,9 +370,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -401,9 +393,7 @@ namespace Data.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -508,9 +498,7 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -575,9 +563,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -619,9 +605,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")

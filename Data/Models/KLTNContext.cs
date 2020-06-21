@@ -64,6 +64,8 @@ namespace Data.Models
 
                 entity.Property(e => e.TieuDe).HasMaxLength(150);
 
+                entity.Property(e => e.Status).HasDefaultValue(1);
+
                 entity.HasOne(d => d.IddeTaiNghienCuuNavigation)
                     .WithMany(p => p.BaiPost)
                     .HasForeignKey(d => d.IddeTaiNghienCuu)
@@ -81,6 +83,8 @@ namespace Data.Models
                 entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
 
                 entity.Property(e => e.NgayNop).HasColumnType("date");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
 
                 entity.Property(e => e.TienDo)
                     .HasMaxLength(50)
@@ -172,8 +176,10 @@ namespace Data.Models
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
-
+                entity.Property(e => e.IdNguoiDangKy).HasColumnName("IDNguoiDangKy");
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
+                entity.Property(e => e.TinhTrangDangKy).HasDefaultValue(1);
+                entity.Property(e => e.TinhTrangPheDuyet).HasDefaultValue(1);
 
                 entity.HasOne(d => d.IdgiangVienNavigation)
                     .WithMany(p => p.DeTaiNghienCuu)
@@ -196,6 +202,8 @@ namespace Data.Models
 
                 entity.Property(e => e.NgaySinh).HasColumnType("date");
 
+                entity.Property(e => e.Status).HasDefaultValue(1);
+
                 entity.Property(e => e.Sdt)
                     .HasColumnName("SDT")
                     .HasMaxLength(10)
@@ -209,6 +217,8 @@ namespace Data.Models
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
             });
 
             modelBuilder.Entity<ImgBaiPost>(entity =>
@@ -266,6 +276,7 @@ namespace Data.Models
             modelBuilder.Entity<Nhom>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Status).HasDefaultValue(1);
             });
 
             modelBuilder.Entity<NhomSinhVien>(entity =>
@@ -322,6 +333,8 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
             });
 
             modelBuilder.Entity<SinhVien>(entity =>
@@ -347,6 +360,8 @@ namespace Data.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Ten).HasMaxLength(100);
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
             });
 
             modelBuilder.Entity<XetDuyetVaDanhGia>(entity =>

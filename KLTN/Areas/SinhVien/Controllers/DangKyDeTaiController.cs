@@ -9,11 +9,11 @@ using Data.Models;
 using AutoMapper;
 using Data.Enum;
 using System.ComponentModel;
-using KLTN.Areas.GVHD.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
+using KLTN.Areas.GVHD.Models;
+using KLTN.Areas.SinhVien.Models;
 
 namespace KLTN.Areas.SinhVien.Controllers
 {
@@ -69,7 +69,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 int recordsTotal = 0;
 
                 // getting all Customer data  
-                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet);
+                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet || x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
                 //foreach(var item in entity)
                 //{
                 //    string name = item.IdgiangVienNavigation.Ho +" "+ item.IdgiangVienNavigation.Ten;
@@ -132,19 +132,33 @@ namespace KLTN.Areas.SinhVien.Controllers
 
 
         [HttpGet]
-        public IActionResult Create()
-        {
-            return PartialView("_CreateEditPopup", new DeTaiNghienCuuViewModel { });
-        }
-
         public IActionResult CreateEdit()
         {
             return PartialView("_CreateEditPopup");
         }
 
+
         [HttpPost]
-        public async Task<ActionResult> Create(DeTaiNghienCuuViewModel vmodel)
+        public async Task<ActionResult> DeXuatDeTai(DeTaiNghienCuuViewModel vmodel)
         {
+            var SV = await _serviceSV.GetById(long.Parse(User.Identity.Name));
+            if (SV == null)
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.NotFoundSV
+                });
+            }
+            var nhomSV = SV.NhomSinhVien.SingleOrDefault(x => x.IdnhomNavigation.Status == (int)BaseStatus.Active);
+            if (nhomSV!=null)
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.ExistDeTai
+                });
+            }
             IEnumerable<DeTaiNghienCuu> list = await _service.GetAll();
             if (list.Count() != 0)
             {
@@ -153,15 +167,17 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             else
                 vmodel.Id = long.Parse(DateTime.Now.Year.ToString() + "001");
+           
             var model = new DeTaiNghienCuu()
             {
                 Id = vmodel.Id,
                 TenDeTai = vmodel.TenDeTai,
                 MoTa = vmodel.MoTa,
-                //IdgiangVien = 
+                IdNguoiDangKy = long.Parse(User.Identity.Name),
+                IdgiangVien = vmodel.IdgiangVien,
                 NgayLap = DateTime.Now,
                 TinhTrangDangKy = (int)StatusDangKyDeTai.Het,
-                TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui,
+                TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDangKy,
                 Loai = LoaiDeTai.DeXuat
             };
             if (await UpLoadFile(vmodel.Files, model) == false)
@@ -170,8 +186,13 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             try
             {
+                Nhom nhom = new Nhom();
+                await _serviceNhom.Add(nhom);
+                NhomSinhVien nhomSinhVien = new NhomSinhVien { Idnhom = nhom.Id, IdsinhVien = SV.Mssv };
+                model.NhomSinhVien.Add(nhomSinhVien);
                 await _service.Add(model);
-                return Json(new { status = true, create = true, data = new { NgayLap = DateTime.Now.ToString("dd/MM/yyyy"), Id = vmodel.Id, TenTep = model.TenTep }, mess = MessageResult.CreateSuccess });
+                
+                return Json(new { status = true, create = true, data = model, mess = MessageResult.CreateSuccess });
             }
             catch
             {
@@ -179,6 +200,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
 
         }
+        
 
         [NonAction]
         public async Task<bool> UpLoadFile(IFormFile file, DeTaiNghienCuu model)
@@ -227,7 +249,8 @@ namespace KLTN.Areas.SinhVien.Controllers
                 await _serviceNhom.Add(nhom);
 
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Het;
-                //DeTai.NgaySVDangKy = DateTime.Now;
+                DeTai.IdNguoiDangKy = long.Parse(User.Identity.Name);
+                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDangKy;
                 await _service.Update(DeTai);
                 return Json(new
                 {
@@ -248,21 +271,36 @@ namespace KLTN.Areas.SinhVien.Controllers
             NhomSinhVien nhom = await _serviceNhomSV.GetEntity(x => x.IdsinhVien == long.Parse(User.Identity.Name) && x.IdnhomNavigation.Status == (int)BaseStatus.Active);
             if(nhom == null)
             {
-                return Ok();
+                return Ok() ;
             }
-            var DeTai = await _service.GetEntity(x => x.Id == nhom.IddeTai && x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet);
-            return Ok(new { data = DeTai });
+            var DeTai = await _service.GetEntity(x => x.Id == nhom.IddeTai && x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
+            return PartialView("_LoadDeTaiDaDangKy",DeTai);
         }
         
         [HttpPost]
         public async Task<IActionResult> HuyDangKy(long id)
         {
             var DeTai = await _service.GetById(id);
-            if (DeTai != null)
+            if (DeTai != null && DeTai.Loai == LoaiDeTai.CoSan)
             {
-                NhomSinhVien nhom = await _serviceNhomSV.GetEntity(x => x.IddeTai == DeTai.Id);
-                await _serviceNhomSV.Delete(nhom);
+                var nhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == DeTai.Id);
+                var nhom = nhomSV.First().IdnhomNavigation;
+                if (nhomSV.Count() > 1)
+                {
+                    foreach(var item in nhomSV)
+                    {
+                        await _serviceNhomSV.Delete(item);
+                    }
+                    await _serviceNhom.Delete(nhom);
+                }
+                else
+                {
+                    await _serviceNhomSV.Delete(nhomSV.First());
+                    await _serviceNhom.Delete(nhom);
+                }
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Con;
+                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDuyet;
+                DeTai.IdNguoiDangKy = null;
                 await _service.Update(DeTai);
                 return Ok(new
                 {
@@ -271,12 +309,29 @@ namespace KLTN.Areas.SinhVien.Controllers
                 });
             }
             else
+            {
+                var nhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == DeTai.Id);
+                var nhom = nhomSV.First().IdnhomNavigation;
+                if (nhomSV.Count() > 1)
+                {
+                    foreach (var item in nhomSV)
+                    {
+                        await _serviceNhomSV.Delete(item);
+                    }
+                    await _serviceNhom.Delete(nhom);
+                }
+                else
+                {
+                    await _serviceNhomSV.Delete(nhomSV.First());
+                    await _serviceNhom.Delete(nhom);
+                }
+                await _service.Delete(DeTai);
                 return Ok(new
                 {
-                    status = false,
-                    mess = MessageResult.NotFoundObject
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
                 });
-
+            }
         }
 
         [HttpPost]
@@ -317,10 +372,13 @@ namespace KLTN.Areas.SinhVien.Controllers
         public async Task<IActionResult> CheckPopupNhom(long idDeTai)
         {
             var nhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == idDeTai);
+            var DeTai = await _service.GetById(idDeTai);
             var SV = await _serviceNhomSV.GetEntity(x => x.IddeTai == idDeTai && x.IdsinhVien != long.Parse(User.Identity.Name));
             if (nhomSV.Count() > 1)
             {
-                return PartialView("_ThongTinThanhVien", SV.IdsinhVienNavigation);
+                var model = _mapper.Map<Data.Models.SinhVien, SinhVienViewModel>(SV.IdsinhVienNavigation);
+                model.IdNguoiDangKy = DeTai.IdNguoiDangKy.Value;
+                return PartialView("_ThongTinThanhVien", model);
             }
             else
                 return Ok(new { status=false });
