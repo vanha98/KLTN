@@ -103,9 +103,9 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("IdkenhThaoLuan")
-                        .HasColumnName("IDKenhThaoLuan")
-                        .HasColumnType("int");
+                    b.Property<long>("IddeTaiNghienCuu")
+                        .HasColumnName("IDDeTaiNghienCuu")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("IdnguoiTao")
                         .HasColumnName("IDNguoiTao")
@@ -129,7 +129,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdkenhThaoLuan");
+                    b.HasIndex("IddeTaiNghienCuu");
 
                     b.ToTable("BaiPost");
                 });
@@ -227,13 +227,13 @@ namespace Data.Migrations
                     b.Property<string>("AnhDinhKem")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("IdbaiPost")
+                    b.Property<int>("IdbaiPost")
                         .HasColumnName("IDBaiPost")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdnguoiTao")
+                    b.Property<long>("IdnguoiTao")
                         .HasColumnName("IDNguoiTao")
-                        .HasColumnType("int");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("NgayPost")
                         .HasColumnType("datetime");
@@ -302,10 +302,6 @@ namespace Data.Migrations
                         .HasColumnName("IDGiangVien")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("Idnhom")
-                        .HasColumnName("IDNhom")
-                        .HasColumnType("int");
-
                     b.Property<bool?>("Loai")
                         .HasColumnType("bit");
 
@@ -321,8 +317,8 @@ namespace Data.Migrations
                     b.Property<string>("TenTep")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("TepDinhKem")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("TepDinhKem")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TinhTrangDangKy")
                         .HasColumnType("int");
@@ -333,8 +329,6 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdgiangVien");
-
-                    b.HasIndex("Idnhom");
 
                     b.ToTable("DeTaiNghienCuu");
                 });
@@ -428,34 +422,6 @@ namespace Data.Migrations
                     b.ToTable("imgBaiPost");
                 });
 
-            modelBuilder.Entity("Data.Models.KenhThaoLuan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("IddeTai")
-                        .HasColumnName("IDDeTai")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdgiangVien")
-                        .HasColumnName("IDGiangVien")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IddeTai");
-
-                    b.HasIndex("IdgiangVien");
-
-                    b.ToTable("KenhThaoLuan");
-                });
-
             modelBuilder.Entity("Data.Models.MoDot", b =>
                 {
                     b.Property<int>("Id")
@@ -543,11 +509,17 @@ namespace Data.Migrations
                         .HasColumnName("IDSinhVien")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("IddeTai")
+                        .HasColumnName("IDDeTaiNghienCuu")
+                        .HasColumnType("bigint");
+
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Idnhom", "IdsinhVien")
+                    b.HasKey("Idnhom", "IdsinhVien", "IddeTai")
                         .HasName("PK__Nhom_Sin__CD149E43F71CE773");
+
+                    b.HasIndex("IddeTai");
 
                     b.HasIndex("IdsinhVien");
 
@@ -776,10 +748,12 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.BaiPost", b =>
                 {
-                    b.HasOne("Data.Models.KenhThaoLuan", "IdkenhThaoLuanNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
                         .WithMany("BaiPost")
-                        .HasForeignKey("IdkenhThaoLuan")
-                        .HasConstraintName("FK__BaiPost__IDCTKen__6754599E");
+                        .HasForeignKey("IddeTaiNghienCuu")
+                        .HasConstraintName("FK__BaiPost__IDDeTa__6754599E")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Data.Models.BaoCaoTienDo", b =>
@@ -813,7 +787,9 @@ namespace Data.Migrations
                     b.HasOne("Data.Models.BaiPost", "IdbaiPostNavigation")
                         .WithMany("Comments")
                         .HasForeignKey("IdbaiPost")
-                        .HasConstraintName("FK__Comments__IDBaiP__6A30C649");
+                        .HasConstraintName("FK__Comments__IDBaiP__6A30C649")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Data.Models.CtxetDuyetVaDanhGia", b =>
@@ -830,11 +806,6 @@ namespace Data.Migrations
                         .WithMany("DeTaiNghienCuu")
                         .HasForeignKey("IdgiangVien")
                         .HasConstraintName("FK__DeTaiNghi__IDGia__4E88ABD4");
-
-                    b.HasOne("Data.Models.Nhom", "IdnhomNavigation")
-                        .WithMany("DeTaiNghienCuu")
-                        .HasForeignKey("Idnhom")
-                        .HasConstraintName("FK__DeTaiNghi__IDNho__4F7CD00D");
                 });
 
             modelBuilder.Entity("Data.Models.ImgBaiPost", b =>
@@ -843,19 +814,6 @@ namespace Data.Migrations
                         .WithMany("ImgBaiPost")
                         .HasForeignKey("IdbaiPost")
                         .HasConstraintName("FK__imgBaiPost__IDBaiP__6A30C649");
-                });
-
-            modelBuilder.Entity("Data.Models.KenhThaoLuan", b =>
-                {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
-                        .WithMany("KenhThaoLuan")
-                        .HasForeignKey("IddeTai")
-                        .HasConstraintName("FK__KenhThaoL__IDDeTai__60A75C0F");
-
-                    b.HasOne("Data.Models.GiangVien", "IdgiangVienNavigation")
-                        .WithMany("KenhThaoLuan")
-                        .HasForeignKey("IdgiangVien")
-                        .HasConstraintName("FK__KenhThaoL__IDGia__60A75C0F");
                 });
 
             modelBuilder.Entity("Data.Models.MoDot", b =>
@@ -873,6 +831,12 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.NhomSinhVien", b =>
                 {
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
+                        .WithMany("NhomSinhVien")
+                        .HasForeignKey("IddeTai")
+                        .HasConstraintName("FK__Nhom_Sinh__IDDet__3F416244")
+                        .IsRequired();
+
                     b.HasOne("Data.Models.Nhom", "IdnhomNavigation")
                         .WithMany("NhomSinhVien")
                         .HasForeignKey("Idnhom")

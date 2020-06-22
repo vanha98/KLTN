@@ -1,19 +1,17 @@
 ﻿(function () {
     $(function () {
-
-        //bsCustomFileInput.init();
+        
         //init datatable
         var btnCreate = "<button class='btn btn-success btn-sm btnCreate' onclick='CreateAction()'>Đề xuất đề tài/Chỉnh sửa</button>";
         var btnSave = "<button class='btn btn-primary btn-sm' id='btnGui'>Lưu đề tài</button>";
         var url = "/SinhVien/DangKyDeTai/LoadData"
         var table = $("#example1").DataTable({
-            "responsive": true,
             "autoWidth": false,
-            //"scrollX": "100%",
-            "fixedHeader": {
-                header: false,
-                footer: true,
-            },
+            "responsive":true,
+            //"scrollX": true,
+            //"fixedColumns": {
+            //    leftColumns: 3,
+            //},
             "pageLength": 10,
             "language": {
                 "lengthMenu": btnCreate,
@@ -42,12 +40,12 @@
             "columns": [
                 {
                     orderable: false,
-                    //data: "tinhTrangPheDuyet",
+                    data: "tinhTrangDangKy",
                     render: function (data, type, row) {
-                        //if (data == "Chưa gửi" || data == "Đã gửi")
-                        return "<input class='form-check-inline SelectRow' type='checkbox' data-id='" + row.id + "' />";
-                        //else
-                          //  return "<input class='form-check-inline' name='SelectRow' type='checkbox' data-id='" + row.id + "' disabled/>";
+                        if (data == "Còn")
+                            return "<input class='form-check-inline SelectRow' type='checkbox' data-id='" + row.id + "' />";
+                        else
+                            return "<input class='form-check-inline' type='checkbox' disabled/>";
                     },
                 },
                 { "data": "id", "name": "Id", "autoWidth": true },
@@ -65,10 +63,10 @@
                 },
                 { "data": "moTa", "name": "MoTa", "autoWidth": true },
                 {
-                    data: "tenTep",
+                    data: "tepDinhKem",
                     render: function (data, type, row) {
                         if (data != null && data != "")
-                            return "<a href='/GVHD/QLDeTai/DownLoadFile/" + row.id + "'>" + data + "</a>";
+                            return "<a href='/../../FileUpload/DeTaiNghienCuu/" + data + "' download='" + data + "'>" + row.tenTep + "</a>";
                         else
                             return "";
                     }
@@ -80,7 +78,6 @@
                 { "data": "sdt", "name": "SDT", "autoWidth": true },
                 { "data": "email", "name": "Email", "autoWidth": true },
                 //
-                
                 //{
                 //    orderable: false,
                 //    "render": function (data, type, full, meta) {
@@ -98,44 +95,145 @@
         });
 
 
-        //$(document).delegate('.SelectRow', 'click', function () {
-        //    if ($(this).is(':checked')) {
-        //        var id = $(this).data('id');
-        //        GetItem(id);
-        //    }
-        //})
+        if (localStorage.getItem("Message")) {
+            toastr.success(localStorage.getItem("Message"));
+            localStorage.clear();
+        }
 
-        //Get Item when Select Row 
-        function LuuDeTai(url,id) {
+        //Load DeTaiDaDangKy
+        $.get('/SinhVien/DangKyDeTai/LoadCurrentDeTai', function (response) {
+            if (response == null || response == "") {
+                return;
+            }
+            else {
+                $("#example1 input.SelectRow:checkbox").attr("disabled", true);
+            }
+            var checkbox = '';
+            if (response.data.loai === false)
+                checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
+            else
+                checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
+            var html = "<tr style='background: #C0C0C0'>" +
+                "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
+                "<th>" + response.data.id + "</th>" +
+                "<th>" + response.data.tenDeTai + "</th>" +
+                "<th class='text-center'>" + checkbox + "</th>" +
+                "<th>" + response.data.moTa + "</th>" +
+                "<th><a href='/../../FileUpload/DeTaiNghienCuu/" + response.data.tepDinhKem + "' download='" + response.data.tepDinhKem + "'>" + response.data.tenTep + "</a></th>" +
+                "<th>Đã đăng ký</th>" +
+                "<th>" + response.data.idgiangVienNavigation.ho + ' ' + response.data.idgiangVienNavigation.ten + "</th>" +
+                "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
+                "<th>" + response.data.idgiangVienNavigation.email + "</th>" +
+                "<th><button class='btn btn-sm btn-default btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
+                "</tr>";
+            $("#Idfooter").html(html);
+        });
+
+        $(document).delegate(".inputMSSV",'keyup',function () {
+            if ($(this).val() != null && $(this).val() != "")
+                $("#btnDKNhom").attr("disabled", false);
+            else
+                $("#btnDKNhom").attr("disabled", true);
+        })
+
+        //CheckPopupNhom
+        function CheckPopupNhom(id) {
             $.ajax({
-                url: url,
-                type: "POST",
-                data: { id: id },
-                success: function (response) {
-                    if (response.status == true) {
-                        var checkbox = '';
-                        if (response.data.loai === false)
-                            checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
-                        else
-                            checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
-                        var html = "<tr style='background: #C0C0C0'>" +
-                            "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
-                            "<th>" + response.data.id + "</th>" +
-                            "<th>" + response.data.tenDeTai + "</th>" +
-                            "<th class='text-center'>" + checkbox + "</th>" +
-                            "<th>" + response.data.moTa + "</th>" +
-                            "<th>" + response.data.tenTep + "</th>" +
-                            "<th></th>" +
-                            "<th>" + response.data.idgiangVienNavigation.ho + response.data.idgiangVienNavigation.ten + "</th>" +
-                            "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
-                            "<th>" + response.data.idgiangVienNavigation.email+ "</th>" +
-                            "<th><button class='btn btn-sm btn-default' id='btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
-                                    "</tr>";
-                        $("#Idfooter").html(html);
+                url: 'DangKyDeTai/CheckPopupNhom',
+                type: 'POST',
+                data: { idDeTai: id},
+                success: function (res) {
+                    if (res.status == false) {
+                        $("#DKNhom .modal-body").html('');
+                        $("#DKNhom .modal-footer").html('');
+                        var body = '<div class="row">'+
+                            '<input type="text" maxlength="12" class="form-control inputMSSV" placeholder ="Nhập MSSV" />'+
+                '</div>'+
+                            '<div class="mt-1"><label class="text-red text-bold" id="lblMSSV" hidden></label></div>';
+                        var footer = '<button type="button" class="btn btn-primary" id="btnDKNhom" disabled>Đăng ký</button>';
+                        $("#DKNhom .modal-body").html(body);
+                        $("#DKNhom .modal-footer").html(footer);
+                        $("#DKNhom").modal();
                     }
-                },
+                    else {
+                        $("#DKNhom .modal-body").html('');
+                        $("#DKNhom .modal-footer").html('');
+                        $("#DKNhom .modal-body").html(res);
+                        $("#DKNhom").modal();
+                    }
+                }
             });
         }
+
+        //Đăng ký nhóm
+        $(document).delegate('.btnXemNhom', 'click', function () {
+            var id = $(this).data('id');
+            CheckPopupNhom(id);
+
+            $(document).delegate("#btnDKNhom",'click',function () {
+                var mssv = $(".inputMSSV").val();
+                    $.ajax({
+                    url: 'DangKyDeTai/DangKyNhom',
+                    type: 'POST',
+                    data: { idDeTai: id, mssv:mssv },
+                    success: function (res) {
+                        if (res.status == true) {
+                            $("#lblMSSV").prop('hidden', true);
+                            toastr.success(res.mess);
+                            $("#DKNhom").modal('hide');
+                        }
+                        else {
+                            $("#lblMSSV").prop('hidden', false);
+                            $("#lblMSSV").html(res.mess);
+                        }
+                    }
+                });
+            });
+            
+        })
+
+        //Hủy đăng ký nhóm
+        $(document).delegate('.btnHuyNhom', 'click', function () {
+            var id = $(".btnXemNhom").data('id');
+            $.ajax({
+                url: '/SinhVien/DangKyDeTai/HuyNhom',
+                type: 'POST',
+                data: {idDeTai:id},
+                success: function (res) {
+                    if (res.status == true) {
+                        toastr.success(res.mess);
+                        $("#DKNhom").modal('hide');
+                    }
+                    else
+                        toastr.error(res.mess);
+                }
+            })
+        });
+
+        //Hủy đăng ký đề tài
+        $(document).delegate('.NotSelectRow','click', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $("#ConfirmDelete").modal();
+            $("#btnXoa").click(function () {
+                $.ajax({
+                    url: '/SinhVien/DangKyDeTai/HuyDangKy',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (res) {
+                        if (res.status == true) {
+                            $("#Idfooter").html('');
+                            table.ajax.reload();
+                            toastr.success(res.mess);
+                        }
+                        else
+                            toastr.error(res.mess);
+                    }
+                })
+            })
+        })
+
+        
 
         //Single Select
         $(document).delegate('input.SelectRow','change', function () {
@@ -189,6 +287,23 @@
             CreateEdit(data, CheckType);
         });
 
+        function CreateEdit(data, CheckType) {
+            $.ajax({
+                url: '/SinhVien/DangKyDeTai/Create',
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (res) {
+                    if (res.status == true) {
+
+                    }
+                    else
+                        toastr.error(res.mess);
+                }
+            });
+        }
+
         //Luu de tai
         $(document).delegate("#btnGui", 'click', function () {
             var data = $("#example1 input:checkbox:checked").data('id')
@@ -200,6 +315,41 @@
             else
                 toastr.error('Bạn chưa chọn đề tài');
         })
+
+        function LuuDeTai(url, id) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { id: id },
+                success: function (response) {
+                    if (response.status == true) {
+                        //var checkbox = '';
+                        //if (response.data.loai === false)
+                        //    checkbox = "<input class='form-check-inline' type='checkbox' checked disabled/>";
+                        //else
+                        //    checkbox = "<input class='form-check-inline' type='checkbox' disabled/>";
+                        //var html = "<tr style='background: #C0C0C0'>" +
+                        //    "<th><input class='form-check-inline NotSelectRow' type='checkbox' data-id='" + response.data.id + "' checked/></th>" +
+                        //    "<th>" + response.data.id + "</th>" +
+                        //    "<th>" + response.data.tenDeTai + "</th>" +
+                        //    "<th class='text-center'>" + checkbox + "</th>" +
+                        //    "<th>" + response.data.moTa + "</th>" +
+                        //    "<th>" + response.data.tenTep + "</th>" +
+                        //    "<th></th>" +
+                        //    "<th>" + response.data.idgiangVienNavigation.ho + ' ' + response.data.idgiangVienNavigation.ten + "</th>" +
+                        //    "<th>" + response.data.idgiangVienNavigation.sdt + "</th>" +
+                        //    "<th>" + response.data.idgiangVienNavigation.email + "</th>" +
+                        //    "<th><button class='btn btn-sm btn-default' id='btnXemNhom' data-id='" + response.data.id + "'><i class='fas fa-user-friends'></i></button></th>" +
+                        //    "</tr>";
+                        //$("#Idfooter").html(html);
+//                        toastr.success(response.mess);
+                        localStorage.setItem('Message', response.mess);
+                        location.reload();
+                    }
+                },
+            });
+        }
+
     });
 })();
         

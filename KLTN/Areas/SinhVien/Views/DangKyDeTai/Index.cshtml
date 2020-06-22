@@ -7,23 +7,23 @@
 @section Script{
     <script src="~/Resources/SinhVien/DangKyDeTai.js"></script>
     <script>
-        // func
-        var EditAction = function (id) {
-            url = "/SinhVien/DangKyDeTai/Edit/" + id;
-            $(".modal-body").load(url, function () {
-                $("#CheckType").val(1);
-                $("#modal-lg").modal();
-                //$("#modal-lg").html("");
-            });
-        }
+        //// func
+        //var EditAction = function (id) {
+        //    url = "/SinhVien/DangKyDeTai/Edit/" + id;
+        //    $(".modal-body").load(url, function () {
+        //        $("#CheckType").val(1);
+        //        $("#modal-lg").modal();
+        //        //$("#modal-lg").html("");
+        //    });
+        //}
 
         var CreateAction = function () {
-            url = "/SinhVien/DangKyDeTai/Create/";
-            $(".modal-body").load(url, function () {
-                $("#CheckType").val("");
-                $("#modal-lg").modal();
-                //$("#modal-lg").html("");
-            });
+            url = "/SinhVien/DangKyDeTai/CreateEdit/";
+            $('.modal-body').html('');
+            $.get(url, function (data) {
+                $('.modal-body').html(data);
+                $('#modal-lg').modal();
+            })
         }
     </script>
 }
@@ -34,11 +34,11 @@
     <hr />
 </div>
 <div class="card">
-    <div class="card-body">
+    <div class="card-body" id="refreshTable">
         <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
             @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
             <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-sm dataTable dtr-inline" style="width:100%" role="grid" aria-describedby="example1_info">
+                <table id="example1" class="table table-bordered table-hover dataTable table-sm dtr-inline" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
                             <th rowspan="2"></th>
@@ -62,7 +62,7 @@
                             </th>
                             <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
 
-                            <th rowspan="2"></th>
+                            @*<th rowspan="2"></th>*@
                         </tr>
                         <tr>
                             <th class="text-center">
@@ -112,11 +112,56 @@
                 </button>
             </div>
             <div class="modal-body">
-                @await Html.PartialAsync("_CreateEditPopup")
+                
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
         </div>
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<div class="modal" id="ConfirmDelete">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận hủy đăng ký đề tài?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="DKNhom">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Đăng ký thành viên</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="text" maxlength="12" class="form-control inputMSSV" placeholder="Nhập MSSV" />
+                </div>
+                <div class="mt-1"><label class="text-red text-bold" id="lblMSSV" hidden></label></div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDKNhom" disabled>Đăng ký</button>
+                
+            </div>
+
+        </div>
+    </div>
 </div>

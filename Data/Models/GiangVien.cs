@@ -9,7 +9,6 @@ namespace Data.Models
         {
             BoNhiem = new HashSet<BoNhiem>();
             DeTaiNghienCuu = new HashSet<DeTaiNghienCuu>();
-            KenhThaoLuan = new HashSet<KenhThaoLuan>();
         }
 
         public long Id { get; set; }
@@ -24,6 +23,6 @@ namespace Data.Models
 
         public virtual ICollection<BoNhiem> BoNhiem { get; set; }
         public virtual ICollection<DeTaiNghienCuu> DeTaiNghienCuu { get; set; }
-        public virtual ICollection<KenhThaoLuan> KenhThaoLuan { get; set; }
+        //public virtual ICollection<KenhThaoLuan> KenhThaoLuan { get; set; }
     }
 }

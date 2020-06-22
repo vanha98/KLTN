@@ -6,22 +6,28 @@
                 <div class="input-group">
                     @if (Model.ViewType == (int)Data.Enum.ViewType.ThaoLuanGV)
                     {
-                        <textarea class="form-control form-control-navbar" placeholder="Viết bình luận"></textarea>
+                        <textarea class="form-control form-control-navbar" placeholder="Viết bình luận" id="inputComments"></textarea>
                     }
                     else if (Model.ViewType == (int)Data.Enum.ViewType.XetDuyetGV)
                     {
                         <textarea class="form-control form-control-navbar" placeholder="Đặt câu hỏi"></textarea>
                     }
+
                     <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
+                        <button class="btn btn-navbar btnOpenImgComment">
                             <i class="fas fa-image"></i>
                         </button>
+                        <input type="file" id="imgCommentFile" accept="image/jpeg, image/png, image/jpg" hidden />
                     </div>
                     <div class="input-group-append">
-                        <button class="btn btn-navbar">
+                        <button class="btn btn-navbar btnSendComment">
                             <i class="fas fa-arrow-alt-circle-right"></i>
                         </button>
                     </div>
+                </div>
+                <div>
+                    <ul class="mailbox-attachments d-flex align-items-stretch clearfix h-100" id="imgComment">
+                    </ul>
                 </div>
             </nav>
         </div>

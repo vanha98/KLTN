@@ -14,31 +14,36 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using AutoMapper;
 using KLTN.Models;
+using Microsoft.AspNetCore.Identity;
+using KLTN.Authorization;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
-    [Authorize]
     [Area("GVHD")]
+    [Authorize(Roles ="GVHD")]
     public class ThaoLuanController : Controller
     {
         private readonly IBaiPost _service;
-        private readonly IKenhThaoLuan _serviceKenhThaoLuan;
         private readonly IImgBaiPost _serviceimgBaiPost;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
-        public ThaoLuanController(IBaiPost service, IKenhThaoLuan serviceKenhThaoLuan, IImgBaiPost imgBaiPost, IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
+        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, 
+             IImgBaiPost imgBaiPost, 
+            IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
         {
+            _userManager = userManager;
             _service = service;
             _serviceimgBaiPost = imgBaiPost;
-            _serviceKenhThaoLuan = serviceKenhThaoLuan;
             _mapper = mapper;
             _authorizationService = authorizationService;
             _hostingEnvironment = hostingEnvironment;
         }
         public async Task<IActionResult> Index()
         {
-            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x => x.Status.Value == (int)BaseStatus.Active);
+            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x =>x.IdnguoiTao == long.Parse(User.Identity.Name) 
+                                            && x.Status.Value == (int)BaseStatus.Active);
             return View(baiPosts);
         }
 
@@ -83,18 +88,19 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             BaiPost entity = new BaiPost();
             string tempNgay = DateTime.Now.ToString("dd/MM/yyyy");
-            await _service.Add(entity);
-            KenhThaoLuan kenhThaoLuan = await _serviceKenhThaoLuan.GetEntity(x=>x.IddeTai == vmodel.IdDeTaiNghienCuu);
             entity.TieuDe = vmodel.TieuDe;
+            if(vmodel.Loai == (int)BaiPostType.CongKhai)
+            {
+                entity.IddeTaiNghienCuu = DefaultValue.IddeTaiNghienCuu;
+            }
+            else
+                entity.IddeTaiNghienCuu = vmodel.IdDeTaiNghienCuu;
             entity.NoiDung = vmodel.NoiDung;
             entity.Loai = vmodel.Loai;
             entity.IdnguoiTao = long.Parse(User.Identity.Name);
             entity.NgayPost = DateTime.Now;
-            if (kenhThaoLuan != null)
-            {
-                entity.IdkenhThaoLuan = kenhThaoLuan.Id;
-            }
             entity.Status = (int)BaseStatus.Active;
+            await _service.Add(entity);
             if (await UpLoadFile(vmodel.Files,entity))
             {
                 await _service.Update(entity);
@@ -121,8 +127,10 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 BaiPostDTO bai = new BaiPostDTO();
                 bai.Id = item.Id;
-                if(CongKhaiTab==false)
-                    bai.IdDeTai = item.IdkenhThaoLuanNavigation.IddeTai;
+                if (CongKhaiTab == false)
+                    bai.IdDeTai = item.IddeTaiNghienCuu;
+                else
+                    bai.IdDeTai = DefaultValue.IddeTaiNghienCuu;
                 bai.IdnguoiTao = item.IdnguoiTao;
                 bai.TieuDe = item.TieuDe;
                 bai.NgayPost = item.NgayPost.Value.ToString("dd/MM/yyyy");
@@ -139,13 +147,13 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 if (CongKhaiTab)
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
 
                 }
                 else
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.Contains(SearchString) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
                 }
             }
@@ -207,34 +215,25 @@ namespace KLTN.Areas.GVHD.Controllers
                 });
             }
         }
-        public async Task<JsonResult> NoiDungBaiPost(int idbaipost)
+        public async Task<IActionResult> NoiDungBaiPost(int id)
         {
-            BaiPost baiPost = await _service.GetById(idbaipost);
-            List<ImgBaiPost> listImg = baiPost.ImgBaiPost.ToList();
-            return Json(new
-            {
-                status = true,
-                data = baiPost,
-                listImg=listImg
-            });
+            BaiPost baiPost = await _service.GetById(id);
+            return PartialView("_NoiDung", baiPost);
         }
-            
-        [HttpPost]
-        public async Task<IActionResult> GoAnh(int id)
+
+        [NonAction]
+        public bool DeleteImg(int[] idImg, BaiPost model)
         {
-            ImgBaiPost imgBaiPost = await _serviceimgBaiPost.GetById(id);
-            if (imgBaiPost != null)
+            foreach (int i in idImg)
             {
-                await _serviceimgBaiPost.Delete(imgBaiPost);
-                return Ok(new
+                ImgBaiPost imgBaiPost = model.ImgBaiPost.SingleOrDefault(x => x.Id == i);
+                if (imgBaiPost == null)
                 {
-                    status = true,
-                });
+                    return false;
+                }
+                model.ImgBaiPost.Remove(imgBaiPost);
             }
-            return Ok(new
-            {
-                status = false,
-            });
+            return true;
         }
 
         [HttpPost]
@@ -243,9 +242,24 @@ namespace KLTN.Areas.GVHD.Controllers
             if(data != null)
             {
                 var BaiPost = await _service.GetById(data.Id);
+                var isAuthorize = await _authorizationService.AuthorizeAsync(User, BaiPost, ThaoLuanOperation.Update);
+                if (!isAuthorize.Succeeded)
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.AccessDenied
+                    });
                 BaiPost.TieuDe = data.TieuDe;
                 BaiPost.NoiDung = data.NoiDung;
-                if(await UpLoadFile(data.Files,BaiPost))
+                if (!DeleteImg(data.currentImg, BaiPost))
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.Fail
+                    });
+                }
+                if (await UpLoadFile(data.Files,BaiPost))
                 {
                     await _service.Update(BaiPost);
                     return Ok(new
@@ -273,6 +287,13 @@ namespace KLTN.Areas.GVHD.Controllers
         public async Task<IActionResult> XoaBaiPost(int id)
         {
             BaiPost baiPost = await _service.GetById(id);
+            var isAuthorize = await _authorizationService.AuthorizeAsync(User, baiPost, ThaoLuanOperation.Delete);
+            if (!isAuthorize.Succeeded)
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.AccessDenied
+                });
             if (baiPost != null)
             {
                 baiPost.Status = (int)BaseStatus.Disable;
@@ -287,6 +308,77 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 status = false,
             });
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> LoadComments(int id)
+        //{
+        //    BaiPost BaiPost = await _service.GetEntity(x=>x.Id == id);
+        //    var Comments = BaiPost.Comments.ToList();
+        //    List<LoadCommentModel> data = new List<LoadCommentModel>();
+        //    foreach(var item in Comments)
+        //    {
+        //        var user = await _userManager.FindByNameAsync(item.IdnguoiTao.ToString());
+        //        var claim = await _userManager.GetClaimsAsync(user);
+        //        LoadCommentModel model = new LoadCommentModel {
+        //            NoiDungComment = item.NoiDungComment,
+        //            NgayPost = item.NgayPost.Value.ToString("HH:mm dd/MM/yyyy"),
+        //            NguoiComment = claim[0].Value,
+        //            AnhDinhKem = item.AnhDinhKem
+        //        };
+        //        data.Add(model);
+        //    }
+        //    return Json(data);
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> SendComment(CommentsViewModel data)
+        {
+            var BaiPost = await _service.GetById(data.IdbaiPost);
+            var files = data.Files;
+            string uniqueFileName = null;
+            if (files != null)
+            {
+                string[] permittedExtensions = { ".png", ".jpeg", ".jpg" };
+                var ext = Path.GetExtension(files.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.UpLoadFileFail
+                    });
+                }
+                else
+                {
+                    string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "img/GVHD/Comments");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + files.FileName;
+                    string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+                    await files.CopyToAsync(new FileStream(filePath, FileMode.Create));
+                }
+            }
+            Comments cmt = new Comments
+                {
+                    IdnguoiTao = long.Parse(User.Identity.Name),
+                    NgayPost = DateTime.Now,
+                    NoiDungComment=data.NoiDungComment,
+                    AnhDinhKem = uniqueFileName,
+                    Status = (int)BaseStatus.Active
+                };
+            BaiPost.Comments.Add(cmt);
+            await _service.Update(BaiPost);
+
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var role = await _userManager.GetRolesAsync(user);
+            LoadCommentModel model = new LoadCommentModel
+            {
+                NguoiComment = User.FindFirst("Name").Value,
+                NgayPost = DateTime.Now.ToString("HH:mm dd/MM/yyyy"),
+                NoiDungComment = data.NoiDungComment,
+                AnhDinhKem = uniqueFileName,
+            };
+            
+            return Ok(new { status = true, data = model });
         }
     }
 }

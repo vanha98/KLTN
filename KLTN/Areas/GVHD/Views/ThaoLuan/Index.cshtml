@@ -14,13 +14,16 @@
     right: 2px;
     z-index: 100;
 }
+.nondisplay{ display:none;
+}
 
 </style>
 
 @section Script{
     <script src="~/Resources/GVHD/ThaoLuan.js"></script>
-
-
+    <script src="~/Resources/GVHD/Comments.js"></script>
+    <script src="~/Resources/CustomArrayImg.js"></script>
+    
 }
 
 <div class="container" id="mydiv">
@@ -32,44 +35,18 @@
             <br />
             @await Component.InvokeAsync("ListBaiPost", new KLTN.Models.TabListViewModel() { ViewType = (int)Data.Enum.ViewType.ThaoLuanGV, ListBaiPostThaoLuan = Model })
         </div>
-        <div class="col-md-8 card">
+        <div class="col-md-8">
             <div hidden id="wait" class="overlay">
                 <i class="fas fa-2x fa-sync-alt fa-spin"></i>
             </div>
-            <div class="container">
-                <div class="row justify-content-end">
-                    @await Component.InvokeAsync("MarkEditDelete")
-                </div>
-                <div id="txtTieuDeBaiPost" class="row">
-                    <h3 class="col text-center">Tiêu đề bài đăng ...</h3>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col" align="center">
-                        <input type="text" class="form-control w-50 align-items-center" id="inputTieuDe" hidden />
-                    </div>
-                </div>
-                
-                @await Component.InvokeAsync("HienThiNoiDungThaoLuan")
-
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })
-                    </div>
-
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col">
-                        @await Component.InvokeAsync("ListBinhLuan")
-                    </div>
-                </div>
-
+            <div class="card card-widget">
             </div>
         </div>
     </div>
 </div>
+
 <input type="text" id="valueIdBaiPost" hidden/>
+
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">

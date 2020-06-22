@@ -18,9 +18,9 @@ namespace Data.Models
         public string NoiDung { get; set; }
         public int? Loai { get; set; }
         public int? Status { get; set; }
-        public int? IdkenhThaoLuan { get; set; }
+        public long IddeTaiNghienCuu { get; set; }
 
-        public virtual KenhThaoLuan IdkenhThaoLuanNavigation { get; set; }
+        public virtual DeTaiNghienCuu IddeTaiNghienCuuNavigation { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }
         public virtual ICollection<ImgBaiPost> ImgBaiPost { get; set; }
     }

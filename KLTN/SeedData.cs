@@ -24,15 +24,22 @@ namespace KLTN
                 await EnsureCreatedRole(services, "QuanLy");
                 await EnsureCreatedRole(services, "Administrators");
             }
-
+           
             if (!context.Users.Any())
             {
                 EnsureCreatedUser(services, "3116410022", "SinhVien", new Claim[]{
                     new Claim("Name", "Tạ Văn Hà"),
                 });
 
+                EnsureCreatedUser(services, "3116410024", "SinhVien", new Claim[]{
+                    new Claim("Name", "Đinh Tuấn Hải"),
+                });
+                EnsureCreatedUser(services, "333641002", "GVHD", new Claim[]{
+                    new Claim("Name", "Nguyễn Văn B"),
+                });
+
                 EnsureCreatedUser(services, "333641001", "GVHD", new Claim[]{
-                    new Claim("Name", "Giảng viên 1"),
+                    new Claim("Name", "Nguyễn Văn A"),
                 });
 
                 EnsureCreatedUser(services, "222641001", "QuanLy", new Claim[]{

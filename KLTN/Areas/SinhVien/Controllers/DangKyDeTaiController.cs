@@ -13,6 +13,7 @@ using KLTN.Areas.GVHD.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace KLTN.Areas.SinhVien.Controllers
 {
@@ -20,11 +21,19 @@ namespace KLTN.Areas.SinhVien.Controllers
     public class DangKyDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
+        private readonly INhom _serviceNhom;
+        private readonly ISinhVien _serviceSV;
+        private readonly INhomSinhVien _serviceNhomSV;
         private readonly IMapper _mapper;
-        public DangKyDeTaiController (IDeTaiNghienCuu service, IMapper mapper)
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public DangKyDeTaiController (IDeTaiNghienCuu service, ISinhVien serviceSV, INhomSinhVien serviceNhomSV, INhom serviceNhom, IMapper mapper, IHostingEnvironment hostingEnvironment)
         {
             _mapper = mapper;
+            _serviceSV = serviceSV;
             _service = service;
+            _serviceNhom = serviceNhom;
+            _serviceNhomSV = serviceNhomSV;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult Index()
         {
@@ -128,6 +137,11 @@ namespace KLTN.Areas.SinhVien.Controllers
             return PartialView("_CreateEditPopup", new DeTaiNghienCuuViewModel { });
         }
 
+        public IActionResult CreateEdit()
+        {
+            return PartialView("_CreateEditPopup");
+        }
+
         [HttpPost]
         public async Task<ActionResult> Create(DeTaiNghienCuuViewModel vmodel)
         {
@@ -178,31 +192,48 @@ namespace KLTN.Areas.SinhVien.Controllers
             {
                 return false;
             }
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
 
-                // Upload the file if less than 2 MB
-                if (memoryStream.Length < 2097152)
-                {
-                    model.TenTep = file.FileName;
-                    model.TepDinhKem = memoryStream.ToArray();
-                    return true;
-                }
-                else return false;
-            }
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/DeTaiNghienCuu");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TenTep = uniqueFileName;
+            return true;
         }
 
         [HttpPost]
         public async Task<IActionResult> LuuDeTai(long id)
         {
-            var data = await _service.GetById(id);
-            if(data != null)
+            var DeTai = await _service.GetById(id);
+            if(DeTai.TinhTrangDangKy == (int)StatusDangKyDeTai.Het)
             {
+                return Ok(new
+                {
+                    status = false,
+                    mess = "Đề tài đã hết"
+                });
+            }
+            NhomSinhVien nhomSinhVien = new NhomSinhVien
+            {
+                IdsinhVien = long.Parse(User.Identity.Name),
+                IddeTai = DeTai.Id
+            };
+            
+            if(DeTai != null)
+            {
+                Nhom nhom = new Nhom();
+                nhom.Status = (int)BaseStatus.Active;
+                nhom.NhomSinhVien.Add(nhomSinhVien);
+                await _serviceNhom.Add(nhom);
+
+                DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Het;
+                //DeTai.NgaySVDangKy = DateTime.Now;
+                await _service.Update(DeTai);
                 return Json(new
                 {
                     status = true,
-                    data = data,
+                    data = DeTai,
+                    mess = "Lưu đề tài thành công"
                 });
             }
             else
@@ -210,6 +241,103 @@ namespace KLTN.Areas.SinhVien.Controllers
                 {
                     status = false,
                 });
+        }
+
+        public async Task<IActionResult> LoadCurrentDeTai()
+        {
+            NhomSinhVien nhom = await _serviceNhomSV.GetEntity(x => x.IdsinhVien == long.Parse(User.Identity.Name) && x.IdnhomNavigation.Status == (int)BaseStatus.Active);
+            if(nhom == null)
+            {
+                return Ok();
+            }
+            var DeTai = await _service.GetEntity(x => x.Id == nhom.IddeTai && x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet);
+            return Ok(new { data = DeTai });
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> HuyDangKy(long id)
+        {
+            var DeTai = await _service.GetById(id);
+            if (DeTai != null)
+            {
+                NhomSinhVien nhom = await _serviceNhomSV.GetEntity(x => x.IddeTai == DeTai.Id);
+                await _serviceNhomSV.Delete(nhom);
+                DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Con;
+                await _service.Update(DeTai);
+                return Ok(new
+                {
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
+                });
+            }
+            else
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.NotFoundObject
+                });
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DangKyNhom(long idDeTai, string mssv)
+        {
+            long masv = 0;
+            long.TryParse(mssv, out masv);
+            var SV = await _serviceSV.GetById(masv);
+            if (SV == null)
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.NotFoundSV
+                });
+            }
+            var checkSV = SV.NhomSinhVien.Where(x => x.IdnhomNavigation.Status == (int)BaseStatus.Active);
+            if (checkSV.Any())
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.ExistDeTai
+                });
+            }
+            var DeTai = await _service.GetById(idDeTai);
+            var Nhom = DeTai.NhomSinhVien.SingleOrDefault(x => x.IddeTai == DeTai.Id);
+            NhomSinhVien nhomSV = new NhomSinhVien { IddeTai = DeTai.Id, Idnhom = Nhom.Idnhom, IdsinhVien = SV.Mssv };
+            await _serviceNhomSV.Add(nhomSV);
+            return Ok(new
+            {
+                status = true,
+                mess = MessageResult.RegisterSuccess
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckPopupNhom(long idDeTai)
+        {
+            var nhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == idDeTai);
+            var SV = await _serviceNhomSV.GetEntity(x => x.IddeTai == idDeTai && x.IdsinhVien != long.Parse(User.Identity.Name));
+            if (nhomSV.Count() > 1)
+            {
+                return PartialView("_ThongTinThanhVien", SV.IdsinhVienNavigation);
+            }
+            else
+                return Ok(new { status=false });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HuyNhom(long idDeTai)
+        {
+            var nhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == idDeTai);
+            if(nhomSV.Count() < 2)
+                return Ok(new { status = false,mess=MessageResult.Fail });
+            foreach (var item in nhomSV)
+            {
+                if (item.IdsinhVien != long.Parse(User.Identity.Name))
+                    await _serviceNhomSV.Delete(item);
+            }
+            return Ok(new { status = true, mess=MessageResult.UpdateSuccess });
         }
     }
 }

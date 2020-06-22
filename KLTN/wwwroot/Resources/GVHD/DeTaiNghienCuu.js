@@ -7,9 +7,12 @@
         var btnSave = "<button class='btn btn-primary btn-sm' id='btnGui'>Gửi đề tài</button>" +"<button class='btn btn-sm btn-danger ml-1' id='btnHuyGui'>Hủy gửi đề tài</button>";
         var url = "/GVHD/QLDeTai/LoadData"
         var table = $("#example1").DataTable({
-            "responsive": true,
+            //"responsive": true,
             "autoWidth": false,
-            //"scrollX": "100%",
+            "scrollX": true,
+            //"fixedColumns": {
+            //    leftColumns: 3,
+            //},
             //"fixedHeader": true,
             "pageLength": 10,
             "language": {
@@ -36,7 +39,6 @@
                 "type": "POST",
                 "datatype": "json"
             },
-
             "columns": [
                 {
                     orderable:false,
@@ -52,12 +54,18 @@
                 { "data": "tenDeTai", "name": "TenDeTai", "autoWidth": true },
                 { "data": "moTa", "name": "MoTa", "autoWidth": true },
                 { "data": "ngayLap", "name": "NgayLap", "autoWidth": true },
-                { "data": "idnhom", "name": "Idnhom", "autoWidth": true },
                 {
-                    data: "tenTep",
+                    orderable: false,
+                    addClass: "text-center",
+                    "render": function (data, type, full, meta) {
+                        return '<button class="btn btn-sm btn-primary btnXemNhom" onclick="XemNhom(' + full.id + ')" data-id="' + full.id + '"><i class="fas fa-user-friends"></i> Xem nhóm </button>';
+                    }
+                },
+                {
+                    data: "tepDinhKem",
                     render: function (data, type, row) {
                         if (data != null && data != "")
-                            return "<a href='/GVHD/QLDeTai/DownLoadFile/" + row.id + "'>" + data + "</a>";
+                            return "<a href='/../../FileUpload/DeTaiNghienCuu/" + data + "' download='" + data + "'>" + row.tenTep + "</a>";
                         else
                             return "";
                     }
@@ -67,8 +75,7 @@
                 {
                     orderable:false,
                     "render": function (data, type, full, meta) {
-                        return '<button class="btn btn-sm btn-default" id="btnXemNhom" data-id="'+full.id+'"><i class="fas fa-eye"></i></button>' +
-                            '<button class="btn btn-sm btn-default" id="btnSua" data-id="'+full.id+'" onclick="EditAction('+full.id+')"><i class="far fa-edit"></i></button>'+
+                        return '<button class="btn btn-sm btn-default" id="btnSua" data-id="'+full.id+'" onclick="EditAction('+full.id+')"><i class="far fa-edit"></i></button>'+
                         '<button class="btn btn-sm btn-default Delete" data-id="'+full.id+'" data-toggle="modal" data-target="#ConfirmDelete"><i class="far fa-trash-alt"></i></button>';
                     }
                 },
@@ -154,7 +161,7 @@
 
         //Gui de tai
         $(document).delegate("#btnGui", 'click', function () {
-            var data = $("#example1 input:checkbox:checked").map(function () {
+            var data = $("table input:checkbox:checked").map(function () {
                 return $(this).data('id');
             }).get(); // <----
             console.log(data);
@@ -163,7 +170,7 @@
         })
         //Huy gui de tai
         $(document).delegate("#btnHuyGui", 'click', function () {
-            var data = $("#example1 input:checkbox:checked").map(function () {
+            var data = $("table input:checkbox:checked").map(function () {
                 return $(this).data('id');
             }).get(); // <----
             console.log(data);

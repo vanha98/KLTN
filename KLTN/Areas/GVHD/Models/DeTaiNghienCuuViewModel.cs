@@ -15,7 +15,9 @@ namespace KLTN.Areas.GVHD.Models
         [Required(ErrorMessage = "Tên đề tài không được trống")]
         public string TenDeTai { get; set; }
         public int? Idnhom { get; set; }
+        public string Mssv { get; set; }
         public string MoTa { get; set; }
+        public string TepDinhKem { get; set; }
         public bool? Loai { get; set; }
         public string TenTep { get; set; }
         public string HoTenGVHD { get; set; }

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Data.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KLTN.Areas.GVHD.Controllers
 {
     [Area("GVHD")]
+    [Authorize(Roles = "GVHD")]
     public class HomeController : Controller
     {
         private readonly ISinhVien _service;

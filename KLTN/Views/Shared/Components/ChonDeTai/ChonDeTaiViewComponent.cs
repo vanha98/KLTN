@@ -19,7 +19,7 @@ namespace KLTN.Views.Shared.Components.ChonDeTai
         {
             long id;
             long.TryParse(ma,out id);
-            IEnumerable<DeTaiNghienCuu> model = await _service.GetAll(x=>x.IdgiangVien == id && x.Idnhom != null || x.Idnhom == id);
+            IEnumerable<DeTaiNghienCuu> model = await _service.GetAll(x=>x.IdgiangVien == id && x.NhomSinhVien.Any()==true);
             return await Task.FromResult<IViewComponentResult>(View(model));
         }
     }

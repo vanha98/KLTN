@@ -15,6 +15,7 @@ namespace KLTN.Areas.GVHD.Models
         public int Loai { get; set; }
         public long IdDeTaiNghienCuu { get; set; }
         public long MaDeTai { get; set; }
+        public int[] currentImg { get; set; }
         public List<IFormFile> Files { get; set; }
     }
 }
