@@ -51,6 +51,7 @@ namespace KLTN
             services.AddScoped<IBaiPost, BaiPostBo>();
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
             services.AddScoped<IIdentity, Identity>();
+            services.AddScoped<IMoDot, MoDotBo>();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
