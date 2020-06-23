@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200623065937_YCChinhSua")]
+    partial class YCChinhSua
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -681,11 +683,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.YCChinhSuaDeTai", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<long>("IDDeTai")
                         .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
@@ -701,10 +698,6 @@ namespace Data.Migrations
 
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IDDeTai");
 
                     b.ToTable("YCChinhSuaDeTai");
                 });
@@ -960,16 +953,6 @@ namespace Data.Migrations
                         .WithMany("XetDuyetVaDanhGia")
                         .HasForeignKey("IdmoDot")
                         .HasConstraintName("FK__XetDuyetV__IDMoD__5812160E");
-                });
-
-            modelBuilder.Entity("Data.Models.YCChinhSuaDeTai", b =>
-                {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
-                        .WithMany("YCChinhSuaDeTai")
-                        .HasForeignKey("IDDeTai")
-                        .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Data.Models.YeuCauPheDuyet", b =>

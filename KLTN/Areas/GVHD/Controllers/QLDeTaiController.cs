@@ -97,6 +97,10 @@ namespace KLTN.Areas.GVHD.Controllers
                         item.TinhTrangPheDuyet = "Đang thực hiện";
                     else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.HoanThanh)
                         item.TinhTrangPheDuyet = "Hoàn thành";
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaDangKy)
+                        item.TinhTrangPheDuyet = "Đã đăng ký";
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.ChoDuyet)
+                        item.TinhTrangPheDuyet = "Chờ duyệt";
                     else
                         item.TinhTrangPheDuyet = "Đã hủy";
                 }
@@ -133,6 +137,27 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             if (file == null) return true;
             string[] permittedExtensions = { ".txt", ".pdf",".doc",".docx",".xlsx", ".xls" };
+
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                return false;
+            }
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/DeTaiNghienCuu");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TenTep = file.FileName;
+            model.TepDinhKem = uniqueFileName;
+            return true;
+        }
+
+        [NonAction]
+        public async Task<bool> UpLoadFileYCChinhSua(IFormFile file, YCChinhSuaDeTai model)
+        {
+            if (file == null) return true;
+            string[] permittedExtensions = { ".txt", ".pdf", ".doc", ".docx", ".xlsx", ".xls" };
 
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
@@ -244,18 +269,52 @@ namespace KLTN.Areas.GVHD.Controllers
                     });
                 else
                 {
-                    entity.TenDeTai = model.TenDeTai;
-                    entity.MoTa = model.MoTa;
-                    if (await UpLoadFile(model.Files, entity) == false)
+                    
+                    if (entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui)
                     {
-                        return Ok(new
+                        if (await UpLoadFile(model.Files, entity) == false)
                         {
-                            status = false,
-                            mess = MessageResult.UpLoadFileFail
-                        });
+                            return Ok(new
+                            {
+                                status = false,
+                                mess = MessageResult.UpLoadFileFail
+                            });
+                        }
+                        entity.TenDeTai = model.TenDeTai;
+                        entity.MoTa = model.MoTa;
+                        await _service.Update(entity);
+                        return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
                     }
-                    await _service.Update(entity);
-                    return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
+                    else
+                    {
+                        YCChinhSuaDeTai yCChinhSua = new YCChinhSuaDeTai
+                        {
+                            IDDeTai = model.Id,
+                            MoTa = model.MoTa,
+                            TenDeTai = model.TenDeTai,
+                        };
+                        YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
+                        {
+                            IddeTai = model.Id,
+                            LoaiYeuCau = (int)LoaiYeuCauPheDuyet.ChinhSua,
+                            NgayTao = DateTime.Now,
+                        };
+                        if (await UpLoadFileYCChinhSua(model.Files, yCChinhSua) == false)
+                        {
+                            return Ok(new
+                            {
+                                status = false,
+                                mess = MessageResult.UpLoadFileFail
+                            });
+                        }
+                        entity.YCChinhSuaDeTai.Clear();
+                        entity.YeuCauPheDuyet.Clear();
+                        entity.YeuCauPheDuyet.Add(yeuCau);
+                        entity.YCChinhSuaDeTai.Add(yCChinhSua);
+                        entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
+                        await _service.Update(entity);
+                        return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
+                    }
                 }
             }
             else { return Ok(new { status = false, mess = MessageResult.Fail }); }

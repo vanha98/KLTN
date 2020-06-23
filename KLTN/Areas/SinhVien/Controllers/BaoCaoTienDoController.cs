@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KLTN.Areas.SinhVien.Controllers
 {
     [Area("SinhVien")]
+    [Authorize(Roles = "SinhVien")]
     public class BaoCaoTienDoController : Controller
     {
         private readonly IDeTaiNghienCuu _service;
@@ -204,6 +205,8 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> CreateEdit(BaoCaoTienDoViewModel vmodel)
         {
@@ -219,11 +222,16 @@ namespace KLTN.Areas.SinhVien.Controllers
             if ( vmodel.Id == 0)
             {
                 BaoCaoTienDo baoCao = new BaoCaoTienDo();
-                int tuanDaNop = DeTai.BaoCaoTienDo.LastOrDefault().TuanDaNop;
+                int tuanDaNop = 0;
+                var LastBaoCao = DeTai.BaoCaoTienDo.LastOrDefault();
+                if(LastBaoCao != null)
+                {
+                    tuanDaNop = LastBaoCao.TuanDaNop;
+                }
                 baoCao.NoiDung = vmodel.NoiDung;
                 baoCao.TienDo = vmodel.TienDo;
                 baoCao.NgayNop = DateTime.Now;
-                if (CheckTuanNop(baoCao.NgayNop.Value,tuanDaNop,baoCao))
+                if (CheckTuanNop(DeTai.NgayThucHien.Value,tuanDaNop,baoCao))
                 {
                     if (await UpLoadFile(vmodel.File, baoCao))
                     {
@@ -249,23 +257,22 @@ namespace KLTN.Areas.SinhVien.Controllers
             {
                 BaoCaoTienDo baoCao = await _serviceBaoCao.GetById(vmodel.Id);
                 int week = ((DateTime.Now - DeTai.NgayThucHien.Value).Days / 7) + 1;
-                if(baoCao.TuanDaNop == week)
+                if(baoCao.TuanDaNop < week)
                 {
-                    baoCao.NoiDung = vmodel.NoiDung;
-                    baoCao.TienDo = vmodel.TienDo;
-                    baoCao.NgayNop = DateTime.Now;
-                    if (await UpLoadFile(vmodel.File, baoCao))
-                    {
-                        DeTai.BaoCaoTienDo.Add(baoCao);
-                        await _service.Update(DeTai);
-                        return Ok(new { status = true, mess = MessageResult.CreateSuccess });
-                    }
-                    else
-                    {
-                        return Ok(new { status = false, mess = MessageResult.UpLoadFileFail });
-                    }
+                    baoCao.Status = (int)StatusBaoCao.TreHan;
                 }
-                return Ok();
+                baoCao.NoiDung = vmodel.NoiDung;
+                baoCao.TienDo = vmodel.TienDo;
+                baoCao.NgayNop = DateTime.Now;
+                if (await UpLoadFile(vmodel.File, baoCao))
+                {
+                    await _serviceBaoCao.Update(baoCao);
+                    return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
+                }
+                else
+                {
+                    return Ok(new { status = false, mess = MessageResult.UpLoadFileFail });
+                }
             }
         }
     }

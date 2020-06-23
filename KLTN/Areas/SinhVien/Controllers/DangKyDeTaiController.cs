@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace KLTN.Areas.SinhVien.Controllers
 {
     [Area("SinhVien")]
+    [Authorize(Roles = "SinhVien")]
     public class DangKyDeTaiController : Controller
     {
         private readonly IDeTaiNghienCuu _service;

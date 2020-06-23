@@ -3,7 +3,9 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
+@section Script{ 
+    <script src="~/Resources/Admin/PheDuyetYeuCau.js"></script>
+}
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -73,7 +75,7 @@
 
                     @*CARD BODY*@
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                        <table id="example2" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                             <thead>
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="example1">

@@ -39,6 +39,7 @@
             "columns": [
                 { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "ngayNop", "name": "NgayNop", "autoWidth": true },
+                { "data": "tuanDaNop", "name": "TuanDaNop", "autoWidth": true, render: function (data, type, row) { return "Tuần " + data; } },
                 { "data": "noiDung", "name": "NoiDung", "autoWidth": true },
                 {
                     data: "tepDinhKem",
