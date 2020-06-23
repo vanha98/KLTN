@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container" id="mydiv">
+        <div class="row">
+            <div class="col-md-4 p-3 card card-default">
+                <div class="row">
+                    <div class="col">
+                        <nav class="navbar-white navbar-light">
+
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" id="txtSearch" type="search" placeholder="Tìm kiếm hội đồng">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" id="btnSearch">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </nav>
+                    </div>
+
+                    <div class="col-auto m-auto">
+                        <a id="LkRefreshList">
+                            <i class="fas fa-sync fa-lg text-navy"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-header">
+                    <h3 class="card-title col text-center"><b>Danh sách hội đồng</b></h3>
+                </div>
+
+                <div class="form-group" id="listBaiPost">
+                    <table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblSinhVien">
+
+                        <tr>
+                            <td><label class="text-truncate" style="max-width: 190px">Hội đồng 1</label></td>
+                            <td class="text-danger">Chưa phân công</td>
+                        </tr>
+                        <tr>
+                            <td><label class="text-truncate" style="max-width: 190px">Hội đồng 2</label></td>
+                            <td class="text-danger">Chưa phân công</td>
+                        </tr>
+                        <tr>
+                            <td><label class="text-truncate" style="max-width: 190px">Hội đồng 3</label></td>
+                            <td class="text-success">Đã phân công</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div hidden id="wait" class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+                @await Html.PartialAsync("_PhanCongHoiDong")
+            </div>
+        </div>
+    </div>
+
