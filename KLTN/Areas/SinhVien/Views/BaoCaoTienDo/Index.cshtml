@@ -1,33 +1,67 @@
 ﻿
 @section Script{
+    <script src="~/Resources/SinhVien/BaoCaoTienDo.js">
+    </script>
     <script>
-      (function () {
-            $(function () {
-                //init datatable
-                var btnCreate = "<button type='button' class='btn btn-success btn-sm' id='btnCreate' data-toggle='modal' data-target='#modal-lg'>Tạo báo cáo</button>";
-                var btnSave = "";
-                var table = new CustomTable("example1", btnCreate, btnSave);
-                table.Init();
-
-                //
-                $("#btnCreate").on('click', function () {
-                    $(".titleHeader").text("Nội dung báo cáo");
-                    $("#btnLuu").on('click', function () {
-                        var TenDeTai = $("#InputTenDeTai").val();
-                        var MoTa = $("#InputMoTa").val();
-                        var FileMoTa = $("#customFile").val();
-                        CreateNew(TenDeTai, MoTa, FileMoTa);
-                    });
-                });
+        //// func
+        var EditAction = function (id) {
+            url = "/SinhVien/BaoCaoTienDo/CreateEdit/" + id;
+            $('#modal-lg .modal-body').html('');
+            $('#modal-lg .titleHeader').html('Chỉnh sửa báo cáo');
+            $.get(url, function (data) {
+                $('#modal-lg .modal-body').html(data);
+                $('#modal-lg').modal();
             });
-        })();
+        }
+
+        var CreateAction = function () {
+            url = "/SinhVien/BaoCaoTienDo/CreateEdit/";
+            $('#modal-lg .modal-body').html('');
+            $('#modal-lg .titleHeader').html('Tạo báo cáo');
+            $.get(url, function (data) {
+                $('#modal-lg .modal-body').html(data);
+                $('#modal-lg').modal();
+            })
+        }
     </script>
 }
-<div class="content-header">
-    <h1 class="text-center">
-        Báo cáo tiến độ
-    </h1>
+@if (ViewBag.Check == true)
+{<div class="content-header">
+    <div class="row">
+        <h1 class="col text-center">Báo cáo tiến độ đề tài</h1>
+    </div>
+
+    <div class="row">
+        <h5 class="col text-center">@ViewBag.TenDeTai</h5>
+    </div>
     <hr />
 </div>
 
 @await Component.InvokeAsync("ListBaoCao")
+}
+else
+{
+    <div class="text-primary text-center text-bold"><h2>Bạn chưa đăng ký đề tài</h2></div>
+}
+
+<input value="@ViewBag.IdDeTai" id="valueIdDeTai" hidden/>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

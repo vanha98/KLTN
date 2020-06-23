@@ -76,8 +76,6 @@ namespace Data.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.HanNop).HasColumnType("date");
-
                 entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
 
                 entity.Property(e => e.NgayNop).HasColumnType("date");

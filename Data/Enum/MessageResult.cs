@@ -19,6 +19,8 @@ namespace Data.Enum
         public const string UpLoadFileFail = "Tệp sai định dạng hoặc kích thước quá lớn";
 
         public const string ExistDeTai = "Sinh viên này đã đăng ký đề tài";
+        public const string ChuaDenTGThucHien = "Chưa đến thời gian thực hiện đề tài";
+        public const string DaNopBaoCao = "Bạn đã nộp báo cáo của tuần ";
     }
 
     public static class DefaultValue

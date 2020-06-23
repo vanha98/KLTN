@@ -1,10 +1,20 @@
-﻿<div class="form-group">
-    <label>Chọn GVHD</label>
-    <select class="form-control">
-        <option>GV 1</option>
-        <option>GV 2</option>
-        <option>GV 3</option>
-        <option>GV 4</option>
-        <option>GV 5</option>
+﻿@model IEnumerable<Data.Models.GiangVien>
+
+    <label>Chọn giảng viên (nếu có)</label>
+    <select id="SelectGVHD" class="form-control">
+        @if (ViewBag.Selected == null)
+        {
+            <option selected>Chọn...</option>
+}
+        @foreach (var item in Model)
+        {
+            if (item.Id == ViewBag.Selected)
+            {
+                <option value="@item.Id" selected>@item.Ho @item.Ten</option>
+            }
+            else
+            {
+                <option value="@item.Id">@item.Ho @item.Ten</option>
+            }
+        }
     </select>
-</div>

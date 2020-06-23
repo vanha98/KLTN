@@ -1,20 +1,33 @@
-﻿
+﻿@using KLTN.Areas.SinhVien.Models
+@model BaoCaoTienDoViewModel
 
-<div class="modal fade" id="modal-lg">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title titleHeader"></h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @await Component.InvokeAsync("Mota")
-            </div>
-            @await Component.InvokeAsync("LuuHuyFooter")
-        </div>
-        <!-- /.modal-content -->
+<form method="post" enctype="multipart/form-data" onsubmit="return false;">
+    <input class="form-control" id="InputId" type="number" asp-for="Id" hidden />
+
+    <div class="form-group">
+        <!-- <label for="customFile">Custom File</label> -->
+            <label>Nội dung báo cáo (*) </label>
+                <textarea class="form-control" asp-for="NoiDung" id="InputNoiDung" 
+                          name="NoiDung" placeholder="Nhập nội dung" required 
+                          oninvalid="this.setCustomValidity('Bạn chưa nhập nội dung báo cáo')"
+                          oninput="this.setCustomValidity('')" >
+                </textarea>
+                <div class="custom-file">
+                    <input asp-for="File" type="file" id="Files" class="custom-file-input" accept="file_extension" name="Files">
+                    @if (Model != null && Model.TenTep != null)
+                    {
+                        <label class="custom-file-label" for="customFile">@Model.TenTep</label>
+                    }
+                    else
+                    {<label class="custom-file-label" for="customFile">Chọn tệp đính kèm (nếu có)</label>}
+                    <span asp-validation-for="File" class="text-danger lblFiles"></span>
+                </div>
     </div>
-    <!-- /.modal-dialog -->
-</div>
+
+    <div class="form-group">
+        <label>Tiến độ thực hiện</label>
+        <input type="text" class="form-control" id="InputTienDo" asp-for="TienDo" placeholder="SV tự đánh giá tiến độ"/>
+    </div>
+
+    @await Component.InvokeAsync("LuuHuyFooter")
+</form>

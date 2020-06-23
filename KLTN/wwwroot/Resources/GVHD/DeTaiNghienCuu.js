@@ -88,12 +88,6 @@
             }
         });
 
-        ////
-        //if (localStorage.getItem("Message")) {
-        //    toastr.success(localStorage.getItem("Message"));
-        //    localStorage.clear();
-        //}
-
         //Refresh Value
         function Refresh() {
             $("#InputTenDeTai").val('');

@@ -44,8 +44,11 @@ namespace KLTN
             
             services.AddScoped<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
+
             services.AddScoped<IDeTaiNghienCuu, DeTaiNghienCuuBo>();
             services.AddScoped<ISinhVien, SinhVienBo>();
+            services.AddScoped<IBaoCaoTienDo, BaoCaoTienDoBo>();
+            services.AddScoped<IGiangVien, GiangVienBo>();
             services.AddScoped<INhom, NhomBo>();
             services.AddScoped<INhomSinhVien, NhomSinhVienBo>();
             services.AddScoped<IBaiPost, BaiPostBo>();

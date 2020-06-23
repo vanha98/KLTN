@@ -145,9 +145,6 @@ namespace Data.Migrations
                     b.Property<string>("DanhGia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("HanNop")
-                        .HasColumnType("date");
-
                     b.Property<long?>("IddeTai")
                         .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
@@ -161,6 +158,9 @@ namespace Data.Migrations
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("TenTep")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,6 +168,9 @@ namespace Data.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
+
+                    b.Property<int>("TuanDaNop")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -310,6 +313,9 @@ namespace Data.Migrations
 
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NgayThucHien")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TenDeTai")
                         .HasColumnType("nvarchar(max)");
