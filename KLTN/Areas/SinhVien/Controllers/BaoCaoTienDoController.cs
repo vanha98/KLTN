@@ -124,7 +124,6 @@ namespace KLTN.Areas.SinhVien.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     list = list.Where(x => x.Id.ToString().Contains(searchValue)
-                    || x.TenTep.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.NoiDung.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.NgayNop.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     );
@@ -249,6 +248,23 @@ namespace KLTN.Areas.SinhVien.Controllers
             else
             {
                 BaoCaoTienDo baoCao = await _serviceBaoCao.GetById(vmodel.Id);
+                int week = ((DateTime.Now - DeTai.NgayThucHien.Value).Days / 7) + 1;
+                if(baoCao.TuanDaNop == week)
+                {
+                    baoCao.NoiDung = vmodel.NoiDung;
+                    baoCao.TienDo = vmodel.TienDo;
+                    baoCao.NgayNop = DateTime.Now;
+                    if (await UpLoadFile(vmodel.File, baoCao))
+                    {
+                        DeTai.BaoCaoTienDo.Add(baoCao);
+                        await _service.Update(DeTai);
+                        return Ok(new { status = true, mess = MessageResult.CreateSuccess });
+                    }
+                    else
+                    {
+                        return Ok(new { status = false, mess = MessageResult.UpLoadFileFail });
+                    }
+                }
                 return Ok();
             }
         }
