@@ -35,7 +35,7 @@ namespace KLTN
                     new Claim("Name", "Đinh Tuấn Hải"),
                 });
                 EnsureCreatedUser(services, "333641002", "GVHD", new Claim[]{
-                    new Claim("Name", "Nguyễn Văn B"),
+                    new Claim("Name", "Nguyễn Thị B"),
                 });
 
                 EnsureCreatedUser(services, "333641001", "GVHD", new Claim[]{
@@ -43,7 +43,7 @@ namespace KLTN
                 });
 
                 EnsureCreatedUser(services, "222641001", "QuanLy", new Claim[]{
-                    new Claim("Name", "Quản lý 1"),
+                    new Claim("Name", "Trần Văn A"),
                 });
             }
         }

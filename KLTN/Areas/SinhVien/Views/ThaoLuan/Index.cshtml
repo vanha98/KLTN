@@ -12,47 +12,55 @@
     <script src="~/Resources/SinhVien/Comments.js"></script>
 }
 
-<div class="container" id="mydiv">
-    <div class="row">
-        <div class="col-md-4 p-3 card">
-            @await Component.InvokeAsync("BtnTaoBaiDang")
-            <br />
-            <div class="form-group">
-                <select class="form-control select2" data-placeholder="Select a State" style="width: 100%;">
+@if (Model != null)
+{
+    <div class="container" id="mydiv">
+        <div class="row">
+            <div class="col-md-4 p-3 card">
+                @await Component.InvokeAsync("BtnTaoBaiDang")
+                <br />
+                <div class="form-group">
+                    <select class="form-control select2" data-placeholder="Select a State" style="width: 100%;">
 
-                    @foreach (var item in listDeTai)
-                    {
-                        if (item.Id == deTai.Id)
+                        @foreach (var item in listDeTai)
                         {
-                            <option value="@item.Id" selected>@item.TenDeTai</option>
+                            if (item.Id == deTai.Id)
+                            {
+                                <option value="@item.Id" selected>@item.TenDeTai</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.TenDeTai</option>
+                            }
                         }
-                        else
-                        {
-                            <option value="@item.Id">@item.TenDeTai</option>
-                        }
-                    }
-                </select>
+                    </select>
+                </div>
+                @await Component.InvokeAsync("TimKiem")
+                <div class="form-group" id="listBaiPost">
+                    @await Component.InvokeAsync("ListBaiPosts", new { listbaipost = Model })
+                </div>
             </div>
-            @await Component.InvokeAsync("TimKiem")
-            <div class="form-group" id="listBaiPost">
-                @await Component.InvokeAsync("ListBaiPosts", new { listbaipost = Model })
-            </div>
-        </div>
 
-        <div class="col-md-8">
-            <div hidden id="wait" class="overlay">
-                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-            </div>
-            <div class="card card-widget">
+            <div class="col-md-8">
+                <div hidden id="wait" class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+                <div class="card card-widget">
+                </div>
             </div>
         </div>
     </div>
-</div>
-@*}
+}
 else
-{ 
-    <div class="text-red text-bold" align="center">Bạn chưa đăng ký đề tài nghiên cứu khoa học</div>
-}*@
+{
+<div class="text-primary text-center text-bold"><h2>Bạn chưa đăng ký đề tài</h2></div>
+}
+
+@*}
+    else
+    {
+        <div class="text-red text-bold" align="center">Bạn chưa đăng ký đề tài nghiên cứu khoa học</div>
+    }*@
 
 <input type="text" id="valueIdBaiPost" hidden />
 

@@ -74,6 +74,16 @@ namespace KLTN.Areas.SinhVien.Controllers
 
                 // getting all Customer data  
                 var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet || x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
+                if(!entity.Any())
+                {
+                    return Json(new
+                    {
+                        draw = draw,
+                        recordsFiltered = recordsTotal,
+                        recordsTotal = recordsTotal,
+                        data = ""
+                    });
+                }
                 //foreach(var item in entity)
                 //{
                 //    string name = item.IdgiangVienNavigation.Ho +" "+ item.IdgiangVienNavigation.Ten;
