@@ -42,6 +42,10 @@ namespace KLTN.Areas.SinhVien.Controllers
         public async Task<IActionResult> Index()
         {
             var listNhom = await _serviceNhomSV.GetAll(x => x.IdsinhVien == long.Parse(User.Identity.Name));
+            if(!listNhom.Any())
+            {
+                return View();
+            }
             NhomSinhVien nhom = listNhom.SingleOrDefault(x => x.IdnhomNavigation.Status == (int)BaseStatus.Active);
             IEnumerable<BaiPost> baiPostsRieng = await _serviceBaiPost.GetAll(x =>x.IddeTaiNghienCuu == nhom.IddeTai && x.Status.Value == (int)BaseStatus.Active);
             IEnumerable<BaiPost> baiPostsChung = await _serviceBaiPost.GetAll(x => x.IdnguoiTao == nhom.IddeTaiNavigation.IdgiangVien

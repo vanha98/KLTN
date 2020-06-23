@@ -19,7 +19,7 @@ namespace Data.Models
         public string TenTep { get; set; }
         public string TepDinhKem { get; set; }
         public long? IdgiangVien { get; set; }
-        //public int? Idnhom { get; set; }
+        public long? IdNguoiDangKy { get; set; }
         public DateTime? NgayLap { get; set; }
         //public DateTime? NgaySVDangKy { get; set; }
         public bool? Loai { get; set; }

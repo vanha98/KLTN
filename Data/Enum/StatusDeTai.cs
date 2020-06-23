@@ -16,6 +16,7 @@ namespace Data.Enum
         DaGui = 2,
         DaDuyet = 3,
         HoanThanh = 4,
-        Huy = 5
+        Huy = 5,
+        DaDangKy = 6,
     }
 }

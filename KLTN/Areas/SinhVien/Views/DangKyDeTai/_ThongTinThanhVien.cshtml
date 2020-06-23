@@ -1,4 +1,4 @@
-﻿@model Data.Models.SinhVien
+﻿@model KLTN.Areas.SinhVien.Models.SinhVienViewModel
 
 <div class="row text-blue text-bold justify-content-center">Hoàn tất đăng ký</div>
 <div class="row">
@@ -21,6 +21,10 @@
     <label class="col">Email: </label>
     <div class="col">@Model.Email</div>
 </div>
-<div class="row justify-content-center">
-    <button class="btn btn-danger btn-sm btnHuyNhom">Hủy nhóm</button>
-</div>
+@if (Model.IdNguoiDangKy == long.Parse(User.Identity.Name))
+{
+    <div class="row justify-content-center">
+        <button class="btn btn-danger btn-sm btnHuyNhom">Hủy nhóm</button>
+    </div>
+}
+
