@@ -1,24 +1,17 @@
 ﻿@using KLTN.Areas.GVHD.Models
 @model DeTaiNghienCuuViewModel
 
-    <form method="post" enctype="multipart/form-data" onsubmit="return false;">
-        <input class="form-control" id="InputId" type="number" asp-for="Id" hidden />
+<form method="post" enctype="multipart/form-data" onsubmit="return false;">
+    <input class="form-control" id="InputId" type="number" asp-for="Id" hidden />
+
+    <div class="form-group">
+        <label for="exampleInputEmail1">Tên đề tài</label>
+        <input type="text" asp-for="TenDeTai" id="InputTenDeTai" name="TenDeTai" class="form-control" placeholder="Nhập tên đề tài">
+        <span asp-validation-for="TenDeTai" class="text-danger lblTenDeTai"></span>
+    </div>
 
         <div class="form-group">
-            <label for="exampleInputEmail1">Tên đề tài</label>
-            <input type="text" asp-for="TenDeTai" id="InputTenDeTai" name="TenDeTai" class="form-control" placeholder="Nhập tên đề tài">
-            <span asp-validation-for="TenDeTai" class="text-danger lblTenDeTai"></span>
-        </div>
-
-        <div class="form-group">
-            @if (Model == null)
-            {
-                @await Component.InvokeAsync("GVHD",null)
-            }
-            else
-            {
-                @await Component.InvokeAsync("GVHD", Model.IdgiangVien)
-            }
+            @await Component.InvokeAsync("GVHD")
             <span asp-validation-for="IdgiangVien" class="text-danger lblGVHD"></span>
         </div>
 
@@ -27,7 +20,7 @@
             <label>Mô tả</label>
             <textarea class="form-control" asp-for="MoTa" id="InputMoTa" name="MoTa" placeholder="Nhập mô tả"></textarea>
             <div class="custom-file">
-                <input asp-for="Files" type="file" id="Files" class="custom-file-input" accept="file_extension"  name="Files">
+                <input asp-for="Files" type="file" id="Files" class="custom-file-input" name="Files">
                 @if (Model != null && Model.TenTep != null)
                 {
                     <label class="custom-file-label" for="customFile">@Model.TenTep</label>
