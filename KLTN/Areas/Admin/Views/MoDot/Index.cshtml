@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var a = ViewBag.NgayBdDeTai;
 }
 @section Script
 {
@@ -56,7 +57,6 @@
                                 Đợt nghiệm thu đề tài
                             </h2>
                         }
-
                         <div class="text-center">
                             <h3>Thời gian @Model.ThoiGianBd.Value.ToString("hh:mm tt, dd/MM/yyyy") - @Model.ThoiGianKt.Value.ToString("hh:mm tt, dd/MM/yyyy")</h3>
                         </div>
@@ -104,7 +104,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input asp-for="ThoiGianKt" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                                <input  type="datetime-local" id="NgayBdDeTai" name="NgayBdDeTai" value="@ViewBag.NgayBdDeTai" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
                             </div>
                         </div>
 
@@ -115,22 +115,22 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input asp-for="ThoiGianKt" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                                <input type="datetime-local" id="NgayKtDeTai" name="NgayKtDeTai" value="@ViewBag.NgayKtDeTai" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
 
                             </div>
                         </div>
 
                         <div class="form-group">
-                            @if (Model == null)
+                            @if (ViewBag.NgayBdDeTai == null)
                             {
-                                <button class="btn btn-success">Tạo</button>
+                                <button class="btn btn-success" asp-controller="MoDot" asp-action="CreateTGThucHienDeTai">Tạo</button>
                             }
                             else
                             {
 
-                                <button class="btn btn-success">Chỉnh sửa</button>
+                                <button class="btn btn-success" asp-controller="MoDot" asp-action="EditTGThucHienDeTai">Chỉnh sửa</button>
                             }
-
+                            @*<button class="btn btn-success" asp-controller="MoDot" asp-action="CreateTGThucHienDeTai">Tạo</button>*@
                         </div>
                     </form>
                 </div>

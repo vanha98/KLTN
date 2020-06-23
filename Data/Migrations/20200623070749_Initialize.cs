@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -89,7 +89,7 @@ namespace Data.Migrations
                     DiaChi = table.Column<string>(nullable: true),
                     SDT = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
                     Email = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -103,7 +103,7 @@ namespace Data.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -131,7 +131,7 @@ namespace Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -150,7 +150,7 @@ namespace Data.Migrations
                     DiaChi = table.Column<string>(nullable: true),
                     SDT = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
                     Email = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -184,7 +184,7 @@ namespace Data.Migrations
                     DiaChi = table.Column<string>(nullable: true),
                     SDT = table.Column<string>(unicode: false, maxLength: 10, nullable: true),
                     Email = table.Column<string>(unicode: false, maxLength: 100, nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -224,13 +224,15 @@ namespace Data.Migrations
                     TenDeTai = table.Column<string>(nullable: true),
                     MoTa = table.Column<string>(nullable: true),
                     TenTep = table.Column<string>(nullable: true),
-                    TepDinhKem = table.Column<byte[]>(nullable: true),
+                    TepDinhKem = table.Column<string>(nullable: true),
                     IDGiangVien = table.Column<long>(nullable: true),
-                    IDNhom = table.Column<int>(nullable: true),
+                    IDNguoiDangKy = table.Column<long>(nullable: true),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
+                    NgayThucHien = table.Column<DateTime>(nullable: true),
+                    NgayKetThuc = table.Column<DateTime>(nullable: true),
                     Loai = table.Column<bool>(nullable: true),
-                    TinhTrangDangKy = table.Column<int>(nullable: true),
-                    TinhTrangPheDuyet = table.Column<int>(nullable: true)
+                    TinhTrangDangKy = table.Column<int>(nullable: true, defaultValue: 1),
+                    TinhTrangPheDuyet = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -239,12 +241,6 @@ namespace Data.Migrations
                         name: "FK__DeTaiNghi__IDGia__4E88ABD4",
                         column: x => x.IDGiangVien,
                         principalTable: "GiangVien",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__DeTaiNghi__IDNho__4F7CD00D",
-                        column: x => x.IDNhom,
-                        principalTable: "Nhom",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -316,28 +312,28 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Nhom_SinhVien",
+                name: "BaiPost",
                 columns: table => new
                 {
-                    IDNhom = table.Column<int>(nullable: false),
-                    IDSinhVien = table.Column<long>(nullable: false),
-                    Status = table.Column<int>(nullable: true)
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IDNguoiTao = table.Column<long>(nullable: false),
+                    NgayPost = table.Column<DateTime>(type: "datetime", nullable: true),
+                    TieuDe = table.Column<string>(maxLength: 150, nullable: true),
+                    NoiDung = table.Column<string>(nullable: true),
+                    Loai = table.Column<int>(nullable: true),
+                    Status = table.Column<int>(nullable: true, defaultValue: 1),
+                    IDDeTaiNghienCuu = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Nhom_Sin__CD149E43F71CE773", x => new { x.IDNhom, x.IDSinhVien });
+                    table.PrimaryKey("PK_BaiPost", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__Nhom_Sinh__Statu__3F466844",
-                        column: x => x.IDNhom,
-                        principalTable: "Nhom",
+                        name: "FK__BaiPost__IDDeTa__6754599E",
+                        column: x => x.IDDeTaiNghienCuu,
+                        principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK__Nhom_Sinh__IDSin__403A8C7D",
-                        column: x => x.IDSinhVien,
-                        principalTable: "SinhVien",
-                        principalColumn: "MSSV",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -348,12 +344,13 @@ namespace Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IDDeTai = table.Column<long>(nullable: true),
                     NoiDung = table.Column<string>(nullable: true),
+                    TenTep = table.Column<string>(nullable: true),
                     TepDinhKem = table.Column<string>(nullable: true),
                     TienDo = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     DanhGia = table.Column<string>(nullable: true),
                     NgayNop = table.Column<DateTime>(type: "date", nullable: true),
-                    HanNop = table.Column<DateTime>(type: "date", nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    TuanDaNop = table.Column<int>(nullable: false),
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -367,29 +364,34 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "KenhThaoLuan",
+                name: "Nhom_SinhVien",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IDGiangVien = table.Column<long>(nullable: true),
-                    Status = table.Column<int>(nullable: true),
-                    IDDeTai = table.Column<long>(nullable: true)
+                    IDNhom = table.Column<int>(nullable: false),
+                    IDSinhVien = table.Column<long>(nullable: false),
+                    IDDeTaiNghienCuu = table.Column<long>(nullable: false),
+                    Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_KenhThaoLuan", x => x.ID);
+                    table.PrimaryKey("PK__Nhom_Sin__CD149E43F71CE773", x => new { x.IDNhom, x.IDSinhVien, x.IDDeTaiNghienCuu });
                     table.ForeignKey(
-                        name: "FK__KenhThaoL__IDDeTai__60A75C0F",
-                        column: x => x.IDDeTai,
+                        name: "FK__Nhom_Sinh__IDDet__3F416244",
+                        column: x => x.IDDeTaiNghienCuu,
                         principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__KenhThaoL__IDGia__60A75C0F",
-                        column: x => x.IDGiangVien,
-                        principalTable: "GiangVien",
+                        name: "FK__Nhom_Sinh__Statu__3F466844",
+                        column: x => x.IDNhom,
+                        principalTable: "Nhom",
                         principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK__Nhom_Sinh__IDSin__403A8C7D",
+                        column: x => x.IDSinhVien,
+                        principalTable: "SinhVien",
+                        principalColumn: "MSSV",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -430,26 +432,47 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BaiPost",
+                name: "Comments",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IDNguoiTao = table.Column<long>(nullable: false),
+                    IDBaiPost = table.Column<int>(nullable: false),
+                    NoiDungComment = table.Column<string>(nullable: true),
+                    AnhDinhKem = table.Column<string>(nullable: true),
                     NgayPost = table.Column<DateTime>(type: "datetime", nullable: true),
-                    TieuDe = table.Column<string>(maxLength: 150, nullable: true),
-                    NoiDung = table.Column<string>(nullable: true),
-                    Loai = table.Column<int>(nullable: true),
-                    Status = table.Column<int>(nullable: true),
-                    IDKenhThaoLuan = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaiPost", x => x.ID);
+                    table.PrimaryKey("PK_Comments", x => x.ID);
                     table.ForeignKey(
-                        name: "FK__BaiPost__IDCTKen__6754599E",
-                        column: x => x.IDKenhThaoLuan,
-                        principalTable: "KenhThaoLuan",
+                        name: "FK__Comments__IDBaiP__6A30C649",
+                        column: x => x.IDBaiPost,
+                        principalTable: "BaiPost",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "imgBaiPost",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IDBaiPost = table.Column<int>(nullable: true),
+                    TenAnh = table.Column<string>(nullable: true),
+                    KichThuoc = table.Column<string>(nullable: true),
+                    AnhDinhKem = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_imgBaiPost", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK__imgBaiPost__IDBaiP__6A30C649",
+                        column: x => x.IDBaiPost,
+                        principalTable: "BaiPost",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -480,56 +503,10 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IDNguoiTao = table.Column<int>(nullable: false),
-                    IDBaiPost = table.Column<int>(nullable: true),
-                    NoiDungComment = table.Column<string>(nullable: true),
-                    AnhDinhKem = table.Column<string>(nullable: true),
-                    NgayPost = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK__Comments__IDBaiP__6A30C649",
-                        column: x => x.IDBaiPost,
-                        principalTable: "BaiPost",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "imgBaiPost",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IDBaiPost = table.Column<int>(nullable: true),
-                    TenAnh = table.Column<string>(nullable: true),
-                    KichThuoc = table.Column<string>(nullable: true),
-                    AnhDinhKem = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_imgBaiPost", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK__imgBaiPost__IDBaiP__6A30C649",
-                        column: x => x.IDBaiPost,
-                        principalTable: "BaiPost",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_BaiPost_IDKenhThaoLuan",
+                name: "IX_BaiPost_IDDeTaiNghienCuu",
                 table: "BaiPost",
-                column: "IDKenhThaoLuan");
+                column: "IDDeTaiNghienCuu");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BaoCaoTienDo_IDDeTai",
@@ -567,24 +544,9 @@ namespace Data.Migrations
                 column: "IDGiangVien");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeTaiNghienCuu_IDNhom",
-                table: "DeTaiNghienCuu",
-                column: "IDNhom");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_imgBaiPost_IDBaiPost",
                 table: "imgBaiPost",
                 column: "IDBaiPost");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_KenhThaoLuan_IDDeTai",
-                table: "KenhThaoLuan",
-                column: "IDDeTai");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_KenhThaoLuan_IDGiangVien",
-                table: "KenhThaoLuan",
-                column: "IDGiangVien");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MoDot_IDNamHoc",
@@ -595,6 +557,11 @@ namespace Data.Migrations
                 name: "IX_MoDot_IDQuanLy",
                 table: "MoDot",
                 column: "IDQuanLy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Nhom_SinhVien_IDDeTaiNghienCuu",
+                table: "Nhom_SinhVien",
+                column: "IDDeTaiNghienCuu");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Nhom_SinhVien_IDSinhVien",
@@ -665,6 +632,9 @@ namespace Data.Migrations
                 name: "BaiPost");
 
             migrationBuilder.DropTable(
+                name: "Nhom");
+
+            migrationBuilder.DropTable(
                 name: "SinhVien");
 
             migrationBuilder.DropTable(
@@ -674,7 +644,7 @@ namespace Data.Migrations
                 name: "MoDot");
 
             migrationBuilder.DropTable(
-                name: "KenhThaoLuan");
+                name: "DeTaiNghienCuu");
 
             migrationBuilder.DropTable(
                 name: "NamHoc");
@@ -683,13 +653,7 @@ namespace Data.Migrations
                 name: "QuanLy");
 
             migrationBuilder.DropTable(
-                name: "DeTaiNghienCuu");
-
-            migrationBuilder.DropTable(
                 name: "GiangVien");
-
-            migrationBuilder.DropTable(
-                name: "Nhom");
         }
     }
 }

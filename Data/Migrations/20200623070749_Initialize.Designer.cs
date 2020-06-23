@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200614144241_deleteproperty")]
-    partial class deleteproperty
+    [Migration("20200623070749_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,9 +105,9 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("IdkenhThaoLuan")
-                        .HasColumnName("IDKenhThaoLuan")
-                        .HasColumnType("int");
+                    b.Property<long>("IddeTaiNghienCuu")
+                        .HasColumnName("IDDeTaiNghienCuu")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("IdnguoiTao")
                         .HasColumnName("IDNguoiTao")
@@ -123,7 +123,9 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("TieuDe")
                         .HasColumnType("nvarchar(150)")
@@ -131,7 +133,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdkenhThaoLuan");
+                    b.HasIndex("IddeTaiNghienCuu");
 
                     b.ToTable("BaiPost");
                 });
@@ -147,9 +149,6 @@ namespace Data.Migrations
                     b.Property<string>("DanhGia")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("HanNop")
-                        .HasColumnType("date");
-
                     b.Property<long?>("IddeTai")
                         .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
@@ -161,7 +160,12 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("TenTep")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
@@ -170,6 +174,9 @@ namespace Data.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
+
+                    b.Property<int>("TuanDaNop")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -300,13 +307,13 @@ namespace Data.Migrations
                         .HasColumnName("ID")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("IdNguoiDangKy")
+                        .HasColumnName("IDNguoiDangKy")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("IdgiangVien")
                         .HasColumnName("IDGiangVien")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("Idnhom")
-                        .HasColumnName("IDNhom")
-                        .HasColumnType("int");
 
                     b.Property<bool?>("Loai")
                         .HasColumnType("bit");
@@ -314,10 +321,13 @@ namespace Data.Migrations
                     b.Property<string>("MoTa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("NgayKetThuc")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("NgaySVDangKy")
+                    b.Property<DateTime?>("NgayThucHien")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TenDeTai")
@@ -326,17 +336,22 @@ namespace Data.Migrations
                     b.Property<string>("TenTep")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TepDinhKem")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("TinhTrangDangKy")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("TinhTrangPheDuyet")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdgiangVien");
-
-                    b.HasIndex("Idnhom");
 
                     b.ToTable("DeTaiNghienCuu");
                 });
@@ -372,7 +387,9 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -395,7 +412,9 @@ namespace Data.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
@@ -428,34 +447,6 @@ namespace Data.Migrations
                     b.HasIndex("IdbaiPost");
 
                     b.ToTable("imgBaiPost");
-                });
-
-            modelBuilder.Entity("Data.Models.KenhThaoLuan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("IddeTai")
-                        .HasColumnName("IDDeTai")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IdgiangVien")
-                        .HasColumnName("IDGiangVien")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IddeTai");
-
-                    b.HasIndex("IdgiangVien");
-
-                    b.ToTable("KenhThaoLuan");
                 });
 
             modelBuilder.Entity("Data.Models.MoDot", b =>
@@ -528,7 +519,9 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
@@ -545,11 +538,17 @@ namespace Data.Migrations
                         .HasColumnName("IDSinhVien")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("IddeTai")
+                        .HasColumnName("IDDeTaiNghienCuu")
+                        .HasColumnType("bigint");
+
                     b.Property<int?>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Idnhom", "IdsinhVien")
+                    b.HasKey("Idnhom", "IdsinhVien", "IddeTai")
                         .HasName("PK__Nhom_Sin__CD149E43F71CE773");
+
+                    b.HasIndex("IddeTai");
 
                     b.HasIndex("IdsinhVien");
 
@@ -587,7 +586,9 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -629,7 +630,9 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -778,10 +781,12 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.BaiPost", b =>
                 {
-                    b.HasOne("Data.Models.KenhThaoLuan", "IdkenhThaoLuanNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
                         .WithMany("BaiPost")
-                        .HasForeignKey("IdkenhThaoLuan")
-                        .HasConstraintName("FK__BaiPost__IDCTKen__6754599E");
+                        .HasForeignKey("IddeTaiNghienCuu")
+                        .HasConstraintName("FK__BaiPost__IDDeTa__6754599E")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Data.Models.BaoCaoTienDo", b =>
@@ -834,11 +839,6 @@ namespace Data.Migrations
                         .WithMany("DeTaiNghienCuu")
                         .HasForeignKey("IdgiangVien")
                         .HasConstraintName("FK__DeTaiNghi__IDGia__4E88ABD4");
-
-                    b.HasOne("Data.Models.Nhom", "IdnhomNavigation")
-                        .WithMany("DeTaiNghienCuu")
-                        .HasForeignKey("Idnhom")
-                        .HasConstraintName("FK__DeTaiNghi__IDNho__4F7CD00D");
                 });
 
             modelBuilder.Entity("Data.Models.ImgBaiPost", b =>
@@ -847,19 +847,6 @@ namespace Data.Migrations
                         .WithMany("ImgBaiPost")
                         .HasForeignKey("IdbaiPost")
                         .HasConstraintName("FK__imgBaiPost__IDBaiP__6A30C649");
-                });
-
-            modelBuilder.Entity("Data.Models.KenhThaoLuan", b =>
-                {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
-                        .WithMany("KenhThaoLuan")
-                        .HasForeignKey("IddeTai")
-                        .HasConstraintName("FK__KenhThaoL__IDDeTai__60A75C0F");
-
-                    b.HasOne("Data.Models.GiangVien", "IdgiangVienNavigation")
-                        .WithMany("KenhThaoLuan")
-                        .HasForeignKey("IdgiangVien")
-                        .HasConstraintName("FK__KenhThaoL__IDGia__60A75C0F");
                 });
 
             modelBuilder.Entity("Data.Models.MoDot", b =>
@@ -877,6 +864,12 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.NhomSinhVien", b =>
                 {
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
+                        .WithMany("NhomSinhVien")
+                        .HasForeignKey("IddeTai")
+                        .HasConstraintName("FK__Nhom_Sinh__IDDet__3F416244")
+                        .IsRequired();
+
                     b.HasOne("Data.Models.Nhom", "IdnhomNavigation")
                         .WithMany("NhomSinhVien")
                         .HasForeignKey("Idnhom")

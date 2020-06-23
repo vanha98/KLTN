@@ -319,6 +319,9 @@ namespace Data.Migrations
                     b.Property<string>("MoTa")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("NgayKetThuc")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
 
