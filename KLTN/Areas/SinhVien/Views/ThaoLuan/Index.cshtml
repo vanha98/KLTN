@@ -19,6 +19,7 @@
             <br />
             <div class="form-group">
                 <select class="form-control select2" data-placeholder="Select a State" style="width: 100%;">
+
                     @foreach (var item in listDeTai)
                     {
                         if (item.Id == deTai.Id)
@@ -28,7 +29,7 @@
                         else
                         {
                             <option value="@item.Id">@item.TenDeTai</option>
-}
+                        }
                     }
                 </select>
             </div>
@@ -47,6 +48,11 @@
         </div>
     </div>
 </div>
+@*}
+else
+{ 
+    <div class="text-red text-bold" align="center">Bạn chưa đăng ký đề tài nghiên cứu khoa học</div>
+}*@
 
 <input type="text" id="valueIdBaiPost" hidden />
 

@@ -1,0 +1,30 @@
+﻿@model Data.Models.DeTaiNghienCuu
+
+@if (Model != null)
+{
+    <tr style="background:#C0C0C0">
+        @if (Model.IdNguoiDangKy != long.Parse(User.Identity.Name))
+        {
+            <th></th>
+        }
+        else
+        {<th><input class="form-check-inline NotSelectRow" type="checkbox" data-id="@Model.Id" checked /></th>}
+        <th>@Model.Id</th>
+        <th>@Model.TenDeTai</th>
+        @if (Model.Loai == false)
+        {
+            <th class="text-center"><input class="form-check-inline" type="checkbox" disabled checked /></th>
+        }
+        else
+        {
+            <th class="text-center"><input class="form-check-inline" type="checkbox" disabled /></th>
+}
+        <th>@Model.MoTa</th>
+        <th><a href="/../../FileUpload/DeTaiNghienCuu/@Model.TepDinhKem" download="@Model.TepDinhKem">@Model.TenTep</a></th>
+        <th>Đã đăng ký</th>
+        <th>@Model.IdgiangVienNavigation.Ho @Model.IdgiangVienNavigation.Ten</th>
+        <th>@Model.IdgiangVienNavigation.Sdt</th>
+        <th>@Model.IdgiangVienNavigation.Email</th>
+        <th><button class="btn btn-sm btn-default btnXemNhom" data-id="@Model.Id"><i class="fas fa-user-friends"></i></button></th>
+    </tr>
+}

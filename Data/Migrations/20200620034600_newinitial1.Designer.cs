@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200620034600_newinitial1")]
+    partial class newinitial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,9 +123,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("TieuDe")
                         .HasColumnType("nvarchar(150)")
@@ -147,6 +147,9 @@ namespace Data.Migrations
                     b.Property<string>("DanhGia")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("HanNop")
+                        .HasColumnType("date");
+
                     b.Property<long?>("IddeTai")
                         .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
@@ -158,12 +161,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<string>("TenTep")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
@@ -172,9 +170,6 @@ namespace Data.Migrations
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50)
                         .IsUnicode(false);
-
-                    b.Property<int>("TuanDaNop")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -305,10 +300,6 @@ namespace Data.Migrations
                         .HasColumnName("ID")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("IdNguoiDangKy")
-                        .HasColumnName("IDNguoiDangKy")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("IdgiangVien")
                         .HasColumnName("IDGiangVien")
                         .HasColumnType("bigint");
@@ -322,9 +313,6 @@ namespace Data.Migrations
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("NgayThucHien")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("TenDeTai")
                         .HasColumnType("nvarchar(max)");
 
@@ -335,14 +323,10 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TinhTrangDangKy")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<int?>("TinhTrangPheDuyet")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -382,9 +366,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -407,9 +389,7 @@ namespace Data.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -514,9 +494,7 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -581,9 +559,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")
@@ -625,9 +601,7 @@ namespace Data.Migrations
                         .IsUnicode(false);
 
                     b.Property<int?>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.Property<string>("Ten")
                         .HasColumnType("nvarchar(100)")

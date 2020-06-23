@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary">
+
+                    @*CARD HEADER*@
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách yêu cầu</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @*CARD BODY*@
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Mã đề tài
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Tên đề tài
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Tên giảng viên
+                                    </th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="example1">
+                                        Yêu cầu
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Ngày yêu cầu
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Người phê duyệt
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Xử lý
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-warning collapsed-card">
+                    @*CARD HEADER*@
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách đề tài dự kiến mở</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @*CARD BODY*@
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Mã đề tài
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Tên đề tài
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Tên giảng viên
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
