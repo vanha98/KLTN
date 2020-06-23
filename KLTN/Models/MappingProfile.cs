@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Data.Enum;
 using Data.Models;
+using KLTN.Areas.Admin.Models;
 using KLTN.Areas.GVHD.Models;
 using KLTN.Areas.SinhVien.Models;
 using System;
@@ -25,6 +26,15 @@ namespace KLTN.Models
             CreateMap<BaoCaoTienDo, BaoCaoTienDoViewModel>()
                 .ForMember(dest => dest.NgayNop, opt => opt.MapFrom(src => ((DateTime)src.NgayNop).ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status == (int)StatusBaoCao.DaNop ? "Đã nộp" : "Trễ hạn"));
+
+            CreateMap<YeuCauPheDuyet, YeuCauPheDuyetViewModel>()
+                .ForMember(dest => dest.TenDeTai, opt => opt.MapFrom(src => src.IddeTaiNavigation.TenDeTai))
+                .ForMember(dest => dest.TenGiangVien, opt => opt.MapFrom(src => src.IddeTaiNavigation.IdgiangVienNavigation.Ho +" "+ src.IddeTaiNavigation.IdgiangVienNavigation.Ten))
+                .ForMember(dest => dest.NgayTao, opt => opt.MapFrom(src => ((DateTime)src.NgayTao).ToString("dd/MM/yyyy")))
+                //.ForMember(dest => dest.NgayDuyet, opt => opt.MapFrom(src => ((DateTime)src.NgayDuyet.Value).ToString("dd/MM/yyyy")))
+                .ForMember(dest => dest.IdNguoiDuyet, opt => opt.MapFrom(src => src.IdNguoiDuyet.ToString()))
+                .ForMember(dest => dest.LoaiYeuCau, opt => opt.MapFrom(src => src.LoaiYeuCau == (int)LoaiYeuCauPheDuyet.ChinhSua ? "Chỉnh sửa" : "Xóa"))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy ? "Chưa xử lý" : src.Status == (int)StatusYeuCauPheDuyet.DaDuyet ? "Đã duyệt" : "Hủy yêu cầu"));
         }
     }
 }

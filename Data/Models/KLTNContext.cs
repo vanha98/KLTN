@@ -33,13 +33,15 @@ namespace Data.Models
         public virtual DbSet<QuanLy> QuanLy { get; set; }
         public virtual DbSet<SinhVien> SinhVien { get; set; }
         public virtual DbSet<XetDuyetVaDanhGia> XetDuyetVaDanhGia { get; set; }
+        public virtual DbSet<YeuCauPheDuyet> YeuCauPheDuyet { get; set; }
+        public virtual DbSet<YCChinhSuaDeTai> YCChinhSuaDeTai { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=ERP-HAIDT\\SQLEXPRESS;Database=KLTN;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-U7OPBBM;Database=KLTN;Trusted_Connection=True;");
             }
         }
 
@@ -92,6 +94,36 @@ namespace Data.Models
                     .WithMany(p => p.BaoCaoTienDo)
                     .HasForeignKey(d => d.IddeTai)
                     .HasConstraintName("FK__BaoCaoTie__IDDeT__5DCAEF64");
+            });
+
+            modelBuilder.Entity<YCChinhSuaDeTai>(entity =>
+            {
+                entity.HasIndex(e => e.IDDeTai);
+                entity.Property(e => e.IDDeTai).HasColumnName("IDDeTai");
+                entity.HasOne(d => d.IddeTaiNavigation)
+                    .WithMany(p => p.YCChinhSuaDeTai)
+                    .HasForeignKey(d => d.IDDeTai)
+                    .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12");
+
+            });
+
+            modelBuilder.Entity<YeuCauPheDuyet>(entity =>
+            {
+                entity.HasIndex(e => e.IddeTai);
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
+
+                entity.Property(e => e.NgayTao).HasColumnType("date");
+                entity.Property(e => e.NgayDuyet).HasColumnType("date");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
+
+                entity.HasOne(d => d.IddeTaiNavigation)
+                    .WithMany(p => p.YeuCauPheDuyet)
+                    .HasForeignKey(d => d.IddeTai)
+                    .HasConstraintName("FK__YeuCauPhe__IDDeT__6DCBFF34");
             });
 
             modelBuilder.Entity<BoNhiem>(entity =>

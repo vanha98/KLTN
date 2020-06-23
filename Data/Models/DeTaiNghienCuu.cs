@@ -11,6 +11,8 @@ namespace Data.Models
             BaiPost = new HashSet<BaiPost>();
             XetDuyetVaDanhGia = new HashSet<XetDuyetVaDanhGia>();
             NhomSinhVien = new HashSet<NhomSinhVien>();
+            YeuCauPheDuyet = new HashSet<YeuCauPheDuyet>();
+            YCChinhSuaDeTai = new HashSet<YCChinhSuaDeTai>();
         }
 
         public long Id { get; set; }
@@ -30,6 +32,8 @@ namespace Data.Models
         public virtual GiangVien IdgiangVienNavigation { get; set; }
         //public virtual Nhom IdnhomNavigation { get; set; }
         public virtual ICollection<BaoCaoTienDo> BaoCaoTienDo { get; set; }
+        public virtual ICollection<YCChinhSuaDeTai> YCChinhSuaDeTai { get; set; }
+        public virtual ICollection<YeuCauPheDuyet> YeuCauPheDuyet { get; set; }
         public virtual ICollection<BaiPost> BaiPost { get; set; }
         public virtual ICollection<XetDuyetVaDanhGia> XetDuyetVaDanhGia { get; set; }
         public virtual ICollection<NhomSinhVien> NhomSinhVien { get; set; }

@@ -18,5 +18,6 @@ namespace Data.Enum
         HoanThanh = 4,
         Huy = 5,
         DaDangKy = 6,
+        ChoDuyet,
     }
 }

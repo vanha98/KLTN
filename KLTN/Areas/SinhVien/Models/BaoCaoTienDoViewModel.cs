@@ -16,7 +16,7 @@ namespace KLTN.Areas.SinhVien.Models
         public string TienDo { get; set; }
         public string DanhGia { get; set; }
         public string NgayNop { get; set; }
-        public string HanNop { get; set; }
+        public int TuanDaNop { get; set; }
         public string Status { get; set; }
         public IFormFile File { get; set; }
     }
