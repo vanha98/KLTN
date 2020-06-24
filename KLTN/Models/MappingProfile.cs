@@ -28,13 +28,16 @@ namespace KLTN.Models
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status == (int)StatusBaoCao.DaNop ? "Đã nộp" : "Trễ hạn"));
 
             CreateMap<YeuCauPheDuyet, YeuCauPheDuyetViewModel>()
-                .ForMember(dest => dest.TenDeTai, opt => opt.MapFrom(src => src.IddeTaiNavigation.TenDeTai))
-                .ForMember(dest => dest.TenGiangVien, opt => opt.MapFrom(src => src.IddeTaiNavigation.IdgiangVienNavigation.Ho +" "+ src.IddeTaiNavigation.IdgiangVienNavigation.Ten))
+                .ForMember(dest => dest.TenDeTai, opt => opt.MapFrom(src => src.IddeTaiNghienCuuNavigation.TenDeTai))
+                .ForMember(dest => dest.TenGiangVien, opt => opt.MapFrom(src => src.IddeTaiNghienCuuNavigation.IdgiangVienNavigation.Ho + " " + src.IddeTaiNghienCuuNavigation.IdgiangVienNavigation.Ten))
                 .ForMember(dest => dest.NgayTao, opt => opt.MapFrom(src => ((DateTime)src.NgayTao).ToString("dd/MM/yyyy")))
                 //.ForMember(dest => dest.NgayDuyet, opt => opt.MapFrom(src => ((DateTime)src.NgayDuyet.Value).ToString("dd/MM/yyyy")))
                 .ForMember(dest => dest.IdNguoiDuyet, opt => opt.MapFrom(src => src.IdNguoiDuyet.ToString()))
-                .ForMember(dest => dest.LoaiYeuCau, opt => opt.MapFrom(src => src.LoaiYeuCau == (int)LoaiYeuCauPheDuyet.ChinhSua ? "Chỉnh sửa" : "Xóa"))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy ? "Chưa xử lý" : src.Status == (int)StatusYeuCauPheDuyet.DaDuyet ? "Đã duyệt" : "Hủy yêu cầu"));
+                .ForMember(dest => dest.MoTa, opt => opt.MapFrom(src => src.IddeTaiNghienCuuNavigation.MoTa))
+                .ForMember(dest => dest.TenTep, opt => opt.MapFrom(src => src.IddeTaiNghienCuuNavigation.TenTep))
+                .ForMember(dest => dest.TepDinhKem, opt => opt.MapFrom(src => src.IddeTaiNghienCuuNavigation.TepDinhKem));
+                //.ForMember(dest => dest.LoaiYeuCau, opt => opt.MapFrom(src => src.LoaiYeuCau == (int)LoaiYeuCauPheDuyet.ChinhSua ? "Chỉnh sửa" : src.LoaiYeuCau == (int)LoaiYeuCauPheDuyet.DuyetDangKy ? "Duyệt đăng ký" : "Xóa"));
+                
         }
     }
 }

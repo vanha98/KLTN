@@ -58,6 +58,9 @@ namespace KLTN
             services.AddScoped<IIdentity, Identity>();
             services.AddScoped<IMoDot, MoDotBo>();
 
+            services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
+            services.AddScoped<IAuthorizationHandler, OwnerThaoLuanAuthorization>();
+
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -73,8 +76,7 @@ namespace KLTN
                 options.SlidingExpiration = true;
             });
 
-            services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
-            services.AddScoped<IAuthorizationHandler, OwnerThaoLuanAuthorization>();
+            
             //services.AddScoped<IRepository<DeTaiNghienCuu>, DangKyDeTaiBo>();
             
 

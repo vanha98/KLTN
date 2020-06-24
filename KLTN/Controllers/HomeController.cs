@@ -45,17 +45,17 @@ namespace KLTN.Controllers
                 {
                     //var user = await _userManager.FindByNameAsync(model.Username);
                     //var role = await _userManager.GetRolesAsync(user);
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    if(User.IsInRole("QuanLy") || User.IsInRole("Admin"))
                     {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else if(User.IsInRole("SinhVien"))
-                    {
-                        return RedirectToAction("Index", "Home", new {area="SinhVien" });
+                        return RedirectToAction("Index", "Home", new {area= "Admin" });
                     }
                     else if(User.IsInRole("GVHD"))
                     {
                         return RedirectToAction("Index", "Home", new { area = "GVHD" });
+                    }
+                    else if(User.IsInRole("SinhVien"))
+                    {
+                        return RedirectToAction("Index", "Home", new { area = "SinhVien" });
                     }
                 }
             }
@@ -78,7 +78,7 @@ namespace KLTN.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login","Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

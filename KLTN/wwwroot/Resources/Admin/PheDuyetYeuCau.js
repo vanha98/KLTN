@@ -42,15 +42,76 @@
             "columns": [
                 { "data": "iddeTai", "name": "IddeTai", "autoWidth": true },
                 { "data": "tenDeTai", "name": "TenDeTai", "autoWidth": true, "className": "text-truncate" },
+                { "data": "moTa", "name": "MoTa", "autoWidth": true },
+                {
+                    data: "tepDinhKem",
+                    render: function (data, type, row) {
+                        if (data != null && data != "")
+                            return "<a href='/../../FileUpload/DeTaiNghienCuu/" + data + "' download='" + data + "'>" + row.tenTep + "</a>";
+                        else
+                            return "";
+                    }
+                },
                 { "data": "tenGiangVien", "name": "TenGiangVien", "autoWidth": true },
-                { "data": "loaiYeuCau", "name": "LoaiYeuCau", "autoWidth": true },
+                {
+                    "data": "loaiYeuCau", "name": "LoaiYeuCau", "autoWidth": true,
+                    render: function (data, type, row) {
+                        if (data == 0)
+                            return '<lable>Chỉnh sửa</lable>' +
+                                '<button class="btn btn-sm btn-info ml-1 btnInfo" data-id="' + row.iddeTai + '">Xem</button>';
+                        else if (data == 2)
+                            return '<lable class="text-primary">Duyệt đăng ký</label>';
+                        else
+                            return '<lable class="text-danger">Từ chối</label>';
+                    }
+                },
                 { "data": "ngayTao", "name": "NgayTao", "autoWidth": true },
                 { "data": "idNguoiDuyet", "name": "IdNguoiDuyet", "autoWidth": true },
-                { "data": "status", "name": "Status", "autoWidth": true },
+                {
+                    "data": "status", "name": "Status", "autoWidth": true,
+                    render: function (data, type, row) {
+                        if (data == 0)
+                            return '<button class="btn btn-sm btn-success btnApprove " data-id="' + row.iddeTai + '"><i class="fas fa-check"> Đồng ý</i></button>' +
+                                '<button class="btn btn-sm btn-danger ml-1 btnReject" data-id="' + row.iddeTai + '" data-toggle="modal" data-target="#ConfirmDelete"><i class="far fa-times-circle"> Từ chối</i></button>';
+                        else if(data == 1)
+                            return '<lable class="text-success">Đã duyệt</label>';
+                        else
+                            return '<lable class="text-danger">Từ chối</label>';
+                    }
+                },
             ],
             
         });
 
-      
+        function ChangeStatus(id,type) {
+            $.ajax({
+                url: 'PheDuyetYeuCau/ChangeStatus',
+                type: 'POST',
+                data: { idDeTai: id, type: type },
+                success: function (res) {
+                    if (res.status == true)
+                    {
+                        toastr.success(res.mess);
+                        table.ajax.reload();
+                    }
+                    else
+                        toastr.error(res.mess);
+                }
+            });
+        }
+
+        $(document).delegate('.btnApprove', 'click', function () {
+            var idDeTai = $(this).data('id');
+            var type = 1; // approve
+            ChangeStatus(idDeTai, type);
+        })  
+
+        $(document).delegate('.btnReject', 'click', function () {
+            var idDeTai = $(this).data('id');
+            var type = 0; // reject
+            ChangeStatus(idDeTai, type);
+        }) 
+
+
     });
 })();
