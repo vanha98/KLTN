@@ -13,5 +13,9 @@ namespace KLTN.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
