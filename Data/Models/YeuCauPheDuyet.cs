@@ -14,6 +14,6 @@ namespace Data.Models
         public DateTime? NgayDuyet { get; set; }
         public int Status { get; set; }
 
-        public virtual DeTaiNghienCuu IddeTaiNavigation { get; set; }
+        public virtual DeTaiNghienCuu IddeTaiNghienCuuNavigation { get; set; }
     }
 }

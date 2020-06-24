@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200623114741_newdb")]
-    partial class newdb
+    [Migration("20200623140431_intial")]
+    partial class intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -692,9 +692,7 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("IDDeTai")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IddeTaiNavigationId")
+                        .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
 
                     b.Property<string>("MoTa")
@@ -711,7 +709,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IddeTaiNavigationId");
+                    b.HasIndex("IDDeTai");
 
                     b.ToTable("YCChinhSuaDeTai");
                 });
@@ -720,6 +718,7 @@ namespace Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnName("ID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -727,26 +726,26 @@ namespace Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("IddeTai")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("IddeTaiNavigationId")
+                        .HasColumnName("IDDeTai")
                         .HasColumnType("bigint");
 
                     b.Property<int>("LoaiYeuCau")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("NgayDuyet")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("NgayTao")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IddeTaiNavigationId");
+                    b.HasIndex("IddeTai");
 
                     b.ToTable("YeuCauPheDuyet");
                 });
@@ -970,16 +969,22 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.YCChinhSuaDeTai", b =>
                 {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
                         .WithMany("YCChinhSuaDeTai")
-                        .HasForeignKey("IddeTaiNavigationId");
+                        .HasForeignKey("IDDeTai")
+                        .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Data.Models.YeuCauPheDuyet", b =>
                 {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
                         .WithMany("YeuCauPheDuyet")
-                        .HasForeignKey("IddeTaiNavigationId");
+                        .HasForeignKey("IddeTai")
+                        .HasConstraintName("FK__YeuCauPhe__IDDeT__6DCBF134")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

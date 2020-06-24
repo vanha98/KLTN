@@ -8,12 +8,13 @@ namespace Data.Enum
     {
         ChinhSua,
         Xoa,
+        DuyetDangKy,
     }
 
     public enum StatusYeuCauPheDuyet
     {
-        DaDuyet,
         ChuaXuLy,
+        DaDuyet,
         Huy,
     }
 }

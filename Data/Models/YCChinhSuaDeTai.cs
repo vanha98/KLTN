@@ -13,6 +13,6 @@ namespace Data.Models
         public string TepDinhKem { get; set; }
         public string TenTep { get; set; }
 
-        public virtual DeTaiNghienCuu IddeTaiNavigation { get; set; }
+        public virtual DeTaiNghienCuu IddeTaiNghienCuuNavigation { get; set; }
     }
 }

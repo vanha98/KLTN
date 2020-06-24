@@ -269,8 +269,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     });
                 else
                 {
-                    
-                    if (entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui)
+                    if (entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui || entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaGui)
                     {
                         if (await UpLoadFile(model.Files, entity) == false)
                         {
@@ -289,13 +288,11 @@ namespace KLTN.Areas.GVHD.Controllers
                     {
                         YCChinhSuaDeTai yCChinhSua = new YCChinhSuaDeTai
                         {
-                            IDDeTai = model.Id,
                             MoTa = model.MoTa,
                             TenDeTai = model.TenDeTai,
                         };
                         YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
                         {
-                            IddeTai = model.Id,
                             LoaiYeuCau = (int)LoaiYeuCauPheDuyet.ChinhSua,
                             NgayTao = DateTime.Now,
                         };
@@ -308,7 +305,6 @@ namespace KLTN.Areas.GVHD.Controllers
                             });
                         }
                         entity.YCChinhSuaDeTai.Clear();
-                        entity.YeuCauPheDuyet.Clear();
                         entity.YeuCauPheDuyet.Add(yeuCau);
                         entity.YCChinhSuaDeTai.Add(yCChinhSua);
                         entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
@@ -320,18 +316,18 @@ namespace KLTN.Areas.GVHD.Controllers
             else { return Ok(new { status = false, mess = MessageResult.Fail }); }
         }
 
-        private Dictionary<string,string> GetMyTypes()
-        {
-            return new Dictionary<string, string>
-            {
-                {".txt","text/plain" },
-                {".doc","application/vnd.ms-word"},
-                {".docx", "application/vnd.ms-word"},
-                {".pdf","application/pdf" },
-                {".xls", "application/vnd.ms-excel" },
-                {".xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  }
-            };
-        }
+        //private Dictionary<string,string> GetMyTypes()
+        //{
+        //    return new Dictionary<string, string>
+        //    {
+        //        {".txt","text/plain" },
+        //        {".doc","application/vnd.ms-word"},
+        //        {".docx", "application/vnd.ms-word"},
+        //        {".pdf","application/pdf" },
+        //        {".xls", "application/vnd.ms-excel" },
+        //        {".xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  }
+        //    };
+        //}
 
         //[HttpGet]
         //public async Task<IActionResult> DownLoadFile(long id)
@@ -366,10 +362,22 @@ namespace KLTN.Areas.GVHD.Controllers
                 {
                     entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.Huy;
                 }
-                else if( type == 0)
+                else if (type == 0)
+                {
                     entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaGui;
+                    YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
+                    {
+                        LoaiYeuCau = (int)LoaiYeuCauPheDuyet.DuyetDangKy,
+                        NgayTao = DateTime.Now,
+                    };
+                    entity.YeuCauPheDuyet.Add(yeuCau);
+                }
                 else
+                {
                     entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
+                    var yeuCau = entity.YeuCauPheDuyet.FirstOrDefault(x => x.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy);
+                    entity.YeuCauPheDuyet.Remove(yeuCau);
+                }
             }
             await _service.Update(entity);
             return Ok(new

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
 using KLTN.Areas.Admin.Models;
@@ -90,11 +91,11 @@ namespace KLTN.Areas.Admin.Controllers
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    list = list.Where(x => x.Id.ToString().Contains(searchValue)
-                    || x.IddeTai.ToString().IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    list = list.Where(x => x.IddeTai.ToString().IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.NgayTao.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.IdNguoiDuyet.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.Status.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    || x.MoTa.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    || x.TenTep.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TenGiangVien.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TenDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     );
@@ -103,7 +104,7 @@ namespace KLTN.Areas.Admin.Controllers
                 //total number of rows counts   
                 recordsTotal = list.Count();
                 //Paging   
-                var data = list.Skip(skip).Take(pageSize).ToList();
+                var data = list.Skip(skip).Take(pageSize).ToList().OrderBy(x=>x.Status);
                 //Returning Json Data  
                 return Json(new
                 {
@@ -118,6 +119,30 @@ namespace KLTN.Areas.Admin.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus (long idDeTai, int type)
+        {
+            var yeuCau = await _servicePheDuyetYeuCau.GetEntity(x => x.IddeTai == idDeTai && x.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy);
+            if(type == 1) //approve
+            {
+                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDuyet;
+                yeuCau.Status = (int)StatusYeuCauPheDuyet.DaDuyet;
+            }
+            else
+            {
+                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
+                yeuCau.Status = (int)StatusYeuCauPheDuyet.Huy;
+            }
+            yeuCau.NgayDuyet = DateTime.Now;
+            yeuCau.IdNguoiDuyet = long.Parse(User.Identity.Name);
+            await _servicePheDuyetYeuCau.Update(yeuCau);
+            return Ok(new
+            {
+                status = true,
+                mess = MessageResult.UpdateSuccess
+            });
         }
     }
 }

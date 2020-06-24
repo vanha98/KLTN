@@ -366,35 +366,35 @@ namespace Data.Models
                 entity.Property(e => e.Status).HasDefaultValue(1);
             });
 
-            //modelBuilder.Entity<YCChinhSuaDeTai>(entity =>
-            //{
-            //    entity.HasIndex(e => e.IDDeTai);
-            //    entity.Property(e => e.IDDeTai).HasColumnName("IDDeTai");
-            //    entity.HasOne(d => d.IddeTaiNavigation)
-            //        .WithMany(p => p.YCChinhSuaDeTai)
-            //        .HasForeignKey(d => d.IDDeTai)
-            //        .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12");
+            modelBuilder.Entity<YCChinhSuaDeTai>(entity =>
+            {
+                entity.HasIndex(e => e.IDDeTai);
+                entity.Property(e => e.IDDeTai).HasColumnName("IDDeTai");
+                entity.HasOne(d => d.IddeTaiNghienCuuNavigation)
+                    .WithMany(p => p.YCChinhSuaDeTai)
+                    .HasForeignKey(d => d.IDDeTai)
+                    .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12");
 
-            //});
+            });
 
-            //modelBuilder.Entity<YeuCauPheDuyet>(entity =>
-            //{
-            //    entity.HasIndex(e => e.IddeTai);
+            modelBuilder.Entity<YeuCauPheDuyet>(entity =>
+            {
+                entity.HasIndex(e => e.IddeTai);
 
-            //    entity.Property(e => e.Id).HasColumnName("ID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
-            //    entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
+                entity.Property(e => e.IddeTai).HasColumnName("IDDeTai");
 
-            //    entity.Property(e => e.NgayTao).HasColumnType("date");
-            //    entity.Property(e => e.NgayDuyet).HasColumnType("date");
+                entity.Property(e => e.NgayTao).HasColumnType("date");
+                entity.Property(e => e.NgayDuyet).HasColumnType("date");
 
-            //    entity.Property(e => e.Status).HasDefaultValue(1);
+                entity.Property(e => e.Status).HasDefaultValue(0);
 
-            //    entity.HasOne(d => d.IddeTaiNavigation)
-            //        .WithMany(p => p.YeuCauPheDuyet)
-            //        .HasForeignKey(d => d.IddeTai)
-            //        .HasConstraintName("FK__YeuCauPhe__IDDeT__6DCBF134");
-            //});
+                entity.HasOne(d => d.IddeTaiNghienCuuNavigation)
+                    .WithMany(p => p.YeuCauPheDuyet)
+                    .HasForeignKey(d => d.IddeTai)
+                    .HasConstraintName("FK__YeuCauPhe__IDDeT__6DCBF134");
+            });
 
             modelBuilder.Entity<XetDuyetVaDanhGia>(entity =>
             {
