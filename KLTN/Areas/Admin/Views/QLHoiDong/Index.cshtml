@@ -4,6 +4,20 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+
+@section Script{
+    <script src="~/Resources/Admin/QLHoiDong.js"></script>
+<script type="text/javascript">
+    var CreateAction = function () {
+            //url = "/SinhVien/DangKyDeTai/CreateEdit/";
+            //$('#modal-lg .modal-body').html('');
+            //$.get(url, function (data) {
+              //  $('#modal-lg .modal-body').html(data);
+                $('#modal-lg').modal();
+            //})
+        }
+</script>
+ }
 <div class="content-header">
     <h1 class="text-center">
         Danh sách hội đồng
@@ -52,7 +66,25 @@
                 </table>
             </div>
         </div>
-        @*<div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>*@
     </div>
-    @*@await  Component.InvokeAsync("DangKySV")*@
+</div>
+
+<div class="modal fade" id="modal-lg">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_ThanhLapHoiDong")
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>

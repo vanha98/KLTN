@@ -304,9 +304,14 @@ namespace KLTN.Areas.GVHD.Controllers
                                 mess = MessageResult.UpLoadFileFail
                             });
                         }
-                        entity.YCChinhSuaDeTai.Clear();
+                        var yeuCauHT = entity.YeuCauPheDuyet.FirstOrDefault(x=>x.LoaiYeuCau == (int)LoaiYeuCauPheDuyet.ChinhSua && x.Status == 0);
+                        var yCChinhSuaHT = entity.YCChinhSuaDeTai.FirstOrDefault(x => x.Status == 0);
+
+                        entity.YeuCauPheDuyet.Remove(yeuCauHT);
+                        entity.YCChinhSuaDeTai.Remove(yCChinhSuaHT);
                         entity.YeuCauPheDuyet.Add(yeuCau);
                         entity.YCChinhSuaDeTai.Add(yCChinhSua);
+
                         entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
                         await _service.Update(entity);
                         return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
@@ -358,12 +363,37 @@ namespace KLTN.Areas.GVHD.Controllers
                         status = false,
                         toastr = MessageResult.AccessDenied
                     });
-                if (type == 2)
+                if (type == 2) // xoa detai
                 {
-                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.Huy;
+                    //if (entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui || entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui)
+                    //{
+                    //    YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
+                    //    {
+                    //        LoaiYeuCau = (int)LoaiYeuCauPheDuyet.Xoa,
+                    //        NgayTao = DateTime.Now,
+                    //    };
+                    //    entity.YeuCauPheDuyet.Clear();
+                    //    entity.YeuCauPheDuyet.Add(yeuCau);
+                    //    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
+                    //}
+                    //else
+                    await _service.Delete(entity);
+                    return Ok(new
+                    {
+                        status = true,
+                        mess = MessageResult.UpdateSuccess
+                    });
                 }
-                else if (type == 0)
+                else if (type == 0) // gui duyet dang ky
                 {
+                    if(entity.TinhTrangPheDuyet.Value == (int)StatusPheDuyetDeTai.DaGui)
+                    {
+                        return Ok(new
+                        {
+                            status = false,
+                            toastr = "Đã gửi yêu cầu đăng ký cho đề tài " + entity.Id
+                        });
+                    }
                     entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaGui;
                     YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
                     {
@@ -372,11 +402,19 @@ namespace KLTN.Areas.GVHD.Controllers
                     };
                     entity.YeuCauPheDuyet.Add(yeuCau);
                 }
-                else
+                else // huy gui
                 {
-                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
-                    var yeuCau = entity.YeuCauPheDuyet.FirstOrDefault(x => x.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy);
-                    entity.YeuCauPheDuyet.Remove(yeuCau);
+                    if(entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui)
+                    { entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
+                        var yeuCau = entity.YeuCauPheDuyet.FirstOrDefault(x => x.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy);
+                        entity.YeuCauPheDuyet.Remove(yeuCau);
+                    }
+                    else
+                        return Ok(new
+                        {
+                            status = false,
+                            toastr = "Đề tài "+entity.Id+ " chưa gửi đăng ký" 
+                        });
                 }
             }
             await _service.Update(entity);

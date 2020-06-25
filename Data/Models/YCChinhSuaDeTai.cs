@@ -12,6 +12,7 @@ namespace Data.Models
         public string MoTa { get; set; }
         public string TepDinhKem { get; set; }
         public string TenTep { get; set; }
+        public int Status { get; set; }
 
         public virtual DeTaiNghienCuu IddeTaiNghienCuuNavigation { get; set; }
     }

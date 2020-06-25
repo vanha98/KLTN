@@ -4,14 +4,16 @@ using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    partial class KLTNContextModelSnapshot : ModelSnapshot
+    [Migration("20200625024545_newhoidong2")]
+    partial class newhoidong2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,11 +201,12 @@ namespace Data.Migrations
                         .HasColumnName("IDHoiDong")
                         .HasColumnType("int");
 
+                    b.Property<long?>("IdquanLy")
+                        .HasColumnName("IDQuanLy")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("NgayBoNhiem")
                         .HasColumnType("datetime");
-
-                    b.Property<long?>("QuanLyId")
-                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .HasColumnType("int");
@@ -217,7 +220,7 @@ namespace Data.Migrations
 
                     b.HasIndex("IdhoiDong");
 
-                    b.HasIndex("QuanLyId");
+                    b.HasIndex("IdquanLy");
 
                     b.ToTable("BoNhiem");
                 });
@@ -883,9 +886,10 @@ namespace Data.Migrations
                         .HasForeignKey("IdhoiDong")
                         .HasConstraintName("FK__BoNhiem__IDHoiDo__4BAC3F29");
 
-                    b.HasOne("Data.Models.QuanLy", null)
+                    b.HasOne("Data.Models.QuanLy", "IdquanLyNavigation")
                         .WithMany("BoNhiem")
-                        .HasForeignKey("QuanLyId");
+                        .HasForeignKey("IdquanLy")
+                        .HasConstraintName("FK__BoNhiem__IDQuanL__4AB81AF0");
                 });
 
             modelBuilder.Entity("Data.Models.Comments", b =>

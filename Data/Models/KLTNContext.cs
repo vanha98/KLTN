@@ -102,15 +102,11 @@ namespace Data.Models
             {
                 entity.HasIndex(e => e.IdhoiDong);
 
-                entity.HasIndex(e => e.IdquanLy);
-
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
 
                 entity.Property(e => e.IdhoiDong).HasColumnName("IDHoiDong");
-
-                entity.Property(e => e.IdquanLy).HasColumnName("IDQuanLy");
 
                 entity.Property(e => e.NgayBoNhiem).HasColumnType("datetime");
 
@@ -124,10 +120,6 @@ namespace Data.Models
                     .HasForeignKey(d => d.IdhoiDong)
                     .HasConstraintName("FK__BoNhiem__IDHoiDo__4BAC3F29");
 
-                entity.HasOne(d => d.IdquanLyNavigation)
-                    .WithMany(p => p.BoNhiem)
-                    .HasForeignKey(d => d.IdquanLy)
-                    .HasConstraintName("FK__BoNhiem__IDQuanL__4AB81AF0");
             });
 
             modelBuilder.Entity<Comments>(entity =>
@@ -370,6 +362,8 @@ namespace Data.Models
             {
                 entity.HasIndex(e => e.IDDeTai);
                 entity.Property(e => e.IDDeTai).HasColumnName("IDDeTai");
+                entity.Property(e => e.Status).HasDefaultValue(0);
+
                 entity.HasOne(d => d.IddeTaiNghienCuuNavigation)
                     .WithMany(p => p.YCChinhSuaDeTai)
                     .HasForeignKey(d => d.IDDeTai)

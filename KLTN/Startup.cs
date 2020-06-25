@@ -54,6 +54,7 @@ namespace KLTN
             services.AddScoped<IBaiPost, BaiPostBo>();
             services.AddScoped<IMoDot, MoDotBo>();
             services.AddScoped<IPheDuyetYeuCau, PheDuyetYeuCauBo>();
+            services.AddScoped<IHoiDong, HoiDongBo>();
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
             services.AddScoped<IIdentity, Identity>();
             services.AddScoped<IMoDot, MoDotBo>();

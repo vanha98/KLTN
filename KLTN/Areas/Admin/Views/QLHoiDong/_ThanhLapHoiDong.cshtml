@@ -1,0 +1,80 @@
+﻿@model HoiDong
+
+    <form id="formHoiDong" onsubmit="return false;">
+        <input asp-for="Id" id="valueIdHD" hidden />
+        @*<div class="form-group">
+            <label>Chọn loại đợt</label>
+            <select asp-for="Loai" class="form-control">
+                <option value="1">Đăng ký đề tài</option>
+                <option value="2">Xét duyệt đề tài</option>
+                <option value="3">Nghiệm thu đề tài</option>
+            </select>
+        </div>*@
+
+    <div class="form-group">
+        <label>Tên hội đồng (*)</label>
+        <input id="valueTenHD" asp-for="TenHoiDong" class="form-control" type="text" placeholder="Nhập tên hội đồng" />
+        <label class="text-danger lblTenHD" hidden></label>
+    </div>
+
+        <div class="form-group">
+            <label>Thành viên</label>
+                <div class="row ThanhVien">
+                    <div class="col-6">
+                        @await Component.InvokeAsync("GVHD")
+                        <label class="text-danger lblGVHD" hidden></label>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control selectVaiTro">
+                            <option value="0">Chọn vai trò</option>
+                            <option value="1">Chủ tịch</option>
+                            <option value="2">Ủy viên</option>
+                            <option value="3">Thư ký</option>
+                            <option value="4">Phản biện</option>
+                        </select>
+                        <label class="text-danger lblVaiTro" hidden></label>
+                    </div>
+                    <div class="col-2 text-center mt-2">
+                        <a class="text-success btnAddTV" href="#"><i class="fas fa-plus"> Thêm</i></a>
+                    </div>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
+                <div class="col-sm-12">
+                    <table id="tableTemp" class="table table-bordered dataTable table-hover table-sm" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row" align="center">
+                                <th>
+                                    Tên thành viên
+                                </th>
+                                <th>
+                                    Vai trò
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <label class="text-danger lblTable" hidden></label>
+        </div>
+
+        <div class="form-group">
+            @if (Model == null)
+            {
+                <button class="btn btn-primary btnLapHD" >Thành lập hội đồng</button>
+            }
+            else
+            {
+                <button class="btn btn-primary">Lưu</button>
+            }
+        </div>
+    </form>
+
