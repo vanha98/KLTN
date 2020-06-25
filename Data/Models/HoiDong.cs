@@ -12,6 +12,8 @@ namespace Data.Models
         }
 
         public int Id { get; set; }
+        public string TenHoiDong { get; set; }
+        public long IdNguoiTao { get; set; }
         public DateTime? NgayLap { get; set; }
         public int? Status { get; set; }
 

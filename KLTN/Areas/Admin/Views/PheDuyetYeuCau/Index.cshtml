@@ -1,4 +1,4 @@
-﻿
+﻿@*@model IEnumerable<DeTaiNghienCuu>*@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -67,21 +67,21 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="card card-warning collapsed-card">
+                <div class="card card-warning">
                     @*CARD HEADER*@
                     <div class="card-header">
                         <h3 class="card-title">Danh sách đề tài dự kiến mở</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                <i class="fas fa-plus"></i>
+                                <i class="fas fa-minus"></i>
                             </button>
                         </div>
                     </div>
 
                     @*CARD BODY*@
                     <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                        <table id="example2" class="table table-bordered table-hover dataTable table-sm nowrap" style="width:100%" role="grid" aria-describedby="example1_info">
                             <thead>
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="example1">
@@ -91,13 +91,17 @@
                                         Tên đề tài
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Mô tả
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
+                                        Tệp mô tả
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1">
                                         Tên giảng viên
                                     </th>
-                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            </tbody>
+                            <tbody></tbody>
 
                         </table>
                     </div>
@@ -106,3 +110,38 @@
         </div>
     </div>
 
+    <div class="modal" id="ThongTinEdit">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Yều cầu chỉnh sửa đề tài</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="ConfirmDelete">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận từ chối yêu cầu?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Đồng ý</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+                </div>
+
+            </div>
+        </div>
+    </div>

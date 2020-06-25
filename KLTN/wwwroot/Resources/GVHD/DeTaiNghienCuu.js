@@ -73,9 +73,14 @@
                 //{ "data": "tenTep", "name": "TenTep", "autoWidth": true },
                 { "data": "tinhTrangPheDuyet", "name": "TinhTrangPheDuyet", "autoWidth": true },
                 {
+                    data: "tinhTrangPheDuyet",
                     orderable:false,
                     "render": function (data, type, full, meta) {
-                        return '<button class="btn btn-sm btn-default" id="btnSua" data-id="'+full.id+'" onclick="EditAction('+full.id+')"><i class="far fa-edit"></i></button>'+
+                        if (data != "Đã gửi" && data!="Chưa gửi") {
+                            return '<button class="btn btn-sm btn-default" id="btnSua" data-id="' + full.id + '" onclick="EditAction(' + full.id + ')"><i class="far fa-edit"></i></button>';
+                        }
+                        else
+                            return '<button class="btn btn-sm btn-default" id="btnSua" data-id="'+full.id+'" onclick="EditAction('+full.id+')"><i class="far fa-edit"></i></button>'+
                         '<button class="btn btn-sm btn-default Delete" data-id="'+full.id+'" data-toggle="modal" data-target="#ConfirmDelete"><i class="far fa-trash-alt"></i></button>';
                     }
                 },
@@ -111,8 +116,9 @@
                         toastr.success(response.mess);
                         //window.location.reload();
                     }
-                    else
+                    else {
                         toastr.error(response.toastr);
+                    }
                 }
             });
         };

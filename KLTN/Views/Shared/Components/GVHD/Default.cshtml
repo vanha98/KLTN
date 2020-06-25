@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Data.Models.GiangVien>
 
-    <label>Chọn giảng viên (nếu có)</label>
+    
     <select id="SelectGVHD" class="form-control">
         @if (ViewBag.Selected == null)
         {
-            <option selected>Chọn...</option>
+            <option value="0" selected>Chọn GVHD...</option>
 }
         @foreach (var item in Model)
         {

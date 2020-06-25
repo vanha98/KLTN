@@ -1,0 +1,57 @@
+﻿@model Data.Models.YCChinhSuaDeTai
+
+    <div class="row">
+        <div class="col-6">
+                <div class="card card-primary w-100">
+                    @*CARD HEADER*@
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin hiện tại</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">Tên đề tài: </div>
+                            <div class="col-9">@Model.IddeTaiNghienCuuNavigation.TenDeTai</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Mô tả: </div>
+                            <div class="col-9">@Model.IddeTaiNghienCuuNavigation.MoTa</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Tệp mô tả: </div>
+                            <div class="col-9"><a href="/../../FileUpload/DeTaiNghienCuu/@Model.IddeTaiNghienCuuNavigation.TepDinhKem" download="@Model.IddeTaiNghienCuuNavigation.TepDinhKem">@Model.IddeTaiNghienCuuNavigation.TenTep</a></div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-6">
+                <div class="card card-success w-100">
+                    @*CARD HEADER*@
+                    <div class="card-header">
+                        <h3 class="card-title">Thông tin sau chỉnh sửa</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">Tên đề tài: </div>
+                            <div class="col-9">@Model.TenDeTai</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">Mô tả: </div>
+                            <div class="col-9">@Model.MoTa</div>
+                        </div>
+                        @if (Model.TenTep != null)
+                        {<div class="row">
+                                <div class="col-3">Tệp mô tả: </div>
+                                <div class="col-9"><a href="/../../FileUpload/DeTaiNghienCuu/@Model.TepDinhKem" download="@Model.TepDinhKem">@Model.TenTep</a></div>
+                            </div>
+                        }
+                        else
+                        {
+                    <div class="row">
+                        <div class="col-3">Tệp mô tả: </div>
+                        <div class="col-9"><a href="/../../FileUpload/DeTaiNghienCuu/@Model.IddeTaiNghienCuuNavigation.TepDinhKem" download="@Model.IddeTaiNghienCuuNavigation.TepDinhKem">@Model.IddeTaiNghienCuuNavigation.TenTep</a></div>
+                    </div>
+                        }
+                    </div>
+                </div>
+        </div>
+</div>
