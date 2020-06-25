@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/SinhVien/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="mydiv">
+    <div class="row">
+        <div class="col-md-4 p-3 card">
+            @await Component.InvokeAsync("ThoiGianMoDot")
+            <br />
+            @await Component.InvokeAsync("TimKiem")
+
+            <div class="card-header">
+                <h3 class="card-title col text-center"><b>Danh sách câu hỏi</b></h3>
+            </div>
+
+            @await Component.InvokeAsync("ListCauHoi")
+        </div>
+
+        <div class="col-md-8">
+            <div hidden id="wait" class="overlay">
+                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+            </div>
+            <div class="card card-primary">
+                @await Html.PartialAsync("_NoiDungXetDuyetSV")
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal-TraLoiCauHoi -->
+<div class="modal fade" id="modal-TraLoiCauHoi">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader">Trả lời câu hỏi</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
+                    <div class="form-group">
+                        <label>Câu hỏi</label>
+                        <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
+                    </div>
+                    <div class="form-group">
+                        <!-- <label for="customFile">Custom File</label> -->
+                        <label>Trả lời</label>
+                        <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập câu trả lời"></textarea>
+                        <div class="custom-file">
+                            <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
+                            <label class="custom-file-label" for="customFile">Chọn tệp</label>
+                            <span class="text-danger lblFiles"></span>
+                        </div>
+                    </div>
+                    @await Component.InvokeAsync("LuuHuyFooter")
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- modal-NopBaoCao -->
+<div class="modal fade" id="modal-NopBaoCao">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title titleHeader">Nộp báo cáo</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
+                    <div class="form-group">
+                        <!-- <label for="customFile">Custom File</label> -->
+                        <label>Mô tả sơ lược</label>
+                        <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập mô tả sơ lược"></textarea>
+                        <div class="custom-file">
+                            <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
+                            <label class="custom-file-label" for="customFile">Chọn tệp báo cáo</label>
+                            <span class="text-danger lblFiles"></span>
+                        </div>
+                    </div>
+                    @await Component.InvokeAsync("LuuHuyFooter")
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
