@@ -29,9 +29,11 @@ namespace KLTN.Areas.GVHD.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
-        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service, 
-             IImgBaiPost imgBaiPost, 
-            IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
+        private readonly IDeTaiNghienCuu _serviceDeTai;
+        public ThaoLuanController(UserManager<AppUser> userManager,IBaiPost service,
+                                  IDeTaiNghienCuu serviceDeTai,
+                                  IImgBaiPost imgBaiPost, 
+                                  IHostingEnvironment hostingEnvironment, IMapper mapper, IAuthorizationService authorizationService)
         {
             _userManager = userManager;
             _service = service;
@@ -39,12 +41,21 @@ namespace KLTN.Areas.GVHD.Controllers
             _mapper = mapper;
             _authorizationService = authorizationService;
             _hostingEnvironment = hostingEnvironment;
+            _serviceDeTai = serviceDeTai;
         }
         public async Task<IActionResult> Index()
         {
-            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x =>x.IdnguoiTao == long.Parse(User.Identity.Name) 
-                                            && x.Status.Value == (int)BaseStatus.Active);
-            return View(baiPosts);
+            IEnumerable<BaiPost> baiPosts = new List<BaiPost>();
+            var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
+                                                    && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui
+                                                    && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui);
+            foreach (var item in DeTai)
+            {
+                var temp = await _service.GetAll(x => x.IddeTaiNghienCuu == item.Id && x.Status.Value == (int)BaseStatus.Active);
+                baiPosts = baiPosts.Concat(temp);
+            }
+
+            return View(baiPosts.OrderByDescending(x => x.NgayPost));
         }
 
         [NonAction]

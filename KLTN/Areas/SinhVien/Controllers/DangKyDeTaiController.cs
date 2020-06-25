@@ -29,7 +29,10 @@ namespace KLTN.Areas.SinhVien.Controllers
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
         private readonly IHostingEnvironment _hostingEnvironment;
-        public DangKyDeTaiController (IDeTaiNghienCuu service, IAuthorizationService authorizationService, ISinhVien serviceSV, INhomSinhVien serviceNhomSV, INhom serviceNhom, IMapper mapper, IHostingEnvironment hostingEnvironment)
+        private readonly IMoDot _serviceMoDot;
+        public DangKyDeTaiController (IDeTaiNghienCuu service, IAuthorizationService authorizationService, ISinhVien serviceSV, 
+                                      INhomSinhVien serviceNhomSV, INhom serviceNhom, IMapper mapper, IHostingEnvironment hostingEnvironment,
+                                      IMoDot serviceMoDot)
         {
             _mapper = mapper;
             _serviceSV = serviceSV;
@@ -38,9 +41,28 @@ namespace KLTN.Areas.SinhVien.Controllers
             _serviceNhomSV = serviceNhomSV;
             _hostingEnvironment = hostingEnvironment;
             _authorizationService = authorizationService;
+            _serviceMoDot = serviceMoDot;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            MoDot moDot = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo && x.Loai == (int)MoDotLoai.DangKy);
+            if(moDot != null)
+            {
+                if(DateTime.Now >= moDot.ThoiGianBd && DateTime.Now <= moDot.ThoiGianKt)
+                {
+                    double thoigian = (moDot.ThoiGianKt - DateTime.Now).Value.TotalSeconds;
+                    HttpContext.Response.Headers.Add("refresh", ""+ thoigian +"; url=" + Url.Action("Index"));
+                    ViewBag.DangMoDot = true;
+                }
+                else
+                {
+                    ViewBag.DangMoDot = false;
+                }
+            }
+            else
+            {
+                ViewBag.DangMoDot = false;
+            }
             return View();
         }
 

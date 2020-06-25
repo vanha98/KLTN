@@ -17,153 +17,169 @@
         //    });
         //}
 
-        var CreateAction = function () {
+        var CreateAction = function ()
+        {
             url = "/SinhVien/DangKyDeTai/CreateEdit/";
             $('#modal-lg .modal-body').html('');
-            $.get(url, function (data) {
+            $.get(url, function (data)
+            {
                 $('#modal-lg .modal-body').html(data);
                 $('#modal-lg').modal();
             })
         }
     </script>
 }
-<div class="content-header">
 
-    <h1 class="text-center">
-        Đăng ký đề tài nghiên cứu khoa học
-    </h1>
-    <hr />
-</div>
-<div class="card">
-    <div class="card-body" id="refreshTable">
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-            @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
-            <div class="col-sm-12">
-                <table id="example1" class="table table-bordered table-hover dataTable table-sm dtr-inline" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr role="row">
-                            <th rowspan="2"></th>
-                            <th rowspan="2" class="text-center">
-                                Mã đề tài
-                            </th>
-                            <th rowspan="2" class="text-center">
-                                Tên đề tài
-                            </th>
-                            <th rowspan="2" class="text-center">
-                                Tự đề xuất
-                            </th>
-                            <th rowspan="2" class="text-center">
-                                Mô tả
-                            </th>
-                            <th rowspan="2" class="text-center">
-                                Tệp mô tả
-                            </th>
-                            <th rowspan="2" class="text-center">
-                                Tình trạng
-                            </th>
-                            <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
+@if (ViewBag.DangMoDot == true)
+{
+    <div class="content-header">
 
-                            @*<th rowspan="2"></th>*@
-                        </tr>
-                        <tr>
-                            <th class="text-center">
-                                Họ tên
-                            </th>
-                            <th class="text-center">
-                                SDT
-                            </th>
-                            <th class="text-center">
-                                Email
-                            </th>
-                        </tr>
-                    </thead>
-                    <tfoot id="Idfooter">
-                        @*<tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>*@
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-        @*<div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>*@
+        <h1 class="text-center">
+            Đăng ký đề tài nghiên cứu khoa học
+        </h1>
+        <hr />
     </div>
-    @*@await  Component.InvokeAsync("DangKySV")*@
-</div>
+    <div class="card">
+        <div class="card-body" id="refreshTable">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
+                <div class="col-sm-12">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm dtr-inline" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+                                <th rowspan="2"></th>
+                                <th rowspan="2" class="text-center">
+                                    Mã đề tài
+                                </th>
+                                <th rowspan="2" class="text-center">
+                                    Tên đề tài
+                                </th>
+                                <th rowspan="2" class="text-center">
+                                    Tự đề xuất
+                                </th>
+                                <th rowspan="2" class="text-center">
+                                    Mô tả
+                                </th>
+                                <th rowspan="2" class="text-center">
+                                    Tệp mô tả
+                                </th>
+                                <th rowspan="2" class="text-center">
+                                    Tình trạng
+                                </th>
+                                <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
 
-<input class="form-control" id="CheckType" type="number" hidden />
-
-
-<div class="modal fade" id="modal-lg">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title titleHeader">Đề xuất đề tài</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
-            
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-<div class="modal" id="ConfirmDelete">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Xác nhận hủy đăng ký đề tài?</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="DKNhom">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Đăng ký thành viên</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <input type="text" maxlength="12" class="form-control inputMSSV" placeholder="Nhập MSSV" />
+                                @*<th rowspan="2"></th>*@
+                            </tr>
+                            <tr>
+                                <th class="text-center">
+                                    Họ tên
+                                </th>
+                                <th class="text-center">
+                                    SDT
+                                </th>
+                                <th class="text-center">
+                                    Email
+                                </th>
+                            </tr>
+                        </thead>
+                        <tfoot id="Idfooter">
+                            @*<tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>*@
+                        </tfoot>
+                    </table>
                 </div>
-                <div class="mt-1"><label class="text-red text-bold" id="lblMSSV" hidden></label></div>
             </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnDKNhom" disabled>Đăng ký</button>
-                
-            </div>
+            @*<div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>*@
+        </div>
+        @*@await  Component.InvokeAsync("DangKySV")*@
+    </div>
 
+    <input class="form-control" id="CheckType" type="number" hidden />
+
+
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title titleHeader">Đề xuất đề tài</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal" id="ConfirmDelete">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận hủy đăng ký đề tài?</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+                </div>
+
+            </div>
         </div>
     </div>
-</div>
+
+    <div class="modal" id="DKNhom">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Đăng ký thành viên</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="text" maxlength="12" class="form-control inputMSSV" placeholder="Nhập MSSV" />
+                    </div>
+                    <div class="mt-1"><label class="text-red text-bold" id="lblMSSV" hidden></label></div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnDKNhom" disabled>Đăng ký</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="content-header">
+
+        <h1 class="text-center">
+            Hiện chưa mở đợt đăng ký
+        </h1>
+        <hr />
+    </div>
+}
