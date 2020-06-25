@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200623140431_intial")]
-    partial class intial
+    [Migration("20200623124351_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -692,7 +692,9 @@ namespace Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("IDDeTai")
-                        .HasColumnName("IDDeTai")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IddeTaiNavigationId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("MoTa")
@@ -709,7 +711,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IDDeTai");
+                    b.HasIndex("IddeTaiNavigationId");
 
                     b.ToTable("YCChinhSuaDeTai");
                 });
@@ -718,7 +720,6 @@ namespace Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -726,26 +727,26 @@ namespace Data.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("IddeTai")
-                        .HasColumnName("IDDeTai")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("IddeTaiNavigationId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("LoaiYeuCau")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("NgayDuyet")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("NgayTao")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IddeTai");
+                    b.HasIndex("IddeTaiNavigationId");
 
                     b.ToTable("YeuCauPheDuyet");
                 });
@@ -969,22 +970,16 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.YCChinhSuaDeTai", b =>
                 {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
                         .WithMany("YCChinhSuaDeTai")
-                        .HasForeignKey("IDDeTai")
-                        .HasConstraintName("FK__YCChinh__IDDeT__6DZFFF12")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IddeTaiNavigationId");
                 });
 
             modelBuilder.Entity("Data.Models.YeuCauPheDuyet", b =>
                 {
-                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNghienCuuNavigation")
+                    b.HasOne("Data.Models.DeTaiNghienCuu", "IddeTaiNavigation")
                         .WithMany("YeuCauPheDuyet")
-                        .HasForeignKey("IddeTai")
-                        .HasConstraintName("FK__YeuCauPhe__IDDeT__6DCBF134")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IddeTaiNavigationId");
                 });
 #pragma warning restore 612, 618
         }

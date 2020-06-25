@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class intial : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -405,41 +405,43 @@ namespace Data.Migrations
                     TenDeTai = table.Column<string>(nullable: true),
                     MoTa = table.Column<string>(nullable: true),
                     TepDinhKem = table.Column<string>(nullable: true),
-                    TenTep = table.Column<string>(nullable: true)
+                    TenTep = table.Column<string>(nullable: true),
+                    IddeTaiNavigationId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_YCChinhSuaDeTai", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__YCChinh__IDDeT__6DZFFF12",
-                        column: x => x.IDDeTai,
+                        name: "FK_YCChinhSuaDeTai_DeTaiNghienCuu_IddeTaiNavigationId",
+                        column: x => x.IddeTaiNavigationId,
                         principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "YeuCauPheDuyet",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IDDeTai = table.Column<long>(nullable: false),
+                    IddeTai = table.Column<long>(nullable: false),
                     IdNguoiDuyet = table.Column<long>(nullable: false),
                     LoaiYeuCau = table.Column<int>(nullable: false),
-                    NgayTao = table.Column<DateTime>(type: "date", nullable: false),
-                    NgayDuyet = table.Column<DateTime>(type: "date", nullable: true),
-                    Status = table.Column<int>(nullable: false, defaultValue: 1)
+                    NgayTao = table.Column<DateTime>(nullable: false),
+                    NgayDuyet = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    IddeTaiNavigationId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YeuCauPheDuyet", x => x.ID);
+                    table.PrimaryKey("PK_YeuCauPheDuyet", x => x.Id);
                     table.ForeignKey(
-                        name: "FK__YeuCauPhe__IDDeT__6DCBF134",
-                        column: x => x.IDDeTai,
+                        name: "FK_YeuCauPheDuyet_DeTaiNghienCuu_IddeTaiNavigationId",
+                        column: x => x.IddeTaiNavigationId,
                         principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -631,14 +633,14 @@ namespace Data.Migrations
                 column: "IDMoDot");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YCChinhSuaDeTai_IDDeTai",
+                name: "IX_YCChinhSuaDeTai_IddeTaiNavigationId",
                 table: "YCChinhSuaDeTai",
-                column: "IDDeTai");
+                column: "IddeTaiNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YeuCauPheDuyet_IDDeTai",
+                name: "IX_YeuCauPheDuyet_IddeTaiNavigationId",
                 table: "YeuCauPheDuyet",
-                column: "IDDeTai");
+                column: "IddeTaiNavigationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
