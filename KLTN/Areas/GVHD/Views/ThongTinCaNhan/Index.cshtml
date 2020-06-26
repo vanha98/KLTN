@@ -7,13 +7,97 @@
 <div class="container">
     <div class="row">
         <div class="col-4">
-            <div class="image">
-                <img src="~/img/logosgu.png" class="img-circle img-thumbnail" alt="User Image">
+            <div class="card">
+                <div class="card-header">
+                    <div class="image">
+                        <img src="~/img/logosgu.png" class="img-circle img-thumbnail" alt="User Image">
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <button class="list-group-item list-group-item-action active" data-toggle="list" href="#list-home" role="tab" aria-controls="home">
+                            Thông tin cá nhân
+                        </button>
+                        <button class="list-group-item list-group-item-action" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">
+                            Thay đổi mật khẩu
+                        </button>
+                    </div>
+                </div>
+                
             </div>
             <div></div>
         </div>
         <div class="col-8">
+            
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <div class="card-title col text-center">Thông tin cá nhân</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Họ tên</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập họ tên...">
+                                </div>
 
+                                <div class="form-group">
+                                    <label>Ngày sinh</label>
+
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                        </div>
+                                        <input type="datetime-local" id="NgayKtDeTai" name="NgayKtDeTai" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">SĐT</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập số điện thoại...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập email...">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-warning btn-sm">Chỉnh sửa</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <div class="card-title col text-center">Thay đổi mật khẩu</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Mật khẩu hiện tại</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập mật khẩu hiện tại...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Mật khẩu mới</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập mật khẩu mới...">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nhập lại mật khẩu mới</label>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Nhập mật khẩu mới...">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-warning btn-sm">Đổi mật khẩu</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            
         </div>
     </div>
 </div>

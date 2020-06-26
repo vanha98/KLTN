@@ -17,10 +17,9 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             _service = service;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var listSinhVien = await _service.GetMemberInfo(1);
-            return View(listSinhVien);
+            return View();
         }
     }
 }
