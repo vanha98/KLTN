@@ -8,7 +8,6 @@
                 Kính gửi hội dồng,
 
                 Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài
-                Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài.
 
                 Nhóm thực hiện.
 
@@ -22,11 +21,11 @@
             <div class="card card-warning collapsed-card">
                 <div class="card-header">
                     <h2 class="card-title">Thông tin nhóm thực hiện</h2>
-                    <div class="card-tools">
+                    @*<div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                            <i class="fas fa-minus"></i>
+                            <i class="fas fa-plus"></i>
                         </button>
-                    </div>
+                    </div>*@
                 </div>
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
@@ -46,6 +45,7 @@
                                 </th>
                             </tr>
                         </thead>
+                        </tbody>
                         <tbody>
                         </tbody>
                     </table>
@@ -105,6 +105,24 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>Chủ nhiệm</td>
+                                <td>Câu hỏi 1</td>
+                                <td>26/6/2020</td>
+                                <td><button class="btn btn-success">Xem trả lời</button></td>
+                            </tr>
+                            <tr>
+                                <td>Thư ký</td>
+                                <td>Câu hỏi 2</td>
+                                <td>26/6/2020</td>
+                                <td><button class="btn btn-success">Xem trả lời</button></td>
+                            </tr>
+                            <tr>
+                                <td>Phản biện</td>
+                                <td>Câu hỏi 3</td>
+                                <td>26/6/2020</td>
+                                <td><button class="btn btn-success">Xem trả lời</button></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -157,7 +175,31 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td>Chủ nhiệm</td>
+                                <td>Đánh giá 1</td>
+                                <td>27/6/2020</td>
+                                <td>8</td>
+                            </tr>
+                            <tr>
+                                <td>Thư ký</td>
+                                <td>Đánh giá 2</td>
+                                <td>27/6/2020</td>
+                                <td>9</td>
+                            </tr>
+                            <tr>
+                                <td>Phản biện</td>
+                                <td>Đánh giá 3</td>
+                                <td>27/6/2020</td>
+                                <td>8</td>
+                            </tr>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" colspan="3"><b>Điểm trung bình</b></td>
+                                <td class="bg-success">8.3</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
