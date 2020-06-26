@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200625024343_add-migration hoidongnew")]
-    partial class addmigrationhoidongnew
+    [Migration("20200626091759_hoidongupdate")]
+    partial class hoidongupdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -201,15 +201,10 @@ namespace Data.Migrations
                         .HasColumnName("IDHoiDong")
                         .HasColumnType("int");
 
-                    b.Property<long?>("IdquanLy")
-                        .HasColumnName("IDQuanLy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("NgayBoNhiem")
-                        .HasColumnType("datetime");
-
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("VaiTro")
                         .HasColumnType("int");
@@ -219,8 +214,6 @@ namespace Data.Migrations
                     b.HasIndex("IdgiangVien");
 
                     b.HasIndex("IdhoiDong");
-
-                    b.HasIndex("IdquanLy");
 
                     b.ToTable("BoNhiem");
                 });
@@ -408,8 +401,17 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("IdNguoiTao")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("NguoiSua")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .ValueGeneratedOnAdd()
@@ -882,11 +884,6 @@ namespace Data.Migrations
                         .WithMany("BoNhiem")
                         .HasForeignKey("IdhoiDong")
                         .HasConstraintName("FK__BoNhiem__IDHoiDo__4BAC3F29");
-
-                    b.HasOne("Data.Models.QuanLy", "IdquanLyNavigation")
-                        .WithMany("BoNhiem")
-                        .HasForeignKey("IdquanLy")
-                        .HasConstraintName("FK__BoNhiem__IDQuanL__4AB81AF0");
                 });
 
             modelBuilder.Entity("Data.Models.Comments", b =>

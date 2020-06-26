@@ -7,7 +7,6 @@ namespace Data.Models
     {
         public QuanLy()
         {
-            BoNhiem = new HashSet<BoNhiem>();
             MoDot = new HashSet<MoDot>();
         }
 
@@ -21,7 +20,6 @@ namespace Data.Models
         public string Email { get; set; }
         public int? Status { get; set; }
 
-        public virtual ICollection<BoNhiem> BoNhiem { get; set; }
         public virtual ICollection<MoDot> MoDot { get; set; }
     }
 }

@@ -8,14 +8,25 @@
 @section Script{
     <script src="~/Resources/Admin/QLHoiDong.js"></script>
 <script type="text/javascript">
+    var EditAction = function(id) {
+        url = "/Admin/QLHoiDong/ThanhLapHoiDong/"+id;
+        $('#modal-lg .modal-body').html('');
+        $.get(url, function (data) {
+            $(".titleHeader").html("Chỉnh sửa hội đồng");
+            $('#modal-lg .modal-body').html(data);
+            $('#modal-lg').modal();
+        })
+    }
+
     var CreateAction = function () {
-            //url = "/SinhVien/DangKyDeTai/CreateEdit/";
-            //$('#modal-lg .modal-body').html('');
-            //$.get(url, function (data) {
-              //  $('#modal-lg .modal-body').html(data);
-                $('#modal-lg').modal();
-            //})
-        }
+        url = "/Admin/QLHoiDong/ThanhLapHoiDong/";
+        $('#modal-lg .modal-body').html('');
+        $.get(url, function (data) {
+            $(".titleHeader").html("Lập hội đồng mới");
+            $('#modal-lg .modal-body').html(data);
+            $('#modal-lg').modal();
+        })
+    }
 </script>
  }
 <div class="content-header">
@@ -33,28 +44,14 @@
                 <table id="example1" class="table table-bordered dataTable table-hover table-sm nowrap" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row" align="center">
-                            <th tabindex="0" aria-controls="example1" rowspan="2">
+                            <th>
                                 Mã hội đồng
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
-                                Tên hội đồng
+                            <th class="sorting_desc" tabindex="0" aria-controls="example1">
+                                Hội đồng
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="2">
-                                Ngày lập
-                            </th>
-                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="2">
-                                Người lập
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" colspan="2">
-                                Thành viên
-                            </th>
-                            <th rowspan="2">
-
-                            </th>
-                        </tr>
-                        <tr>
                             <th class="text-center">
-                                Họ tên
+                                Họ tên thành viên
                             </th>
                             <th class="text-center">
                                 Vai trò

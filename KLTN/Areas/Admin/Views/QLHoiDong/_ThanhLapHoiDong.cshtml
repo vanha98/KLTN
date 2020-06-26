@@ -41,9 +41,10 @@
         </div>
 
         <div class="form-group">
+            <label class="text-danger lblTable" hidden></label>
             <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
                 @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
-                <div class="col-sm-12">
+                <div class="col-md-12">
                     <table id="tableTemp" class="table table-bordered dataTable table-hover table-sm" role="grid" aria-describedby="example1_info">
                         <thead>
                             <tr role="row" align="center">
@@ -59,11 +60,37 @@
                             </tr>
                         </thead>
                         <tbody id="bodyTable">
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model.BoNhiem)
+                                {
+                            <tr>
+                                <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten </td>
+                                @if (item.VaiTro == (int)LoaiVaiTro.ChuTich)
+                                {
+                                    <td>Chủ tịch</td>
+                                }
+                                else if (item.VaiTro == (int)LoaiVaiTro.ThuKy)
+                                {
+                                    <td>Thư ký</td>
+                                }
+                                else if (item.VaiTro == (int)LoaiVaiTro.UyVien)
+                                {
+                                    <td>Ủy viên</td>
+                                }
+                                else
+                                {
+                                    <td>Phản biện</td>
+                                }
+                                <td><i class="fas fa-times deleteTV" data-id="@item.Id"></i></td>
+                            </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
-            <label class="text-danger lblTable" hidden></label>
+
         </div>
 
         <div class="form-group">
@@ -73,7 +100,7 @@
             }
             else
             {
-                <button class="btn btn-primary">Lưu</button>
+                <button class="btn btn-success btnLapHD">Lưu</button>
             }
         </div>
     </form>

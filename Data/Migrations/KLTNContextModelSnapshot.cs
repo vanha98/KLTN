@@ -199,14 +199,10 @@ namespace Data.Migrations
                         .HasColumnName("IDHoiDong")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NgayBoNhiem")
-                        .HasColumnType("datetime");
-
-                    b.Property<long?>("QuanLyId")
-                        .HasColumnType("bigint");
-
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("VaiTro")
                         .HasColumnType("int");
@@ -216,8 +212,6 @@ namespace Data.Migrations
                     b.HasIndex("IdgiangVien");
 
                     b.HasIndex("IdhoiDong");
-
-                    b.HasIndex("QuanLyId");
 
                     b.ToTable("BoNhiem");
                 });
@@ -410,6 +404,12 @@ namespace Data.Migrations
 
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("NguoiSua")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .ValueGeneratedOnAdd()
@@ -882,10 +882,6 @@ namespace Data.Migrations
                         .WithMany("BoNhiem")
                         .HasForeignKey("IdhoiDong")
                         .HasConstraintName("FK__BoNhiem__IDHoiDo__4BAC3F29");
-
-                    b.HasOne("Data.Models.QuanLy", null)
-                        .WithMany("BoNhiem")
-                        .HasForeignKey("QuanLyId");
                 });
 
             modelBuilder.Entity("Data.Models.Comments", b =>
