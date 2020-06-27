@@ -44,7 +44,7 @@ namespace KLTN.Areas.GVHD.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            IEnumerable<BaiPost> baiPosts = new List<BaiPost>();
+            IEnumerable<BaiPost> baiPosts = await _service.GetAll(x => x.IdnguoiTao == long.Parse(User.Identity.Name) && x.Status.Value == (int)BaseStatus.Active); ;
             var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
                                                     && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui
                                                     && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui);

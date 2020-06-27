@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class updatebonhiem : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,6 +102,8 @@ namespace Data.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    TenHoiDong = table.Column<string>(nullable: true),
+                    IdNguoiTao = table.Column<long>(nullable: false),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
                     Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
@@ -252,11 +254,11 @@ namespace Data.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IDGiangVien = table.Column<long>(nullable: true),
-                    IDQuanLy = table.Column<long>(nullable: true),
                     IDHoiDong = table.Column<int>(nullable: true),
                     VaiTro = table.Column<int>(nullable: true),
                     NgayBoNhiem = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1),
+                    QuanLyId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -274,8 +276,8 @@ namespace Data.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK__BoNhiem__IDQuanL__4AB81AF0",
-                        column: x => x.IDQuanLy,
+                        name: "FK_BoNhiem_QuanLy_QuanLyId",
+                        column: x => x.QuanLyId,
                         principalTable: "QuanLy",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
@@ -406,42 +408,41 @@ namespace Data.Migrations
                     MoTa = table.Column<string>(nullable: true),
                     TepDinhKem = table.Column<string>(nullable: true),
                     TenTep = table.Column<string>(nullable: true),
-                    IddeTaiNavigationId = table.Column<long>(nullable: true)
+                    Status = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_YCChinhSuaDeTai", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_YCChinhSuaDeTai_DeTaiNghienCuu_IddeTaiNavigationId",
-                        column: x => x.IddeTaiNavigationId,
+                        name: "FK__YCChinh__IDDeT__6DZFFF12",
+                        column: x => x.IDDeTai,
                         principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "YeuCauPheDuyet",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IddeTai = table.Column<long>(nullable: false),
+                    IDDeTai = table.Column<long>(nullable: false),
                     IdNguoiDuyet = table.Column<long>(nullable: false),
                     LoaiYeuCau = table.Column<int>(nullable: false),
-                    NgayTao = table.Column<DateTime>(nullable: false),
-                    NgayDuyet = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    IddeTaiNavigationId = table.Column<long>(nullable: true)
+                    NgayTao = table.Column<DateTime>(type: "date", nullable: false),
+                    NgayDuyet = table.Column<DateTime>(type: "date", nullable: true),
+                    Status = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_YeuCauPheDuyet", x => x.Id);
+                    table.PrimaryKey("PK_YeuCauPheDuyet", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_YeuCauPheDuyet_DeTaiNghienCuu_IddeTaiNavigationId",
-                        column: x => x.IddeTaiNavigationId,
+                        name: "FK__YeuCauPhe__IDDeT__6DCBF134",
+                        column: x => x.IDDeTai,
                         principalTable: "DeTaiNghienCuu",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -573,9 +574,9 @@ namespace Data.Migrations
                 column: "IDHoiDong");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BoNhiem_IDQuanLy",
+                name: "IX_BoNhiem_QuanLyId",
                 table: "BoNhiem",
-                column: "IDQuanLy");
+                column: "QuanLyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_IDBaiPost",
@@ -633,14 +634,14 @@ namespace Data.Migrations
                 column: "IDMoDot");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YCChinhSuaDeTai_IddeTaiNavigationId",
+                name: "IX_YCChinhSuaDeTai_IDDeTai",
                 table: "YCChinhSuaDeTai",
-                column: "IddeTaiNavigationId");
+                column: "IDDeTai");
 
             migrationBuilder.CreateIndex(
-                name: "IX_YeuCauPheDuyet_IddeTaiNavigationId",
+                name: "IX_YeuCauPheDuyet_IDDeTai",
                 table: "YeuCauPheDuyet",
-                column: "IddeTaiNavigationId");
+                column: "IDDeTai");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

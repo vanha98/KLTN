@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200624110137_statusycedit")]
-    partial class statusycedit
+    [Migration("20200625125438_updatebonhiem")]
+    partial class updatebonhiem
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -201,15 +201,16 @@ namespace Data.Migrations
                         .HasColumnName("IDHoiDong")
                         .HasColumnType("int");
 
-                    b.Property<long?>("IdquanLy")
-                        .HasColumnName("IDQuanLy")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("NgayBoNhiem")
                         .HasColumnType("datetime");
 
+                    b.Property<long?>("QuanLyId")
+                        .HasColumnType("bigint");
+
                     b.Property<int?>("Status")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int?>("VaiTro")
                         .HasColumnType("int");
@@ -220,7 +221,7 @@ namespace Data.Migrations
 
                     b.HasIndex("IdhoiDong");
 
-                    b.HasIndex("IdquanLy");
+                    b.HasIndex("QuanLyId");
 
                     b.ToTable("BoNhiem");
                 });
@@ -408,6 +409,9 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("IdNguoiTao")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
 
@@ -415,6 +419,9 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
+
+                    b.Property<string>("TenHoiDong")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -880,10 +887,9 @@ namespace Data.Migrations
                         .HasForeignKey("IdhoiDong")
                         .HasConstraintName("FK__BoNhiem__IDHoiDo__4BAC3F29");
 
-                    b.HasOne("Data.Models.QuanLy", "IdquanLyNavigation")
+                    b.HasOne("Data.Models.QuanLy", null)
                         .WithMany("BoNhiem")
-                        .HasForeignKey("IdquanLy")
-                        .HasConstraintName("FK__BoNhiem__IDQuanL__4AB81AF0");
+                        .HasForeignKey("QuanLyId");
                 });
 
             modelBuilder.Entity("Data.Models.Comments", b =>

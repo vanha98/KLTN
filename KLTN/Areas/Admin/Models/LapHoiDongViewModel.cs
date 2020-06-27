@@ -10,6 +10,7 @@ namespace KLTN.Areas.Admin.Models
         public int Id { get; set; }
         public string TenHoiDong { get; set; }
         public List<ThanhVien> ThanhViens { get; set; }
+        public int[] DelThanhViens { get; set; }
     }
 
     public class ThanhVien

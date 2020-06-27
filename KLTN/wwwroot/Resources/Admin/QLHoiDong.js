@@ -38,40 +38,50 @@
                 "type": "POST",
                 "datatype": "json"
             },
+            rowId:"id",
             "columns": [
                 { "data": "id", "name": "Id", "autoWidth": true },
-                { "data": "tenHoiDong", "name": "TenHoiDong", "autoWidth": true },
-                { "data": "ngayLap", "name": "NgayLap", "autoWidth": true },
-                { "data": "idNguoiTao", "name": "IdNguoiTao", "autoWidth": true },
+                { "data": "hoiDong", "name": "HoiDong", "autoWidth": true },
                 {
-                    "data": "loaiYeuCau", "name": "LoaiYeuCau", "autoWidth": true,
-                    render: function (data, type, row) {
-                        if (data == 0 && row.status == 0)
-                            return '<a href="#" class="text-primary btnInfo" data-id="' + row.id + '" title="Xem thông tin chỉnh sửa">Chỉnh sửa <i class="far fa-eye" ></i></a>';
-                        else if (data == 0)
-                            return '<lable class="text-dark">Chỉnh sửa</label>';
-                        else if (data == 2)
-                            return '<lable class="text-dark">Duyệt đăng ký</label>';
-                    }
+                    "data": "hoTenGV", "name": "HoTenGV", "autoWidth": true,
+                    //render: function (data, type, row) {
+                    //    $.each(data, function (i, item) {
+                    //        return item.idGiangVien
+                    //    })
+                    //}
                 },
-                { "data": "ngayTao", "name": "NgayTao", "autoWidth": true },
-                { "data": "idNguoiDuyet", "name": "IdNguoiDuyet", "autoWidth": true },
                 {
-                    "data": "status", "name": "Status", "autoWidth": true,
-                    render: function (data, type, row) {
-                        if (data == 0)
-                            return '<button class="btn btn-sm btn-success btnApprove " data-id="' + row.iddeTai + '"><i class="fas fa-check"> Đồng ý</i></button>' +
-                                '<button class="btn btn-sm btn-danger ml-1 btnReject" data-id="' + row.iddeTai + '" data-toggle="modal" data-target="#ConfirmDelete"><i class="far fa-times-circle"> Từ chối</i></button>';
-                        else if (data == 1)
-                            return '<lable class="text-success">Đã duyệt</label>';
-                        else
-                            return '<lable class="text-danger">Từ chối</label>';
-                    }
+                    "data": "vaiTro", "name": "VaiTro", "autoWidth": true,
+                    //render: function (data, type, row) {
+                    //    $.each(data, function (i, item) {
+                    //        return item.idGiangVien
+                    //    })
+                    //}
                 },
+                
             ],
-
+            rowGroup: {
+                startRender: function (rows, group) {
+                    var id = '';
+                    rows.each(function () {
+                        id = this.nodes().to$().attr('id');
+                        return;
+                    })
+                    return group + '<a href="#" style="float:right" class="pull-right" onclick = "EditAction('+id+')"><i class="fas fa-pencil-alt"></i></a>';
+                },
+                endRender: null,
+                dataSrc: "hoiDong"
+            },
+            columnDefs: [{
+                targets: [0,1],
+                visible: false
+            }]
         });
 
+        $('#modal-lg').on('hidden.bs.modal', function () {
+            ThanhViens = [];
+            DelThanhViens = [];
+        })
         //function ChangeStatus(id, type) {
         //    $.ajax({
         //        url: 'PheDuyetYeuCau/ChangeStatus',
@@ -88,24 +98,33 @@
         //        }
         //    });
         //}
+        var DelThanhViens = [];
+        $(document).delegate('.deleteTV', 'click', function () {
+            var idTV = $(this).data('id');
+            var rowindex = $(this).parent().parent().index();
+            $("#bodyTable tr").eq(rowindex).remove();
+            DelThanhViens.push(idTV);
+            console.log(DelThanhViens);
+        })
 
-        //$(document).delegate('.btnApprove', 'click', function () {
-        //    var idDeTai = $(this).data('id');
-        //    var type = 1; // approve
-        //    ChangeStatus(idDeTai, type);
-        //})
         var ThanhViens = new Array();
 
         $(document).delegate('.deleteTemp', 'click', function () {
             var rowindex = $(this).parent().parent().index();
+            var id = $(this).data('id');
             $("#bodyTable tr").eq(rowindex).remove();
-            ThanhViens.splice(rowindex, 1);
+            $.each(ThanhViens, function (i, item) {
+                if (item.IdThanhVien == id) {
+                    ThanhViens.splice(i, 1);
+                    return;
+                }
+            })
+            console.log(ThanhViens);
         })
         
         $(document).delegate('.btnAddTV', 'click', function (e) {
             e.preventDefault();
             var flag = true;
-            var demPhanBien = 0;
             var IdTV = $("#SelectGVHD option:selected").val();
             var textTen = $("#SelectGVHD option:selected").text();
             var VaiTro = $('.selectVaiTro option:selected').val();
@@ -129,12 +148,24 @@
                 IdThanhVien: IdTV,
                 VaiTro: VaiTro
             }
-            $.each(ThanhViens, function (i, item) {
-                if (item.IdThanhVien == tv.IdThanhVien) {
-                    toastr.error(textTen + " đã là thành viên hội đồng");
-                    flag=false;
-                }
-            })
+
+            var exist = $('#bodyTable tr > td:contains(' + textTen + ')').length;
+            if (exist == 1) {
+                $(".lblTable").html(textTen + " đã là thành viên hội đồng");
+                $(".lblTable").prop("hidden", false);
+                flag = false;
+            }
+            else
+                $(".lblTable").prop("hidden", true);
+            //$.each(ThanhViens, function (i, item) {
+            //    if (item.IdThanhVien == tv.IdThanhVien) {
+            //        $(".lblTable").html(textTen + " đã là thành viên hội đồng");
+            //        $(".lblTable").prop("hidden", false);
+            //        flag=false;
+            //    }
+            //    else
+            //        $(".lblTable").prop("hidden", true);
+            //})
             if (!flag)
                 return;
             ThanhViens.push(tv);
@@ -142,16 +173,17 @@
             var html = '<tr>' +
                 '<td>' + textTen + '</td>' +
                 '<td>' + textVaiTro + '</td>' +
-                '<td><i class="fas fa-times deleteTemp"></i></td>' +
+                '<td><i class="fas fa-times deleteTemp" data-id="' + tv.IdThanhVien + '"></i></td>' +
                 '</tr>';
             $("#bodyTable").append(html);
         })
 
-        function LapHD(id, tenHD, listTV) {
+        function LapHD(id, tenHD, listTV, listDelTV) {
             var obj = {
                 Id: id,
                 TenHoiDong: tenHD,
-                ThanhViens: listTV
+                ThanhViens: listTV,
+                DelThanhViens: listDelTV,
             }
             $.ajax({
                 url: 'QLHoiDong/LapHD',
@@ -159,8 +191,14 @@
                 data: obj,
                 success: function (res) {
                     if (res.status == true) {
-                        alert(1);
+                        table.ajax.reload();
+                        toastr.success(res.mess);
+                        $('#modal-lg').modal('hide');
+                        ThanhViens = [];
+                        DelThanhViens = [];
                     }
+                    else
+                        toastr.error("Error");
                 }
             });
         }
@@ -168,6 +206,7 @@
         $(document).delegate(".btnLapHD", 'click', function () {
             var idHD = $("#valueIdHD").val();
             var TenHD = $("#valueTenHD").val();
+            var count = $("#bodyTable tr").length;
             if (TenHD == "") {
                 $(".lblTenHD").prop("hidden", false);
                 $(".lblTenHD").text("Chưa nhập tên hội đồng");
@@ -176,18 +215,20 @@
             else {
                 $(".lblTenHD").prop("hidden",true);
             }
-            if (ThanhViens.length < 2) {
-                $(".lblTable").text("Thành viên hội đồng chưa đạt đủ tối thiểu (3 thành viên)");
+            if (count < 3 || count > 5 || count == 4) {
+                $(".lblTable").text("Hội đồng chưa đủ 3 hoặc 5 thành viên");
                 $(".lblTable").prop("hidden", false);
-            }
-            else if (ThanhViens.length > 4) {
-                $(".lblTable").text("Vượt quá số lượng thành viên (5 thành viên)");
-                $(".lblTable").prop("hidden", false);
+                return;
             }
             else {
                 $(".lblTable").prop("hidden",true);
             }
-            LapHD(idHD,TenHD, ThanhViens);
+            if (DelThanhViens.length > 0) {
+                LapHD(idHD, TenHD, ThanhViens, DelThanhViens);
+            }
+            else {
+                LapHD(idHD, TenHD, ThanhViens);
+            }
         })
     });
 })();

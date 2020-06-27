@@ -9,7 +9,7 @@ namespace Data.Models
         public long? IdgiangVien { get; set; }
         public int? IdhoiDong { get; set; }
         public int? VaiTro { get; set; }
-        public DateTime? NgayBoNhiem { get; set; }
+        //public DateTime? NgayBoNhiem { get; set; }
         public int? Status { get; set; }
 
         public virtual GiangVien IdgiangVienNavigation { get; set; }
