@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class updatebonhiem : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -105,6 +105,8 @@ namespace Data.Migrations
                     TenHoiDong = table.Column<string>(nullable: true),
                     IdNguoiTao = table.Column<long>(nullable: false),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
+                    NguoiSua = table.Column<long>(nullable: false),
+                    NgaySua = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
@@ -256,9 +258,7 @@ namespace Data.Migrations
                     IDGiangVien = table.Column<long>(nullable: true),
                     IDHoiDong = table.Column<int>(nullable: true),
                     VaiTro = table.Column<int>(nullable: true),
-                    NgayBoNhiem = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<int>(nullable: true, defaultValue: 1),
-                    QuanLyId = table.Column<long>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -273,12 +273,6 @@ namespace Data.Migrations
                         name: "FK__BoNhiem__IDHoiDo__4BAC3F29",
                         column: x => x.IDHoiDong,
                         principalTable: "HoiDong",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BoNhiem_QuanLy_QuanLyId",
-                        column: x => x.QuanLyId,
-                        principalTable: "QuanLy",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -572,11 +566,6 @@ namespace Data.Migrations
                 name: "IX_BoNhiem_IDHoiDong",
                 table: "BoNhiem",
                 column: "IDHoiDong");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BoNhiem_QuanLyId",
-                table: "BoNhiem",
-                column: "QuanLyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_IDBaiPost",

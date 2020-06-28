@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200625130531_updateQL")]
-    partial class updateQL
+    [Migration("20200627023150_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -406,6 +406,12 @@ namespace Data.Migrations
 
                     b.Property<DateTime?>("NgayLap")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("NguoiSua")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("Status")
                         .ValueGeneratedOnAdd()

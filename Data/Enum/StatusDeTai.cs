@@ -14,6 +14,7 @@
         HoanThanh = 4,
         Huy = 5,
         DaDangKy = 6,
-        ChoDuyet,
+        ChoDuyet = 7,
+        DanhGiaLai = 8
     }
 }
