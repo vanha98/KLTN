@@ -8,7 +8,8 @@
 @section Script{
     <script src="~/Resources/Admin/QLHoiDong.js"></script>
 <script type="text/javascript">
-    var EditAction = function(id) {
+
+    var EditAction = function (id) {
         url = "/Admin/QLHoiDong/ThanhLapHoiDong/"+id;
         $('#modal-lg .modal-body').html('');
         $.get(url, function (data) {
@@ -84,4 +85,24 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<div class="modal" id="ConfirmDelete">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận hủy hội đồng?</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnXoa">Có</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+            </div>
+
+        </div>
+    </div>
 </div>

@@ -194,7 +194,7 @@ namespace KLTN.Areas.Admin.Controllers
             }
             
         }
-        
+        [NonAction]
         public async Task<bool> EditHoiDong(LapHoiDongViewModel obj, HoiDong hoiDong)
         {
             BoNhiemHD(obj, hoiDong);
@@ -215,6 +215,17 @@ namespace KLTN.Areas.Admin.Controllers
             hoiDong.NgaySua = DateTime.Now;
             await _serviceHoiDong.Update(hoiDong);
             return true;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var hoiDong = await _serviceHoiDong.GetById(id);
+            if(hoiDong.XetDuyetVaDanhGia.Where(x=>x.Status == 1).Any())
+                return Ok(new { status = false, mess = "Thất bại, hội đồng này đã được phân công xét duyệt/đánh giá đề tài" });
+            hoiDong.Status = 0;
+            await _serviceHoiDong.Update(hoiDong);
+            return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Data.Models
         public DateTime? NgayLap { get; set; }
         public long NguoiSua { get; set; }
         public DateTime? NgaySua { get; set; }
+        public int StatusPhanCong { get; set; }
         public int? Status { get; set; }
 
         public virtual ICollection<BoNhiem> BoNhiem { get; set; }

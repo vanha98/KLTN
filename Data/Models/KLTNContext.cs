@@ -213,6 +213,7 @@ namespace Data.Models
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
 
                 entity.Property(e => e.Status).HasDefaultValue(1);
+                entity.Property(e => e.StatusPhanCong).HasDefaultValue(0);
             });
 
             modelBuilder.Entity<ImgBaiPost>(entity =>
@@ -242,6 +243,8 @@ namespace Data.Models
                 entity.Property(e => e.IdnamHoc).HasColumnName("IDNamHoc");
 
                 entity.Property(e => e.IdquanLy).HasColumnName("IDQuanLy");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
 
                 entity.Property(e => e.ThoiGianBd)
                     .HasColumnName("ThoiGianBD")
@@ -405,6 +408,8 @@ namespace Data.Models
                 entity.Property(e => e.IdhoiDong).HasColumnName("IDHoiDong");
 
                 entity.Property(e => e.IdmoDot).HasColumnName("IDMoDot");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
 
                 entity.HasOne(d => d.IddeTaiNavigation)
                     .WithMany(p => p.XetDuyetVaDanhGia)

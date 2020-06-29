@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Data.Interfaces
 {
-    public interface IXetDuyetVaDanhGia : IRepository<XetDuyetVaDanhGia>
+    public interface IXetDuyetDanhGia:IRepository<XetDuyetVaDanhGia>
     {
     }
 }

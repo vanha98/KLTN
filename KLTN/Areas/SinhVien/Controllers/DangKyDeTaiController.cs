@@ -95,7 +95,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 int recordsTotal = 0;
 
                 // getting all Customer data  
-                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet || x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
+                var entity = await _service.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusDeTai.DaDuyet || x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
                 if(!entity.Any())
                 {
                     return Json(new
@@ -195,8 +195,10 @@ namespace KLTN.Areas.SinhVien.Controllers
                     mess = MessageResult.NotFoundSV
                 });
             }
+            if (vmodel.IdgiangVien == 0)
+                vmodel.IdgiangVien = null;
             //Update DeTai
-            if(vmodel.Id > 0)
+            if (vmodel.Id > 0)
             {
                 var DeTai = await _service.GetById(vmodel.Id);
                 DeTai.IdgiangVien = vmodel.IdgiangVien;
@@ -227,7 +229,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             else
                 vmodel.Id = long.Parse(DateTime.Now.Year.ToString() + "001");
-           
+            
             var model = new DeTaiNghienCuu()
             {
                 Id = vmodel.Id,
@@ -237,7 +239,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 IdgiangVien = vmodel.IdgiangVien,
                 NgayLap = DateTime.Now,
                 TinhTrangDangKy = (int)StatusDangKyDeTai.Het,
-                TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDangKy,
+                TinhTrangPheDuyet = (int)StatusDeTai.DaDangKy,
                 Loai = LoaiDeTai.DeXuat
             };
             if (await UpLoadFile(vmodel.Files, model) == false)
@@ -256,7 +258,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             catch
             {
-                return Json(new { status = false, mess = MessageResult.Fail });
+                return Json(new { status = false, mess = MessageResult.Fail}) ;
             }
 
         }
@@ -311,7 +313,7 @@ namespace KLTN.Areas.SinhVien.Controllers
 
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Het;
                 DeTai.IdNguoiDangKy = long.Parse(User.Identity.Name);
-                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDangKy;
+                DeTai.TinhTrangPheDuyet = (int)StatusDeTai.DaDangKy;
                 await _service.Update(DeTai);
                 return Json(new
                 {
@@ -334,7 +336,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             {
                 return Ok() ;
             }
-            var DeTai = await _service.GetEntity(x => x.Id == nhom.IddeTai && x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
+            var DeTai = await _service.GetEntity(x => x.Id == nhom.IddeTai && x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
             return PartialView("_LoadDeTaiDaDangKy",DeTai);
         }
         
@@ -360,7 +362,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                     await _serviceNhom.Delete(nhom);
                 }
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Con;
-                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDuyet;
+                DeTai.TinhTrangPheDuyet = (int)StatusDeTai.DaDuyet;
                 DeTai.IdNguoiDangKy = null;
                 await _service.Update(DeTai);
                 return Ok(new

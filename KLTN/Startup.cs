@@ -17,7 +17,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using KLTN.Authorization.Handlers;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using KLTN.Hubs;
 
 namespace KLTN
 {
@@ -60,14 +59,14 @@ namespace KLTN
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
             services.AddScoped<IIdentity, Identity>();
             services.AddScoped<IMoDot, MoDotBo>();
-            services.AddScoped<IXetDuyetVaDanhGia, XetDuyetVaDanhGiaBo>();
+            services.AddScoped<IXetDuyetDanhGia, XetDuyetDanhGiaBo>();
 
             services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
             services.AddScoped<IAuthorizationHandler, OwnerThaoLuanAuthorization>();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            //services.AddSignalR();
+
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -108,8 +107,6 @@ namespace KLTN
             app.UseAuthentication();
             app.UseAuthorization();
 
-
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -127,8 +124,6 @@ namespace KLTN
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Login}/{id?}");
-
-                //endpoints.MapHub<ChatHub>("/chathub");
 
             });
             

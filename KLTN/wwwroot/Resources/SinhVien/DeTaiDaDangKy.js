@@ -9,10 +9,10 @@
             "autoWidth": false,
             "scrollX": true,
             "pageLength": 10,
-            "fixedColumns": {
-                leftColumns: 0,
-                rightColumns: 1,
-            },
+            //"fixedColumns": {
+            //    leftColumns: 0,
+            //    rightColumns: 1,
+            //},
             "language": {
                 "lengthMenu": '',
                 "zeroRecords": "Không có dữ liệu",

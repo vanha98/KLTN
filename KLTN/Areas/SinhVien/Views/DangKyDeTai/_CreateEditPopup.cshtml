@@ -12,7 +12,14 @@
 
     <div class="form-group">
         <label>Chọn giảng viên (nếu có)</label>
+        @if (Model != null)
+        {@await Component.InvokeAsync("GVHD",Model.IdgiangVien)
+    }
+    else
+    {
         @await Component.InvokeAsync("GVHD")
+
+    }
         <span asp-validation-for="IdgiangVien" class="text-danger lblGVHD"></span>
     </div>
 

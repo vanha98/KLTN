@@ -1,76 +1,147 @@
-﻿
+﻿@model IEnumerable<Data.Models.HoiDong>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var moDot = ViewBag.MoDot;
 }
 @section Script
 {
+    <script src="~/Resources/Admin/PhanCongHoiDong.js"></script>
     <script>
-        $(function ()
-        {
+        $(function () {
             $('.duallistbox').bootstrapDualListbox({
-                infoText: '',  
+                infoText: '',
                 filterPlaceHolder: 'Tìm kiếm',
                 infoTextEmpty: 'Trống',
+                selectedListLabel: "Đề tài đã phân công",
+                nonSelectedListLabel: "Đề tài chưa phân công"
             })
         })
     </script>
 }
 <div class="container" id="mydiv">
     <div class="row">
-        <div class="col-md-4 p-3 card card-default">
-            <div class="row">
-                <div class="col">
-                    <nav class="navbar-white navbar-light">
-
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" id="txtSearch" type="search" placeholder="Tìm kiếm hội đồng">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" id="btnSearch">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                    </nav>
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    @if (moDot == null)
+                    {<p class="card-title col text-center text-danger">Hiện tại chưa có đợt xét duyệt hoặc đánh giá nghiệm thu đề tài, vui lòng tạo đợt để phân công.</p>
+                    }
+                    else
+                    {
+                        <p class="card-title col text-center text-danger">
+                            Phân công cho đợt: @moDot
+                        </p>
+                    }
                 </div>
 
-                <div class="col-auto m-auto">
-                    <a id="LkRefreshList">
-                        <i class="fas fa-sync fa-lg text-navy"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="card-header">
-                <h3 class="card-title col text-center"><b>Danh sách hội đồng</b></h3>
-            </div>
-
-            <div class="form-group" id="listBaiPost">
-                <table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblSinhVien">
-
-                    <tr>
-                        <td><label class="text-truncate" style="max-width: 190px">Hội đồng 1</label></td>
-                        <td class="text-danger">Chưa phân công</td>
-                    </tr>
-                    <tr>
-                        <td><label class="text-truncate" style="max-width: 190px">Hội đồng 2</label></td>
-                        <td class="text-danger">Chưa phân công</td>
-                    </tr>
-                    <tr>
-                        <td><label class="text-truncate" style="max-width: 190px">Hội đồng 3</label></td>
-                        <td class="text-success">Đã phân công</td>
-                    </tr>
-
-                </table>
             </div>
         </div>
+    </div>
+
+    <input type="text" id="valueIdMoDot" value="@ViewBag.IdMoDot" hidden />
+
+    <div class="row">
+        <div class="col-md-4 ">
+            <div class="p-3 card card-default">
+                <div class="row">
+                    <div class="col">
+                        <nav class="navbar-white navbar-light">
+
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" id="txtSearch" type="search" placeholder="Tìm kiếm hội đồng">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" id="btnSearch">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </nav>
+                    </div>
+
+                    <div class="col-auto m-auto">
+                        <a id="LkRefreshList">
+                            <i class="fas fa-sync fa-lg text-navy"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-header">
+                    <h3 class="card-title col text-center"><b>Danh sách hội đồng</b></h3>
+                </div>
+
+                <div class="form-group" id="listHoiDong">
+                    <table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblHoiDong">
+                        @if (Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr class="row_@item.Id" id="@item.Id">
+                                    <td><label class="text-truncate" style="max-width: 190px">@item.TenHoiDong</label></td>
+                                    @if (item.StatusPhanCong == 1)
+                                    {
+                                        <td class="text-success">Đã phân công</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-danger">Chưa phân công</td>
+                                    }
+                                </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td><label class="text-truncate" style="max-width: 190px">Chưa có hội đồng</label></td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <input type="text" id="valueIdHoiDong" hidden />
 
         <div class="col-md-8">
             <div hidden id="wait" class="overlay">
                 <i class="fas fa-2x fa-sync-alt fa-spin"></i>
             </div>
-            @await Html.PartialAsync("_PhanCongHoiDong")
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h2 class="card-title">Thông tin hội đồng</h2>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">Vui lòng chọn hội đồng</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-warning">
+                        <div class="card-header">Phân công đề tài</div>
+                        <div class="card-body">
+                            @await Html.PartialAsync("_PhanCongHoiDong", (IEnumerable<Data.Models.DeTaiNghienCuu>)ViewBag.DeTai)
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
         </div>
     </div>
 </div>
