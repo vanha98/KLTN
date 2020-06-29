@@ -3,6 +3,18 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+@section Script
+{
+    <script>
+        $(function ()
+        {
+            $("input[data-bootstrap-switch]").each(function ()
+            {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            });
+        })
+    </script>
+}
 
 <div class="content-header">
     <h1 class="text-center">
@@ -23,13 +35,16 @@
                                 Tên tài khoản
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                Tên hội đồng
+                                Họ tên
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                Ngày lập
+                                SĐT
                             </th>
                             <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                Người lập
+                                Email
+                            </th>
+                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                Vai trò
                             </th>
                             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                 Trạng thái
@@ -39,7 +54,50 @@
                             </th>
                         </tr>
                     </thead>
-
+                    <tbody>
+                        <tr>
+                            <td>333641001</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>0123456789</td>
+                            <td>nguyenvana@gmail.com</td>
+                            <td>Giảng viên</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3116410024</td>
+                            <td>Đinh Tuấn Hải</td>
+                            <td>0123465777</td>
+                            <td>tuanhai@gmail.com</td>
+                            <td>Sinh viên</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3116410020</td>
+                            <td>Nguyễn Văn T</td>
+                            <td>0123465727</td>
+                            <td>T@gmail.com</td>
+                            <td>Sinh viên</td>
+                            <td class="text-center">
+                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
+                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
