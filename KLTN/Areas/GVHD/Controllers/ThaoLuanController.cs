@@ -50,7 +50,7 @@ namespace KLTN.Areas.GVHD.Controllers
                                                     && x.TinhTrangPheDuyet != (int)StatusDeTai.DaGui);
             foreach(var item in DeTai)
             {
-                var temp = await _service.GetAll(x =>x.IddeTaiNghienCuu == item.Id && x.Status.Value == (int)BaseStatus.Active);
+                var temp = await _service.GetAll(x =>x.IddeTaiNghienCuu == item.Id && x.IdnguoiTao != long.Parse(User.Identity.Name) && x.Status.Value == (int)BaseStatus.Active);
                 baiPosts = baiPosts.Concat(temp);
             }
             
@@ -157,14 +157,26 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 if (CongKhaiTab)
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.CongKhai && x.Status == (int)BaseStatus.Active);
+                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) 
+                                                                        && x.IdnguoiTao == long.Parse(User.Identity.Name) 
+                                                                        && x.Loai == (int)BaiPostType.CongKhai 
+                                                                        && x.Status == (int)BaseStatus.Active);
                     listBaiPost = result.ToList();
 
                 }
                 else
                 {
-                    IEnumerable<BaiPost> result = await _service.GetAll(x => x.TieuDe.ToLower().Contains(SearchString.ToLower()) && x.Loai == (int)BaiPostType.RiengTu && x.Status == (int)BaseStatus.Active);
-                    listBaiPost = result.ToList();
+                    var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
+                                                            && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui
+                                                            && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui);
+                    foreach (var item in DeTai)
+                    {
+                        var temp = await _service.GetAll(x => x.IddeTaiNghienCuu == item.Id 
+                                                        && x.TieuDe.ToLower().Contains(SearchString.ToLower())
+                                                        && x.IdnguoiTao != long.Parse(User.Identity.Name) 
+                                                        && x.Status.Value == (int)BaseStatus.Active);
+                        listBaiPost = listBaiPost.Concat(temp).ToList();
+                    }
                 }
             }
             else

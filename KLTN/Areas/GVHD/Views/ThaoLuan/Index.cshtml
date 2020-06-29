@@ -7,28 +7,31 @@
 
 <style type="text/css">
     .img-wrap {
-    position: relative;
-}
-.img-wrap .close {
-    position: absolute;
-    right: 2px;
-    z-index: 100;
-}
-.nondisplay{ display:none;
-}
+        position: relative;
+    }
 
+        .img-wrap .close {
+            position: absolute;
+            right: 2px;
+            z-index: 100;
+        }
+
+    .nondisplay {
+        display: none;
+    }
 </style>
 
 @section Script{
     <script src="~/Resources/GVHD/ThaoLuan.js"></script>
-    <script src="~/Resources/GVHD/Comments.js"></script>
+    <script src="~/resources/gvhd/comments.js"></script>
     <script src="~/Resources/CustomArrayImg.js"></script>
-    
+    @*<script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/Resources/GVHD/chat.js"></script>*@
 }
 
 <div class="container" id="mydiv">
     <div class="row">
-        <div class="col-md-4 p-3 card" >
+        <div class="col-md-4 p-3 card">
             @await Component.InvokeAsync("BtnTaoBaiDang")
             <br />
             @await Component.InvokeAsync("TimKiem")
@@ -40,12 +43,16 @@
                 <i class="fas fa-2x fa-sync-alt fa-spin"></i>
             </div>
             <div class="card card-widget">
+                @*<textarea class="form-control form-control-navbar" placeholder="Viết bình luận" id="messageInput"></textarea>
+                <button class="btn btn-success" id="sendButton">
+                    <i class="fas fa-arrow-alt-circle-right"></i>
+                </button>*@
             </div>
         </div>
     </div>
 </div>
 
-<input type="text" id="valueIdBaiPost" hidden/>
+<input type="text" id="valueIdBaiPost" hidden />
 
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog modal-lg">
@@ -57,7 +64,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @await Html.PartialAsync("_CreatePopup",new BaiPostViewModel { })
+                @await Html.PartialAsync("_CreatePopup", new BaiPostViewModel { })
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
         </div>
@@ -70,7 +77,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">
-                <img class="img-responsive" style="width:100%;height:500px" id="LargeImg"/>
+                <img class="img-responsive" style="width:100%;height:500px" id="LargeImg" />
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
         </div>
