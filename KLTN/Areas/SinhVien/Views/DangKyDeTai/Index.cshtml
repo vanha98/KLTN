@@ -17,12 +17,10 @@
         //    });
         //}
 
-        var CreateAction = function ()
-        {
+        var CreateAction = function () {
             url = "/SinhVien/DangKyDeTai/CreateEdit/";
             $('#modal-lg .modal-body').html('');
-            $.get(url, function (data)
-            {
+            $.get(url, function (data) {
                 $('#modal-lg .modal-body').html(data);
                 $('#modal-lg').modal();
             })
@@ -175,11 +173,14 @@
 }
 else
 {
-    <div class="content-header">
+    <div class="row">
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    <p class="card-title col text-center text-danger">Hiện tại chưa có đợt đăng ký đề tài.</p>
+                </div>
 
-        <h1 class="text-center">
-            Hiện chưa mở đợt đăng ký
-        </h1>
-        <hr />
+            </div>
+        </div>
     </div>
 }
