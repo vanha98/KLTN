@@ -29,7 +29,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             _serviceNhomSV = serviceNhomSV;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -82,17 +82,17 @@ namespace KLTN.Areas.SinhVien.Controllers
                     //{
                     //    item.Mssv = item.Mssv + x.IdsinhVien.ToString() + '   ';
                     //}
-                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.ChuaGui)
+                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.ChuaGui)
                     {
                         item.TinhTrangPheDuyet = "Chưa gửi";
                     }
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaGui)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaGui)
                         item.TinhTrangPheDuyet = "Đã gửi";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaDuyet)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaDuyet)
                         item.TinhTrangPheDuyet = "Đã duyệt";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DangThucHien)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DangThucHien)
                         item.TinhTrangPheDuyet = "Đang thực hiện";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.HoanThanh)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.HoanThanh)
                         item.TinhTrangPheDuyet = "Hoàn thành";
                     else
                         item.TinhTrangPheDuyet = "Đã hủy";
@@ -146,7 +146,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             var DeTai = await _serviceDeTai.GetById(id);
             if(DeTai != null)
             {
-                DeTai.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.Huy;
+                DeTai.TinhTrangPheDuyet = (int)StatusDeTai.Huy;
                 await _serviceDeTai.Update(DeTai);
                 return Ok(new{
                     status =true,

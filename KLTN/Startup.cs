@@ -59,6 +59,7 @@ namespace KLTN
             services.AddScoped<IImgBaiPost, ImgBaiPostBo>();
             services.AddScoped<IIdentity, Identity>();
             services.AddScoped<IMoDot, MoDotBo>();
+            services.AddScoped<IXetDuyetDanhGia, XetDuyetDanhGiaBo>();
 
             services.AddScoped<IAuthorizationHandler, OwnerAuthorization>();
             services.AddScoped<IAuthorizationHandler, OwnerThaoLuanAuthorization>();

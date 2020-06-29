@@ -43,6 +43,7 @@
                 { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "hoiDong", "name": "HoiDong", "autoWidth": true },
                 {
+                    orderable: false,
                     "data": "hoTenGV", "name": "HoTenGV", "autoWidth": true,
                     //render: function (data, type, row) {
                     //    $.each(data, function (i, item) {
@@ -51,6 +52,7 @@
                     //}
                 },
                 {
+                    orderable: false,
                     "data": "vaiTro", "name": "VaiTro", "autoWidth": true,
                     //render: function (data, type, row) {
                     //    $.each(data, function (i, item) {
@@ -67,7 +69,8 @@
                         id = this.nodes().to$().attr('id');
                         return;
                     })
-                    return group + '<a href="#" style="float:right" class="pull-right" onclick = "EditAction('+id+')"><i class="fas fa-pencil-alt"></i></a>';
+                    return group + '<a href="#" style="float:right" class="btnDelete" data-toggle="modal" data-target="#ConfirmDelete" data-id="' + id + '"><i class="fas fa-times"></i></a>' +
+                        '<a href="#" class="mr-2" style="float:right" onclick = "EditAction(' + id + ')"><i class="fas fa-pencil-alt"></i></a>';
                 },
                 endRender: null,
                 dataSrc: "hoiDong"
@@ -230,5 +233,24 @@
                 LapHD(idHD, TenHD, ThanhViens);
             }
         })
+
+        $(document).delegate(".btnDelete", 'click', function () {
+            var id = $(this).data('id');
+            $("#btnXoa").click(function () {
+                $.ajax({
+                    url: "/Admin/QLHoiDong/Delete/",
+                    type: "POST",
+                    data: { id: id },
+                    success: function (res) {
+                        if (res.status == true) {
+                            table.ajax.reload();
+                            toastr.success(res.mess);
+                        }
+                    }
+                });
+            })
+        })
+
+        
     });
 })();

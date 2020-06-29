@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Data.Models.BoNhiem>
+<table id="tblThanhVien" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+    <thead>
+        <tr role="row">
+            <th tabindex="0" aria-controls="example1">
+                Họ tên
+            </th>
+            <th tabindex="0" aria-controls="example1">
+                Vai trò
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten </td>
+                @if (item.VaiTro == (int)LoaiVaiTro.ChuTich)
+                {
+                    <td>Chủ tịch</td>
+                }
+                else if (item.VaiTro == (int)LoaiVaiTro.ThuKy)
+                {
+                    <td>Thư ký</td>
+                }
+                else if (item.VaiTro == (int)LoaiVaiTro.UyVien)
+                {
+                    <td>Ủy viên</td>
+                }
+                else
+                {
+                    <td>Phản biện</td>
+                }
+            </tr>
+        }
+        </tbody>
+</table>

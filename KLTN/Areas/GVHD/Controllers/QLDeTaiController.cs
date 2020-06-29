@@ -85,21 +85,21 @@ namespace KLTN.Areas.GVHD.Controllers
                 var list = _mapper.Map<IEnumerable<DeTaiNghienCuu>, IEnumerable<DeTaiNghienCuuViewModel>>(entity);
                 foreach (var item in list)
                 {
-                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.ChuaGui)
+                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.ChuaGui)
                     {
                         item.TinhTrangPheDuyet = "Chưa gửi";
                     }
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaGui)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaGui)
                         item.TinhTrangPheDuyet = "Đã gửi";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaDuyet)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaDuyet)
                         item.TinhTrangPheDuyet = "Đã duyệt";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DangThucHien)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DangThucHien)
                         item.TinhTrangPheDuyet = "Đang thực hiện";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.HoanThanh)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.HoanThanh)
                         item.TinhTrangPheDuyet = "Hoàn thành";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.DaDangKy)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaDangKy)
                         item.TinhTrangPheDuyet = "Đã đăng ký";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusPheDuyetDeTai.ChoDuyet)
+                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.ChoDuyet)
                         item.TinhTrangPheDuyet = "Chờ duyệt";
                     else
                         item.TinhTrangPheDuyet = "Đã hủy";
@@ -193,7 +193,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     IdgiangVien = long.Parse(User.Identity.Name),
                     NgayLap = DateTime.Now,
                     TinhTrangDangKy = (int)StatusDangKyDeTai.Con,
-                    TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui,
+                    TinhTrangPheDuyet = (int)StatusDeTai.ChuaGui,
                     Loai = LoaiDeTai.CoSan
                 };
                 if (await UpLoadFile(vmodel.Files, model) == false)
@@ -269,7 +269,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     });
                 else
                 {
-                    if (entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.ChuaGui || entity.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaGui)
+                    if (entity.TinhTrangPheDuyet == (int)StatusDeTai.ChuaGui || entity.TinhTrangPheDuyet == (int)StatusDeTai.DaGui)
                     {
                         if (await UpLoadFile(model.Files, entity) == false)
                         {
@@ -312,7 +312,7 @@ namespace KLTN.Areas.GVHD.Controllers
                         entity.YeuCauPheDuyet.Add(yeuCau);
                         entity.YCChinhSuaDeTai.Add(yCChinhSua);
 
-                        entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
+                        entity.TinhTrangPheDuyet = (int)StatusDeTai.ChoDuyet;
                         await _service.Update(entity);
                         return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
                     }
@@ -365,7 +365,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     });
                 if (type == 2) // xoa detai
                 {
-                    //if (entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui || entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui)
+                    //if (entity.TinhTrangPheDuyet != (int)StatusDeTai.ChuaGui || entity.TinhTrangPheDuyet != (int)StatusDeTai.DaGui)
                     //{
                     //    YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
                     //    {
@@ -374,7 +374,7 @@ namespace KLTN.Areas.GVHD.Controllers
                     //    };
                     //    entity.YeuCauPheDuyet.Clear();
                     //    entity.YeuCauPheDuyet.Add(yeuCau);
-                    //    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChoDuyet;
+                    //    entity.TinhTrangPheDuyet = (int)StatusDeTai.ChoDuyet;
                     //}
                     //else
                     await _service.Delete(entity);
@@ -386,7 +386,7 @@ namespace KLTN.Areas.GVHD.Controllers
                 }
                 else if (type == 0) // gui duyet dang ky
                 {
-                    if(entity.TinhTrangPheDuyet.Value == (int)StatusPheDuyetDeTai.DaGui)
+                    if(entity.TinhTrangPheDuyet.Value == (int)StatusDeTai.DaGui)
                     {
                         return Ok(new
                         {
@@ -394,7 +394,7 @@ namespace KLTN.Areas.GVHD.Controllers
                             toastr = "Đã gửi yêu cầu đăng ký cho đề tài " + entity.Id
                         });
                     }
-                    entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaGui;
+                    entity.TinhTrangPheDuyet = (int)StatusDeTai.DaGui;
                     YeuCauPheDuyet yeuCau = new YeuCauPheDuyet
                     {
                         LoaiYeuCau = (int)LoaiYeuCauPheDuyet.DuyetDangKy,
@@ -404,8 +404,8 @@ namespace KLTN.Areas.GVHD.Controllers
                 }
                 else // huy gui
                 {
-                    if(entity.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui)
-                    { entity.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
+                    if(entity.TinhTrangPheDuyet != (int)StatusDeTai.ChuaGui)
+                    { entity.TinhTrangPheDuyet = (int)StatusDeTai.ChuaGui;
                         var yeuCau = entity.YeuCauPheDuyet.FirstOrDefault(x => x.Status == (int)StatusYeuCauPheDuyet.ChuaXuLy);
                         entity.YeuCauPheDuyet.Remove(yeuCau);
                     }

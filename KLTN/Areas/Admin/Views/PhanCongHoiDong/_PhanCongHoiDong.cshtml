@@ -1,55 +1,27 @@
-﻿<div class="row">
-    <div class="col-12">
-        <div class="card card-primary">
-            <div class="card-header">
-                <h2 class="card-title">Thông tin hội đồng</h2>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr role="row">
-                            <th class="sorting" tabindex="0" aria-controls="example1">
-                                Họ tên
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1">
-                                Vai trò
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+﻿@model IEnumerable<Data.Models.DeTaiNghienCuu>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card card-warning">
-            <div class="card-header">Phân công đề tài</div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label>Danh sách đề tài</label>
-                    <select class="duallistbox" multiple="multiple">
-                        <option >Alabama</option>
-                        <option selected>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-warning">Phân công</button>
-                </div>
-            </div>
-        </div>
+@if (Model.Any())
+{<div class="form-group">
+        @*<label>Danh sách đề tài chưa phân công</label>*@
+        <select class="duallistbox" multiple="multiple">
+            @foreach (var item in Model)
+            {
+                if (item.XetDuyetVaDanhGia.Any())
+                {
+                    <option selected value="@item.Id">@item.Id - @item.TenDeTai (@item.IdgiangVienNavigation.Ho  @item.IdgiangVienNavigation.Ten)</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Id - @item.TenDeTai (@item.IdgiangVienNavigation.Ho  @item.IdgiangVienNavigation.Ten)</option>
+                }
+            }
+        </select>
     </div>
-</div>
+    <div class="form-group">
+        <button class="btn btn-warning btnPhanCong" disabled>Phân công</button>
+    </div>
+}
+else
+{
+    <div class="text-center">Chưa có đề tài để phân công</div>
+}

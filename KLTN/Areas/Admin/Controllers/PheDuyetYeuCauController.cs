@@ -153,7 +153,7 @@ namespace KLTN.Areas.Admin.Controllers
                 int recordsTotal = 0;
 
                 // getting all Customer data  
-                var entity = await _serviceDeTai.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDuyet);
+                var entity = await _serviceDeTai.GetAll(x=>x.TinhTrangPheDuyet == (int)StatusDeTai.DaDuyet);
                 //foreach(var item in entity)
                 //{
                 //    string name = item.IdgiangVienNavigation.Ho +" "+ item.IdgiangVienNavigation.Ten;
@@ -218,12 +218,12 @@ namespace KLTN.Areas.Admin.Controllers
                         yeuCau.IddeTaiNghienCuuNavigation.TepDinhKem = chinhSua.TepDinhKem;
                     }
                 }
-                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.DaDuyet;
+                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusDeTai.DaDuyet;
                 yeuCau.Status = (int)StatusYeuCauPheDuyet.DaDuyet;
             }
             else
             {
-                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusPheDuyetDeTai.ChuaGui;
+                yeuCau.IddeTaiNghienCuuNavigation.TinhTrangPheDuyet = (int)StatusDeTai.ChuaGui;
                 yeuCau.Status = (int)StatusYeuCauPheDuyet.Huy;
             }
             yeuCau.NgayDuyet = DateTime.Now;

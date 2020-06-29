@@ -5,7 +5,7 @@
         Het = 0,
         Con = 1
     }
-    public enum StatusPheDuyetDeTai
+    public enum StatusDeTai
     {
         DangThucHien = 0,
         ChuaGui = 1,
@@ -15,5 +15,6 @@
         Huy = 5,
         DaDangKy = 6,
         ChoDuyet,
+        DaPhanCong,
     }
 }
