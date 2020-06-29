@@ -167,8 +167,8 @@ namespace KLTN.Areas.GVHD.Controllers
                 else
                 {
                     var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
-                                                            && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.ChuaGui
-                                                            && x.TinhTrangPheDuyet != (int)StatusPheDuyetDeTai.DaGui);
+                                                            && x.TinhTrangPheDuyet != (int)StatusDeTai.ChuaGui
+                                                            && x.TinhTrangPheDuyet != (int)StatusDeTai.DaGui);
                     foreach (var item in DeTai)
                     {
                         var temp = await _service.GetAll(x => x.IddeTaiNghienCuu == item.Id 

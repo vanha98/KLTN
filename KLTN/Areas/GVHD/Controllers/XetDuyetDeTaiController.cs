@@ -30,8 +30,8 @@ namespace KLTN.Areas.GVHD.Controllers
                                     where t2.IdgiangVien == long.Parse(User.Identity.Name)
                                     select t0;
 
-            IEnumerable<DeTaiNghienCuu> tabDot1 = listDetaiXetDuyet.Where(x => x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DaDangKy);
-            IEnumerable<DeTaiNghienCuu> tabDot2 = listDetaiXetDuyet.Where(x => x.TinhTrangPheDuyet == (int)StatusPheDuyetDeTai.DanhGiaLai);
+            IEnumerable<DeTaiNghienCuu> tabDot1 = listDetaiXetDuyet.Where(x => x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
+            IEnumerable<DeTaiNghienCuu> tabDot2 = listDetaiXetDuyet.Where(x => x.TinhTrangPheDuyet == (int)StatusDeTai.DanhGiaLai);
 
             TabDotViewModel viewx = new TabDotViewModel();
             viewx.ListDeTaiDuocPhanCong = listDetaiXetDuyet;

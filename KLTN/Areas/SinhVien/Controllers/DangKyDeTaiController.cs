@@ -195,8 +195,10 @@ namespace KLTN.Areas.SinhVien.Controllers
                     mess = MessageResult.NotFoundSV
                 });
             }
+            if (vmodel.IdgiangVien == 0)
+                vmodel.IdgiangVien = null;
             //Update DeTai
-            if(vmodel.Id > 0)
+            if (vmodel.Id > 0)
             {
                 var DeTai = await _service.GetById(vmodel.Id);
                 DeTai.IdgiangVien = vmodel.IdgiangVien;
@@ -227,7 +229,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             else
                 vmodel.Id = long.Parse(DateTime.Now.Year.ToString() + "001");
-           
+            
             var model = new DeTaiNghienCuu()
             {
                 Id = vmodel.Id,
@@ -256,7 +258,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             catch
             {
-                return Json(new { status = false, mess = MessageResult.Fail });
+                return Json(new { status = false, mess = MessageResult.Fail}) ;
             }
 
         }

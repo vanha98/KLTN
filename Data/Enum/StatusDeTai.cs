@@ -16,5 +16,6 @@
         DaDangKy = 6,
         ChoDuyet,
         DaPhanCong,
+        DanhGiaLai,
     }
 }
