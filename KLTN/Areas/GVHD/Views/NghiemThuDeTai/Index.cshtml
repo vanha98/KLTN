@@ -3,27 +3,44 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
 }
-<div class="container" id="mydiv">
-    <div class="row">
-        <div class="col-md-4 p-3 card">
-            @await Component.InvokeAsync("ThoiGianMoDot")
-            <br />
-            @await Component.InvokeAsync("TimKiem")
 
-            <div class="card-header">
-                <h3 class="card-title col text-center"><b>Danh sách đề tài</b></h3>
+@if (ViewBag.DangMoDot == true)
+{
+    <div class="container" id="mydiv">
+        <div class="row">
+            <div class="col-md-4 p-3 card">
+                @await Component.InvokeAsync("ThoiGianMoDot")
+                <br />
+                @await Component.InvokeAsync("TimKiem")
+
+                <div class="card-header">
+                    <h3 class="card-title col text-center"><b>Danh sách đề tài</b></h3>
+                </div>
+
+                @await Component.InvokeAsync("ListDeTaiDanhGia")
             </div>
 
-            @await Component.InvokeAsync("ListDeTaiDanhGia")
-        </div>
-
-        <div class="col-md-8">
-            <div hidden id="wait" class="overlay">
-                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-            </div>
-            <div class="card card-primary">
-                @await Html.PartialAsync("_NoiDungNghiemThuGV")
+            <div class="col-md-8">
+                <div hidden id="wait" class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+                <div class="card card-primary">
+                    @await Html.PartialAsync("_NoiDungNghiemThuGV")
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    <p class="card-title col text-center text-danger">Hiện tại chưa có đợt đánh giá nghiệm thu đề tài.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}

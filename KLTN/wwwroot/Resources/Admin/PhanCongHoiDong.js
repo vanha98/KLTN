@@ -9,10 +9,10 @@
         $.each(response.data, function (i, item) {
             var phanCong = "Chưa phân công";
             var css = "text-danger";
-            //if (item.statusPhanCong == 1) {
-            //    phanCong = "Đã phân công";
-            //    css = "text-success";
-            //}
+            if (item.statusPhanCong == 1) {
+                phanCong = "Đã phân công";
+                css = "text-success";
+            }
             var Data = '<tr id="' + item.id + '">' +
                 '<td><label class="text-truncate" style="max-width: 190px">' + item.tenHoiDong + '</label ></td >' +
                 '<td class="'+css+'">' + phanCong + '</td>' +

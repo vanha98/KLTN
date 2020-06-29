@@ -62,7 +62,8 @@ namespace KLTN.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             MoDot moDot = await _service.GetById(id);
-            await _service.Delete(moDot);
+            moDot.Status = 0;
+            await _service.Update(moDot);
             return RedirectToAction("Index");
         }
 

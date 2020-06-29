@@ -53,7 +53,7 @@ namespace KLTN.Areas.Admin.Controllers
             var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
             var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
             ViewBag.DeTai = deTai;
-            return View(hoiDong);
+            return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
 
         public async Task<IActionResult> LoadThanhVien(int id)
@@ -67,15 +67,15 @@ namespace KLTN.Areas.Admin.Controllers
             List<HoiDong> list = new List<HoiDong>();
             if (!String.IsNullOrEmpty(SearchString))
             {
-                IEnumerable<HoiDong> result = await _service.GetAll(x => x.TenHoiDong.ToLower().Contains(SearchString.ToLower()) && x.Status == 1);
+                var result = await _service.GetAll(x => x.TenHoiDong.ToLower().Contains(SearchString.ToLower()) && x.Status == 1);
                 list = result.ToList();
             }
             else
             {
-                IEnumerable<HoiDong> result = await _service.GetAll(x => x.Status==1);
+                var result = await _service.GetAll(x => x.Status==1);
                 list = result.ToList();
             }
-            return list;
+            return list.OrderBy(x=>x.StatusPhanCong).ToList();
         }
         public async Task<JsonResult> SearchHoiDong(string SearchString)
         {
@@ -142,49 +142,29 @@ namespace KLTN.Areas.Admin.Controllers
         {
             var hoiDong = await _serviceHoiDong.GetById(idHoiDong);
             var XDDG = hoiDong.XetDuyetVaDanhGia.Where(x => x.Status == 1).ToList();
-            if (XDDG.Count() < idsDeTai.Length)
+            for (int i = 0; i<XDDG.Count();i++)
             {
-                foreach (long idDeTai in idsDeTai)
-                {
-                    var deTai = await _serviceDeTai.GetById(idDeTai);
-                    if (deTai.TinhTrangPheDuyet != (int)StatusDeTai.DaPhanCong)
-                    {
-                        deTai.TinhTrangPheDuyet = (int)StatusDeTai.DaPhanCong;
-                        XetDuyetVaDanhGia entity = new XetDuyetVaDanhGia
-                        {
-                            IddeTai = idDeTai,
-                            IdmoDot = idMoDot,
-                        };
-                        hoiDong.XetDuyetVaDanhGia.Add(entity);
-                    }
-                }
-                hoiDong.StatusPhanCong = 1; //đã phân công
-                await _serviceHoiDong.Update(hoiDong);
-                return Ok(new
-                {
-                    status = true,
-                    mess = MessageResult.UpdateSuccess
-                });
+                XDDG[i].IddeTaiNavigation.TinhTrangPheDuyet = (int)StatusDeTai.DaDangKy;
+                await _serviceXetDuyetDanhGia.Delete(XDDG[i]);
             }
-            else
+            for (int i = 0; i < idsDeTai.Length; i++)
             {
-                for (int i = 0; i<XDDG.Count();i++)
+                var deTai = await _serviceDeTai.GetById(idsDeTai[i]);
+                deTai.TinhTrangPheDuyet = (int)StatusDeTai.DaPhanCong;
+                XetDuyetVaDanhGia entity = new XetDuyetVaDanhGia
                 {
-                    if (!idsDeTai.Contains(XDDG[i].IddeTai.Value))
-                    {
-                        var deTai = await _serviceDeTai.GetById(XDDG[i].IddeTai.Value);
-                        deTai.TinhTrangPheDuyet = (int)StatusDeTai.DaDangKy;
-                        await _serviceXetDuyetDanhGia.Delete(XDDG[i]);
-                        //i--;
-                    }
-                }
-                await _serviceHoiDong.Update(hoiDong);
-                return Ok(new
-                {
-                    status = true,
-                    mess = MessageResult.UpdateSuccess
-                });
+                    IddeTai = idsDeTai[i],
+                    IdmoDot = idMoDot,
+                };
+                hoiDong.XetDuyetVaDanhGia.Add(entity);
             }
+            hoiDong.StatusPhanCong = 1; //đã phân công
+            await _serviceHoiDong.Update(hoiDong);
+            return Ok(new
+            {
+                status = true,
+                mess = MessageResult.UpdateSuccess
+            });
         }
     }
 }
