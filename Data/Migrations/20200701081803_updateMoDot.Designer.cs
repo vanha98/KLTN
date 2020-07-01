@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200627144617_updatepro")]
-    partial class updatepro
+    [Migration("20200701081803_updateMoDot")]
+    partial class updateMoDot
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -466,6 +466,12 @@ namespace Data.Migrations
                         .HasColumnName("ID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("DiemToiDa")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DiemToiThieu")
+                        .HasColumnType("int");
 
                     b.Property<int?>("IdnamHoc")
                         .HasColumnName("IDNamHoc")

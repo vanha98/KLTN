@@ -107,6 +107,7 @@ namespace Data.Migrations
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
                     NguoiSua = table.Column<long>(nullable: false),
                     NgaySua = table.Column<DateTime>(nullable: true),
+                    StatusPhanCong = table.Column<int>(nullable: false, defaultValue: 0),
                     Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
@@ -288,7 +289,7 @@ namespace Data.Migrations
                     ThoiGianBD = table.Column<DateTime>(type: "datetime", nullable: true),
                     ThoiGianKT = table.Column<DateTime>(type: "datetime", nullable: true),
                     Loai = table.Column<int>(nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -450,7 +451,7 @@ namespace Data.Migrations
                     IDMoDot = table.Column<int>(nullable: true),
                     NoiDung = table.Column<string>(nullable: true),
                     TepDinhKem = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {

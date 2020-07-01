@@ -211,7 +211,8 @@ namespace KLTN.Areas.SinhVien.Controllers
         public async Task<IActionResult> CreateEdit(BaoCaoTienDoViewModel vmodel)
         {
             var DeTai = await _service.GetById(vmodel.IddeTai);
-            if (!DeTai.NgayThucHien.HasValue)
+            var now = DateTime.Now;
+            if (!DeTai.NgayThucHien.HasValue || now < DeTai.NgayThucHien.Value)
             {
                 return Ok(new
                 {
