@@ -16,6 +16,8 @@ namespace Data.Models
         public DateTime? ThoiGianBd { get; set; }
         public DateTime? ThoiGianKt { get; set; }
         public int? Loai { get; set; }
+        public int? DiemToiDa { get; set; }
+        public int? DiemToiThieu { get; set; }
         public int? Status { get; set; }
 
         public virtual NamHoc IdnamHocNavigation { get; set; }

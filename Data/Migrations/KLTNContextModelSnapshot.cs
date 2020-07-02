@@ -491,6 +491,12 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("DiemToiDa")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DiemToiThieu")
+                        .HasColumnType("int");
+
                     b.Property<int?>("IdnamHoc")
                         .HasColumnName("IDNamHoc")
                         .HasColumnType("int");

@@ -25,6 +25,15 @@
         });
     </script>
 }
+@if(ViewBag.mess != null)
+{
+    <script type="text/javascript">
+        window.onload = function ()
+        {
+            this.toastr.success("@ViewBag.mess");
+        }
+    </script>
+}
 <div class="container">
     <div class="row">
         <div class="col">

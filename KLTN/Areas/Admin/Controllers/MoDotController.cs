@@ -21,10 +21,14 @@ namespace KLTN.Areas.Admin.Controllers
             _serviceDeTai = serviceDeTai;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string mess)
         {
             MoDot moDot = await _service.GetEntity(x => x.Status == (int)MoDotStatus.Mo);
             DeTaiNghienCuu detai = await _serviceDeTai.GetEntity(x => x.NgayThucHien != null);
+            if(mess != "")
+            {
+                ViewBag.mess = mess;
+            }
             if(detai != null)
             {
                 ViewBag.NgayBdDeTai = detai.NgayThucHien.Value.ToString("yyyy-MM-dd'T'HH:mm:ss");
@@ -47,8 +51,9 @@ namespace KLTN.Areas.Admin.Controllers
         public async Task<IActionResult> Create(MoDot moDot)
         {
             moDot.Status = 1;
+            moDot.IdquanLy = long.Parse(User.Identity.Name);
             await _service.Add(moDot);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { mess = "Mở đợt thành công" });
         }
 
         [HttpPost]
@@ -56,7 +61,7 @@ namespace KLTN.Areas.Admin.Controllers
         {
             
             await _service.Update(moDot);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { mess = "Cập nhật thành công" });
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -81,7 +86,7 @@ namespace KLTN.Areas.Admin.Controllers
                 }
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { mess = "Tạo gian thực hiện thành công" });
         }
 
         [HttpPost]
@@ -98,7 +103,7 @@ namespace KLTN.Areas.Admin.Controllers
                 }
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { mess = "Cập nhật thành công" });
         }
     }
 }
