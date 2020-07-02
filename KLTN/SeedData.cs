@@ -24,7 +24,7 @@ namespace KLTN
                 await EnsureCreatedRole(services, "QuanLy");
                 await EnsureCreatedRole(services, "Administrators");
             }
-           
+            
             if (!context.Users.Any())
             {
                 EnsureCreatedUser(services, "3116410022", "SinhVien", new Claim[]{
@@ -37,7 +37,9 @@ namespace KLTN
                 EnsureCreatedUser(services, "333641002", "GVHD", new Claim[]{
                     new Claim("Name", "Nguyễn Thị B"),
                 });
-
+                EnsureCreatedUser(services, "333641003", "GVHD", new Claim[]{
+                    new Claim("Name", "Trần Văn C"),
+                });
                 EnsureCreatedUser(services, "333641001", "GVHD", new Claim[]{
                     new Claim("Name", "Nguyễn Văn A"),
                 });

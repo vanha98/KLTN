@@ -268,24 +268,40 @@ namespace Data.Migrations
                     b.Property<double?>("Diem")
                         .HasColumnType("float");
 
-                    b.Property<int>("IdnguoiTao")
-                        .HasColumnName("IDNguoiTao")
-                        .HasColumnType("int");
+                    b.Property<long>("IdgiangVien")
+                        .HasColumnName("IDGiangVien")
+                        .HasColumnType("bigint");
 
                     b.Property<int?>("IdxetDuyet")
                         .HasColumnName("IDXetDuyet")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NgayTao")
+                    b.Property<DateTime?>("NgayDanhGia")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("NgayTaoCauHoi")
                         .HasColumnType("datetime");
 
                     b.Property<string>("NhanXet")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("TenTep")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TepDinhKem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VaiTro")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdgiangVien");
 
                     b.HasIndex("IdxetDuyet");
 
@@ -335,10 +351,20 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
-                    b.Property<int?>("TinhTrangPheDuyet")
+                    b.Property<int?>("TinhTrangDeTai")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(1);
+
+                    b.Property<int>("TinhTrangPhanCong")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("TinhTrangPheDuyet")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -688,6 +714,9 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
+                    b.Property<string>("TenTep")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TepDinhKem")
                         .HasColumnType("nvarchar(max)");
 
@@ -911,6 +940,13 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Models.CtxetDuyetVaDanhGia", b =>
                 {
+                    b.HasOne("Data.Models.GiangVien", "IdgiangVienNavigation")
+                        .WithMany("CtxetDuyetVaDanhGia")
+                        .HasForeignKey("IdgiangVien")
+                        .HasConstraintName("FK__CTXetDuye__IDGia__7AEE31B7")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Models.XetDuyetVaDanhGia", "IdxetDuyetNavigation")
                         .WithMany("CtxetDuyetVaDanhGia")
                         .HasForeignKey("IdxetDuyet")

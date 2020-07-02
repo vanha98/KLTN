@@ -27,24 +27,61 @@
 }
 @if (ViewBag.Check == true)
 {<div class="content-header">
-    <div class="row">
-        <h1 class="col text-center">Báo cáo tiến độ đề tài</h1>
+        <div class="row">
+            <h1 class="col text-center">Báo cáo tiến độ đề tài</h1>
+        </div>
+
+        <div class="row">
+            <h5 class="col text-center">@ViewBag.TenDeTai</h5>
+        </div>
+        <hr />
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="col-sm-12">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                    STT
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                    Ngày nộp
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                    Tuần nộp
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                    Nội dung
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1">
+                                    Tệp báo cáo
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                    Đánh giá
+                                </th>
+                                <th>Tiến độ</th>
+                                <th>Tình trạng</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <h5 class="col text-center">@ViewBag.TenDeTai</h5>
-    </div>
-    <hr />
-</div>
-
-@await Component.InvokeAsync("ListBaoCao")
 }
 else
 {
     <div class="text-primary text-center text-bold"><h2>Bạn chưa đăng ký đề tài</h2></div>
 }
 
-<input value="@ViewBag.IdDeTai" id="valueIdDeTai" hidden/>
+<input value="@ViewBag.IdDeTai" id="valueIdDeTai" hidden />
 
 <div class="modal fade" id="modal-lg">
     <div class="modal-dialog">

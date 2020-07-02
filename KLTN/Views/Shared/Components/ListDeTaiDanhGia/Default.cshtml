@@ -1,53 +1,125 @@
-﻿
+﻿@model KLTN.Models.TabDotViewModel
+
 <div class="row">
     <div class="col">
         <div class="card card-navy card-tabs">
             <div class="card-header p-0 pt-1">
                 <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
-                            ĐỢT 1
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
-                            ĐỢT 2
-                        </a>
-                    </li>
+                    @if (ViewBag.Dot == 1)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                                ĐỢT 1*
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                ĐỢT 2
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link " id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">
+                                ĐỢT 1
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">
+                                ĐỢT 2*
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="card-body">
                 <div class="tab-content" id="custom-tabs-one-tabContent">
-                    <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-
-                        <table class="table table-borderless table-hover dataTable table-sm" role="grid">
-
-                            <tr>
-                                <td><label class="text-truncate" style="max-width: 190px">Tên đề tài 1</label></td>
-                                <td>Chưa đánh giá</td>
-                            </tr>
-                            <tr>
-                                <td><label class="text-truncate" style="max-width: 190px">Tên đề tài 2</label></td>
-                                <td>Chưa đánh giá</td>
-                            </tr>
-                            <tr>
-                                <td><label class="text-truncate" style="max-width: 190px">Tên đề tài 3</label></td>
-                                <td>Đã đánh giá</td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                        <table class="table table-borderless table-hover dataTable table-sm" role="grid">
-
-                            <tr>
-                                <td>Chưa có đề tài</td>
-                            </tr>
-                        </table>
-                    </div>
+                    @if (ViewBag.Dot == 1)
+                    {<div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                            <table id="tblDot1" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @if (Model.tabDot1.Any())
+                                {@foreach (var item in Model.tabDot1)
+                                    {
+                                        <tr id="@item.IdDeTai">
+                                            <td>@item.TenDeTai</td>
+                                            <td>@item.TinhTrang</td>
+                                        </tr>
+                                    }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>Không có đề tài</td>
+                                </tr>
+                            }
+                            </table>
+                        </div>
+                        <div class="tab-pane fade " id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                            <table id="tblDot2" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @if (Model.tabDot2.Any())
+                                {@foreach (var item in Model.tabDot2)
+                                    {
+                                        <tr id="@item.IdDeTai">
+                                            <td>@item.TenDeTai</td>
+                                            <td>@item.TinhTrang</td>
+                                        </tr>
+                                    }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>Không có đề tài</td>
+                                </tr>
+                            }
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="tab-pane fade " id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                            <table id="tblDot1" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @if (Model.tabDot1.Any())
+                                {@foreach (var item in Model.tabDot1)
+                                    {
+                                        <tr id="@item.IdDeTai">
+                                            <td>@item.TenDeTai</td>
+                                            <td>@item.TinhTrang</td>
+                                        </tr>
+                                    }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>Không có đề tài</td>
+                                </tr>
+                            }
+                            </table>
+                        </div>
+                        <div class="tab-pane fade show active" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                            <table id="tblDot2" class="table table-borderless table-hover dataTable table-sm" role="grid">
+                                @if (Model.tabDot2.Any())
+                                {@foreach (var item in Model.tabDot2)
+                                    {
+                                        <tr id="@item.IdDeTai">
+                                            <td>@item.TenDeTai</td>
+                                            <td>@item.TinhTrang</td>
+                                        </tr>
+                                    }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>Không có đề tài</td>
+                                </tr>
+                            }
+                            </table>
+                        </div>
+                    }
                 </div>
+                </div>
+                <!-- /.card -->
             </div>
-            <!-- /.card -->
         </div>
     </div>
-</div>
 

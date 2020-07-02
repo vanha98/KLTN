@@ -7,9 +7,16 @@
     <script src="~/Resources/SinhVien/DeTaiDaDangKy.js"></script>
 <script type="text/javascript">
     var XemNhom = function (id) {
-        $(".modal-body").html("");
+        $("#modal-lg .modal-body").html("");
         $.get('/SinhVien/DeTaiDaDangKy/XemNhom/' + id, function (content) {
-            $(".modal-body").html(content);
+            $("#modal-lg .modal-body").html(content);
+        });
+    }
+    var BaoCaoTienDo = function (id) {
+        $("#LoadBaoCao .modal-body").html("");
+        $.get('/SinhVien/DeTaiDaDangKy/LoadBaoCao/' + id, function (content) {
+            $("#LoadBaoCao .modal-body").html(content);
+            $("#LoadBaoCao").modal();
         });
     }
 </script>
@@ -29,30 +36,31 @@
                 <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
                     <thead>
                         <tr role="row">
+                            <th rowspan="2"></th>
                             <th class="sorting" rowspan="2">
                                 Mã đề tài
                             </th>
                             <th class="sorting" rowspan="2">
                                 Tên đề tài
                             </th>
-                            <th  rowspan="2">
+                            <th rowspan="2">
                                 Tự đề xuất
                             </th>
-                            <th class="sorting_desc"  rowspan="2">
+                            <th class="sorting_desc" rowspan="2">
                                 Mô tả
                             </th>
-                            <th class="sorting_desc"  rowspan="2">
+                            <th class="sorting_desc" rowspan="2">
                                 Tệp mô tả
                             </th>
 
-                            <th class="sorting_desc"  rowspan="2">
+                            <th class="sorting_desc" rowspan="2">
                                 Nhóm thực hiện
                             </th>
                             <th class="sorting" rowspan="2">
                                 Tình trạng
                             </th>
                             <th colspan="3" class="text-center">Giảng viên hướng dẫn</th>
-                            <th rowspan="2"></th>
+
                         </tr>
                         <tr>
                             <th class="sorting" tabindex="0" aria-controls="example1">
@@ -88,6 +96,26 @@
             <div class="modal-body">
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="LoadBaoCao">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Danh sách báo cáo tiến độ</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
         </div>
         <!-- /.modal-content -->
     </div>

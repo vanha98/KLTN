@@ -13,7 +13,7 @@ namespace KLTN.Views.Shared.Components.ListDeTaiDanhGia
         {
             //ViewX.tabDot1 = ViewX.ListDeTai.Where(x => x.Loai == (int)BaiPostType.CongKhai);
             //ViewX.tabDot2 = ViewX.ListDeTai.Where(x => x.Loai == (int)BaiPostType.RiengTu);
-            return View();
+            return View(ViewX);
         }
     }
 }

@@ -82,20 +82,14 @@ namespace KLTN.Areas.SinhVien.Controllers
                     //{
                     //    item.Mssv = item.Mssv + x.IdsinhVien.ToString() + '   ';
                     //}
-                    if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.ChuaGui)
-                    {
-                        item.TinhTrangPheDuyet = "Chưa gửi";
-                    }
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaGui)
-                        item.TinhTrangPheDuyet = "Đã gửi";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DaDuyet)
-                        item.TinhTrangPheDuyet = "Đã duyệt";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.DangThucHien)
-                        item.TinhTrangPheDuyet = "Đang thực hiện";
-                    else if (int.Parse(item.TinhTrangPheDuyet) == (int)StatusDeTai.HoanThanh)
-                        item.TinhTrangPheDuyet = "Hoàn thành";
+                    if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DanhGiaLai)
+                        item.TinhTrangDeTai = "Chờ xét duyệt/đánh giá";
+                    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.HoanThanh)
+                        item.TinhTrangDeTai = "Hoàn thành";
+                    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DaDangKy)
+                        item.TinhTrangDeTai = "Đã đăng ký";
                     else
-                        item.TinhTrangPheDuyet = "Đã hủy";
+                        item.TinhTrangDeTai = "Đang thực hiện";
                 }
 
                 //Sorting  
@@ -113,7 +107,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 {
                     list = list.Where(x => x.Id.ToString().Contains(searchValue)
                     || x.TenDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.TinhTrangPheDuyet.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    || x.TinhTrangDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.MoTa.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.HoTenGVHD.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.Email.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
@@ -141,24 +135,15 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
         }
 
-        public async Task<IActionResult> HuyDeTai(long id)
+        public async Task<IActionResult> LoadBaoCao(long id)
         {
             var DeTai = await _serviceDeTai.GetById(id);
             if(DeTai != null)
             {
-                DeTai.TinhTrangPheDuyet = (int)StatusDeTai.Huy;
-                await _serviceDeTai.Update(DeTai);
-                return Ok(new{
-                    status =true,
-                    mess = MessageResult.UpdateSuccess
-                });
+                var baoCao = DeTai.BaoCaoTienDo.ToList();
+                return ViewComponent("ListBaoCao", baoCao);
             }
-            else
-                return Ok(new
-                {
-                    status = false,
-                    mess = MessageResult.Fail
-                });
+            return ViewComponent("ListBaoCao");
         }
     }
 }

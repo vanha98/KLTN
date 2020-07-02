@@ -38,6 +38,13 @@
                 "datatype": "json"
             },
             "columns": [
+                {
+                    orderable: false,
+                    data: "tinhTrangDeTai",
+                    "render": function (data, type, full, meta) {
+                        return '<button class="btn btn-sm btn-success" title="Báo cáo hàng tuần" onclick="BaoCaoTienDo(' + full.id + ')"><i class="fas fa-clipboard-list"> Báo cáo</i></button>';
+                    }
+                },
                 { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "tenDeTai", "name": "TenDeTai", "autoWidth": true },
                 {
@@ -69,31 +76,14 @@
                         return '<button class="btn btn-sm btn-primary btnXemNhom" data-toggle="modal" data-target="#modal-lg"  onclick="XemNhom(' + full.id + ')" data-id="' + full.id + '"><i class="fas fa-user-friends"></i> Xem nhóm </button>';
                     }
                 },
-                { "data": "tinhTrangPheDuyet", "name": "TinhTrangPheDuyet", "autoWidth": true },
+                { "data": "tinhTrangDeTai", "name": "TinhTrangDeTai", "autoWidth": true },
 
                 //thông tin GVHD
                 { "data": "hoTenGVHD", "name": "HoTenGVHD", "autoWidth": true },
                 { "data": "sdt", "name": "SDT", "autoWidth": true },
                 { "data": "email", "name": "Email", "autoWidth": true },
-                {
-                    orderable: false,
-                    data: "tinhTrangPheDuyet",
-                    "render": function (data, type, full, meta) {
-                        if (data != "Hoàn thành" && data != "Đã hủy") {
-                            return '<button class="btn btn-sm btn-default btnXemBaoCao" title="Xem báo cáo" data-id="' + full.id + '" onclick="BaoCaoTienDo(' + full.id + ')"><i class="fas fa-clipboard-list"></i></button>' +
-                                '<button class="btn btn-sm btn-default Delete" title="Hủy đề tài" data-id="' + full.id + '" data-toggle="modal" data-target="#ConfirmDelete"><i class="far fa-trash-alt"></i></button>';
-                        }
-                        else
-                            return '<button class="btn btn-sm btn-default btnXemBaoCao" title="Xem báo cáo" data-id="' + full.id + '" onclick="BaoCaoTienDo(' + full.id + ')"><i class="fas fa-clipboard-list"></i></button>';
-                    }
-                },
+                
             ],
-            //"order": [[7, "asc"]],
-            //"createdRow": function (row, data, dataIndex) {
-            //    if (data.tinhTrangPheDuyet == "Đã gửi") {
-            //        $(row).addClass('changeRowColor');
-            //    }
-            //}
         });
 
         ////

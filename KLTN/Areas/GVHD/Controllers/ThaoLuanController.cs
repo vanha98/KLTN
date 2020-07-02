@@ -46,8 +46,8 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             IEnumerable<BaiPost> baiPosts = await _service.GetAll(x => x.IdnguoiTao == long.Parse(User.Identity.Name) && x.Status.Value == (int)BaseStatus.Active); ;
             var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
-                                                    && x.TinhTrangPheDuyet != (int)StatusDeTai.ChuaGui
-                                                    && x.TinhTrangPheDuyet != (int)StatusDeTai.DaGui);
+                                                    && x.TinhTrangDeTai != (int)StatusDeTai.MoiTao
+                                                    );
             foreach(var item in DeTai)
             {
                 var temp = await _service.GetAll(x =>x.IddeTaiNghienCuu == item.Id && x.IdnguoiTao != long.Parse(User.Identity.Name) && x.Status.Value == (int)BaseStatus.Active);
@@ -167,8 +167,8 @@ namespace KLTN.Areas.GVHD.Controllers
                 else
                 {
                     var DeTai = await _serviceDeTai.GetAll(x => x.IdgiangVien == long.Parse(User.Identity.Name)
-                                                            && x.TinhTrangPheDuyet != (int)StatusDeTai.ChuaGui
-                                                            && x.TinhTrangPheDuyet != (int)StatusDeTai.DaGui);
+                                                            && x.TinhTrangDeTai != (int)StatusDeTai.MoiTao
+                                                            );
                     foreach (var item in DeTai)
                     {
                         var temp = await _service.GetAll(x => x.IddeTaiNghienCuu == item.Id 

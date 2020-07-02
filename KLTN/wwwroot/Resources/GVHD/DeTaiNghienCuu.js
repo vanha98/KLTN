@@ -42,9 +42,9 @@
             "columns": [
                 {
                     orderable:false,
-                    data: "tinhTrangPheDuyet",
+                    data: "tinhTrangDeTai",
                     render: function (data, type, row) {
-                        if(data == "Chưa gửi" || data == "Đã gửi")
+                        if(data == "Mới tạo")
                             return "<input class='form-check-inline' name='SelectRow' type='checkbox' data-id='" + row.id + "' />";
                         else
                             return "<input class='form-check-inline' name='SelectRow' type='checkbox' data-id='" + row.id + "' disabled/>";
@@ -56,9 +56,16 @@
                 { "data": "ngayLap", "name": "NgayLap", "autoWidth": true },
                 {
                     orderable: false,
-                    addClass: "text-center",
+                    "className": 'text-center',
                     "render": function (data, type, full, meta) {
                         return '<button class="btn btn-sm btn-primary btnXemNhom" onclick="XemNhom(' + full.id + ')" data-id="' + full.id + '"><i class="fas fa-user-friends"></i> Xem nhóm </button>';
+                    }
+                },
+                {
+                    orderable: false,
+                    "className": 'text-center',
+                    "render": function (data, type, full, meta) {
+                        return '<button class="btn btn-sm btn-info" onclick="XemBaoCao(' + full.id + ')"><i class="fas fa-clipboard-list"></i> Báo cáo </button>';
                     }
                 },
                 {
@@ -71,12 +78,13 @@
                     }
                 },
                 //{ "data": "tenTep", "name": "TenTep", "autoWidth": true },
+                { "data": "tinhTrangDeTai", "name": "TinhTrangDeTai", "autoWidth": true },
                 { "data": "tinhTrangPheDuyet", "name": "TinhTrangPheDuyet", "autoWidth": true },
                 {
-                    data: "tinhTrangPheDuyet",
+                    data: "tinhTrangDeTai",
                     orderable:false,
                     "render": function (data, type, full, meta) {
-                        if (data != "Đã gửi" && data!="Chưa gửi") {
+                        if (data !="Mới tạo") {
                             return '<button class="btn btn-sm btn-default" id="btnSua" data-id="' + full.id + '" onclick="EditAction(' + full.id + ')"><i class="far fa-edit"></i></button>';
                         }
                         else
@@ -87,7 +95,7 @@
             ],
             "order": [[7, "asc"]],
             "createdRow": function (row, data, dataIndex) {
-                if (data.tinhTrangPheDuyet == "Đã gửi") {
+                if (data.tinhTrangDeTai == "Đã gửi") {
                     $(row).addClass('changeRowColor');
                 }
             }

@@ -197,8 +197,11 @@ namespace KLTN.Areas.Admin.Controllers
         [NonAction]
         public async Task<bool> EditHoiDong(LapHoiDongViewModel obj, HoiDong hoiDong)
         {
-            BoNhiemHD(obj, hoiDong);
-            if (obj.DelThanhViens.Length > 0)
+            if (obj.ThanhViens != null)
+            {
+                BoNhiemHD(obj, hoiDong);
+            }
+            if (obj.DelThanhViens != null)
             {
                 for(int i = 0; i<hoiDong.BoNhiem.Count(); i++)
                 {
