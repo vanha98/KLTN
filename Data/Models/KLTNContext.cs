@@ -41,7 +41,7 @@ namespace Data.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=ERP-HAIDT\\SQLEXPRESS;Database=KLTN;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-U7OPBBM;Database=KLTN;Trusted_Connection=True;");
             }
         }
 
@@ -148,16 +148,25 @@ namespace Data.Models
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.IdnguoiTao).HasColumnName("IDNguoiTao");
+                entity.Property(e => e.IdgiangVien).HasColumnName("IDGiangVien");
 
                 entity.Property(e => e.IdxetDuyet).HasColumnName("IDXetDuyet");
 
-                entity.Property(e => e.NgayTao).HasColumnType("datetime");
+                entity.Property(e => e.NgayTaoCauHoi).HasColumnType("datetime");
+
+                entity.Property(e => e.NgayDanhGia).HasColumnType("datetime");
+
+                entity.Property(e => e.Status).HasDefaultValue(1);
 
                 entity.HasOne(d => d.IdxetDuyetNavigation)
                     .WithMany(p => p.CtxetDuyetVaDanhGia)
                     .HasForeignKey(d => d.IdxetDuyet)
                     .HasConstraintName("FK__CTXetDuye__IDXet__5AEE82B9");
+
+                entity.HasOne(d => d.IdgiangVienNavigation)
+                    .WithMany(p => p.CtxetDuyetVaDanhGia)
+                    .HasForeignKey(d => d.IdgiangVien)
+                    .HasConstraintName("FK__CTXetDuye__IDGia__7AEE31B7");
             });
 
             modelBuilder.Entity<DeTaiNghienCuu>(entity =>
@@ -173,7 +182,9 @@ namespace Data.Models
                 entity.Property(e => e.IdNguoiDangKy).HasColumnName("IDNguoiDangKy");
                 entity.Property(e => e.NgayLap).HasColumnType("datetime");
                 entity.Property(e => e.TinhTrangDangKy).HasDefaultValue(1);
-                entity.Property(e => e.TinhTrangPheDuyet).HasDefaultValue(1);
+                entity.Property(e => e.TinhTrangDeTai).HasDefaultValue(1);
+                entity.Property(e => e.TinhTrangPheDuyet).HasDefaultValue(0);
+                entity.Property(e => e.TinhTrangPhanCong).HasDefaultValue(0);
 
                 entity.HasOne(d => d.IdgiangVienNavigation)
                     .WithMany(p => p.DeTaiNghienCuu)

@@ -1,8 +1,9 @@
-﻿<div class="form-group">
+﻿@model Data.Models.MoDot
+<div class="form-group">
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text bg-danger" title="Thời gian mở đợt"><i class="far fa-clock"></i></span>
         </div>
-        <input disabled title="Thời gian mở đợt" type="text" class="form-control float-right" value="07:00 SA, 01/07/2020 - 11:00 CH, 07/07/2020">
+        <input disabled title="Thời gian mở đợt" type="text" class="form-control float-right" value="@Model.ThoiGianBd.Value.ToString("HH:mm, dd/MM/yyyy") - @Model.ThoiGianKt.Value.ToString("HH:mm, dd/MM/yyyy")">
     </div>
 </div>

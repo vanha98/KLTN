@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,9 @@ namespace KLTN.Views.Shared.Components.ThoiGianMoDot
 {
     public class ThoiGianMoDotViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(MoDot model)
         {
-            return View();
+            return View(model);
         }
     }
 }

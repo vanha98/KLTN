@@ -18,9 +18,18 @@ namespace KLTN.Models
                 .ForMember(dest => dest.MoTa, options => options.MapFrom(orderitem => orderitem.MoTa == null ? "" : orderitem.MoTa))
                 .ForMember(dest => dest.SDT, options => options.MapFrom(orderitem => orderitem.IdgiangVienNavigation.Sdt))
                 .ForMember(dest => dest.Email, options => options.MapFrom(orderitem => orderitem.IdgiangVienNavigation.Email))
-                .ForMember(dest => dest.HoTenGVHD, options => options.MapFrom(orderitem => orderitem.IdgiangVienNavigation.Ho +" "+ orderitem.IdgiangVienNavigation.Ten))
-                .ForMember(dest => dest.TenTep, options => options.MapFrom(orderitem => orderitem.TenTep == null ? "" : orderitem.TenTep));
-            
+                .ForMember(dest => dest.HoTenGVHD, options => options.MapFrom(orderitem => orderitem.IdgiangVienNavigation.Ho + " " + orderitem.IdgiangVienNavigation.Ten))
+                .ForMember(dest => dest.TenTep, options => options.MapFrom(orderitem => orderitem.TenTep == null ? "" : orderitem.TenTep))
+                .ForMember(dest => dest.TinhTrangDeTai, opt => opt.MapFrom(src => src.TinhTrangDeTai == (int)StatusDeTai.MoiTao ? "Mới tạo"
+                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.DaDuyet ? "Đã duyệt"
+                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.DaDangKy ? "Đã đăng ký"
+                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.DangThucHien ? "Đang thực hiện"
+                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.HoanThanh ? "Hoàn thành"
+                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai ? "Duyệt lại" : "Hủy"))
+                .ForMember(dest => dest.TinhTrangPheDuyet, opt => opt.MapFrom(src => src.TinhTrangPheDuyet == (int)StatusPheDuyet.ChuaCoYeuCau ? "Chưa có"
+                                                                                : src.TinhTrangPheDuyet == (int)StatusPheDuyet.GuiChinhSua ? "Gửi chỉnh sửa"
+                                                                                : "Gửi đăng ký"));
+
             CreateMap<Data.Models.SinhVien, SinhVienViewModel>();
 
             CreateMap<BaoCaoTienDo, BaoCaoTienDoViewModel>()

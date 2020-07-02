@@ -15,6 +15,7 @@ namespace Data.Models
         public int? IdhoiDong { get; set; }
         public int? IdmoDot { get; set; }
         public string NoiDung { get; set; }
+        public string TenTep { get; set; }
         public string TepDinhKem { get; set; }
         public int? Status { get; set; }
 

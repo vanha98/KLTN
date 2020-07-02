@@ -25,6 +25,7 @@ namespace KLTN.Areas.GVHD.Models
         public string Email { get; set; }
         public string TinhTrangDangKy { get; set; }
         public string TinhTrangPheDuyet { get; set; }
+        public string TinhTrangDeTai { get; set; }
 
         public IFormFile Files { get; set; }
 

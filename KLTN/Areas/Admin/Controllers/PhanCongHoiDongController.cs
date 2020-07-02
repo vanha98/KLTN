@@ -51,7 +51,7 @@ namespace KLTN.Areas.Admin.Controllers
                 ViewBag.IdMoDot = moDot.Id;
             }
             var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
             ViewBag.DeTai = deTai;
             return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
@@ -120,7 +120,7 @@ namespace KLTN.Areas.Admin.Controllers
         {
             var hoiDong = await _serviceHoiDong.GetById(idHoiDong);
             var list = hoiDong.XetDuyetVaDanhGia.Where(x=>x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPheDuyet == (int)StatusDeTai.DaDangKy);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
             List<DeTaiNghienCuu> datas = new List<DeTaiNghienCuu>();
             if (list.Any())
             {
@@ -144,13 +144,13 @@ namespace KLTN.Areas.Admin.Controllers
             var XDDG = hoiDong.XetDuyetVaDanhGia.Where(x => x.Status == 1).ToList();
             for (int i = 0; i<XDDG.Count();i++)
             {
-                XDDG[i].IddeTaiNavigation.TinhTrangPheDuyet = (int)StatusDeTai.DaDangKy;
+                XDDG[i].IddeTaiNavigation.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
                 await _serviceXetDuyetDanhGia.Delete(XDDG[i]);
             }
             for (int i = 0; i < idsDeTai.Length; i++)
             {
                 var deTai = await _serviceDeTai.GetById(idsDeTai[i]);
-                deTai.TinhTrangPheDuyet = (int)StatusDeTai.DaPhanCong;
+                deTai.TinhTrangDeTai = (int)StatusPhanCong.DaPhanCong;
                 XetDuyetVaDanhGia entity = new XetDuyetVaDanhGia
                 {
                     IddeTai = idsDeTai[i],

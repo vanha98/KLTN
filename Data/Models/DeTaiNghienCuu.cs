@@ -27,7 +27,9 @@ namespace Data.Models
         public DateTime? NgayKetThuc { get; set; }
         public bool? Loai { get; set; }
         public int? TinhTrangDangKy { get; set; }
-        public int? TinhTrangPheDuyet { get; set; }
+        public int? TinhTrangDeTai { get; set; }
+        public int TinhTrangPheDuyet { get; set; }
+        public int TinhTrangPhanCong { get; set; }
 
         public virtual GiangVien IdgiangVienNavigation { get; set; }
         //public virtual Nhom IdnhomNavigation { get; set; }

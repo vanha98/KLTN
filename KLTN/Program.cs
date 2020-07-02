@@ -16,11 +16,11 @@ namespace KLTN
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    SeedData.InitializeAsync(services).GetAwaiter().GetResult();
-            //}
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                SeedData.InitializeAsync(services).GetAwaiter().GetResult();
+            }
             host.Run();
         }
 

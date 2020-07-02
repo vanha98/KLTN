@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace KLTN.Views.Shared.Components.ListBaoCao
 {
     public class ListBaoCaoViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(List<BaoCaoTienDo> list)
         {
-            return View();
+            return View(list);
         }
     }
 }
