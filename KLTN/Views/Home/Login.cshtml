@@ -24,19 +24,24 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <img class="img-fluid w-100 h-100" style="position: relative;" src="~/img/school1.jpg" />
+    <div class="container" >
         <div class="row h-100 align-items-center justify-content-around pt-lg-5">
-            <div class="col-md-8">
-                <img class="img-fluid w-100 h-100" src="~/img/school.jpg" />
-            </div>
-            <div class="col-md-4 login-box">
+            @*<div class="col-md-8">
+            <img class="img-fluid w-100 h-100" src="~/img/school.jpg" />
+        </div>*@
+            
+            <div class="login-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                 <div class="login-logo">
-                    Đăng nhập
+                    
                 </div>
                 <!-- /.login-logo -->
                 <div class="card">
+                    <div class="login-logo">
+                        Đăng nhập
+                    </div>
                     <div class="card-body login-card-body">
-                        <form method="post" asp-controller="Home" asp-action="Login" asp-route-returnurl = "@Model.ReturnUrl">
+                        <form method="post" asp-controller="Home" asp-action="Login" asp-route-returnurl="@Model.ReturnUrl">
                             <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Tài khoản" asp-for="Username">
