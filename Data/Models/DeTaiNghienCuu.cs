@@ -16,6 +16,7 @@ namespace Data.Models
         }
 
         public long Id { get; set; }
+        public int IDDot { get; set; }
         public string TenDeTai { get; set; }
         public string MoTa { get; set; }
         public string TenTep { get; set; }
@@ -23,6 +24,7 @@ namespace Data.Models
         public long? IdgiangVien { get; set; }
         public long? IdNguoiDangKy { get; set; }
         public DateTime? NgayLap { get; set; }
+        public DateTime? NgayDangKy { get; set; }
         public DateTime? NgayThucHien { get; set; }
         public DateTime? NgayKetThuc { get; set; }
         public bool? Loai { get; set; }

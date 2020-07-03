@@ -26,7 +26,6 @@
 
     public enum StatusDeTai
     {
-        DangThucHien = 0,
         MoiTao = 1,
         DaDuyet,
         DaDangKy,

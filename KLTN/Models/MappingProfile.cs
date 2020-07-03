@@ -23,7 +23,6 @@ namespace KLTN.Models
                 .ForMember(dest => dest.TinhTrangDeTai, opt => opt.MapFrom(src => src.TinhTrangDeTai == (int)StatusDeTai.MoiTao ? "Mới tạo"
                                                                                 : src.TinhTrangDeTai == (int)StatusDeTai.DaDuyet ? "Đã duyệt"
                                                                                 : src.TinhTrangDeTai == (int)StatusDeTai.DaDangKy ? "Đã đăng ký"
-                                                                                : src.TinhTrangDeTai == (int)StatusDeTai.DangThucHien ? "Đang thực hiện"
                                                                                 : src.TinhTrangDeTai == (int)StatusDeTai.HoanThanh ? "Hoàn thành"
                                                                                 : src.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai ? "Duyệt lại" : "Hủy"))
                 .ForMember(dest => dest.TinhTrangPheDuyet, opt => opt.MapFrom(src => src.TinhTrangPheDuyet == (int)StatusPheDuyet.ChuaCoYeuCau ? "Chưa có"

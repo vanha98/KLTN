@@ -229,12 +229,13 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             else
                 vmodel.Id = long.Parse(DateTime.Now.Year.ToString() + "001");
-            
+
             var model = new DeTaiNghienCuu()
             {
                 Id = vmodel.Id,
                 TenDeTai = vmodel.TenDeTai,
                 MoTa = vmodel.MoTa,
+                NgayDangKy = DateTime.Now,
                 IdNguoiDangKy = long.Parse(User.Identity.Name),
                 IdgiangVien = vmodel.IdgiangVien,
                 NgayLap = DateTime.Now,
@@ -311,6 +312,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 nhom.NhomSinhVien.Add(nhomSinhVien);
                 await _serviceNhom.Add(nhom);
 
+                DeTai.NgayDangKy = DateTime.Now;
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Het;
                 DeTai.IdNguoiDangKy = long.Parse(User.Identity.Name);
                 DeTai.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
@@ -361,6 +363,8 @@ namespace KLTN.Areas.SinhVien.Controllers
                     await _serviceNhomSV.Delete(nhomSV.First());
                     await _serviceNhom.Delete(nhom);
                 }
+
+                DeTai.NgayDangKy = null;
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Con;
                 DeTai.TinhTrangDeTai = (int)StatusDeTai.DaDuyet;
                 DeTai.IdNguoiDangKy = null;

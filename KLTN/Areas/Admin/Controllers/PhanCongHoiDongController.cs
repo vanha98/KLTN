@@ -51,7 +51,7 @@ namespace KLTN.Areas.Admin.Controllers
                 ViewBag.IdMoDot = moDot.Id;
             }
             var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
             ViewBag.DeTai = deTai;
             return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
@@ -120,7 +120,7 @@ namespace KLTN.Areas.Admin.Controllers
         {
             var hoiDong = await _serviceHoiDong.GetById(idHoiDong);
             var list = hoiDong.XetDuyetVaDanhGia.Where(x=>x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
             List<DeTaiNghienCuu> datas = new List<DeTaiNghienCuu>();
             if (list.Any())
             {
