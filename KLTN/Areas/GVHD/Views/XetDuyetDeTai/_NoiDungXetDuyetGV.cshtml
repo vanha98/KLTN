@@ -9,21 +9,25 @@
 
 <div class="card-body" id="NoiDung">
     <div class="row">
+        <div class="row">
+            <label>Báo của của sinh viên: </label>
+        </div>
         <div class="mailbox-read-message">
             @if (ViewBag.XDDG.NoiDung != null)
             {
-            <p style="white-space: pre-line" id="txtNoiDungBaiPost">
-                @ViewBag.XDDG.NoiDung
-                <a>@ViewBag.XDDG.TepDinhKem</a>
-            </p>
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    @ViewBag.XDDG.NoiDung
+                    <a>@ViewBag.XDDG.TepDinhKem</a>
+                </p>
             }
-            else { 
-            <p style="white-space: pre-line" id="txtNoiDungBaiPost">
-               Chưa có nội dung
-            </p>
+            else
+            {
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    Chưa có nội dung
+                </p>
             }
 
-                
+
         </div>
     </div>
 

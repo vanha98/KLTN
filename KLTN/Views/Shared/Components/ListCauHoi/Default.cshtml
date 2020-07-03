@@ -1,63 +1,63 @@
-﻿<div class="form-group" id="listBaiPost">
+﻿@model IEnumerable<Data.Models.CtxetDuyetVaDanhGia>
 
-    <div class="card collapsed-card">
-        <div class="input-group">
-            <button type="button" class="btn btn-warning btn-block btn-flat form-control" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                Tên người đặt câu hỏi
-            </button>
-            <div class="input-group-append">
-                <span class="input-group-text bg-warning" title="Chưa trả lời"><i class="fas fa-spinner"></i></span>
-            </div>
-        </div>
+    <div class="form-group" id="listBaiPost">
 
-        <div class="card-body">
-            <label>Câu hỏi:</label>
-            <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-TraLoiCauHoi">Trả lời</button>
-        </div>
+        @if (Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                if (item.CauTraLoi != null || item.TenTepCauTraLoi != null)
+                {
+                    <div class="card collapsed-card">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-success btn-block btn-flat form-control" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                @item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten
+                            </button>
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-success" title="Đã trả lời"><i class="fas fa-check"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <label>Câu hỏi:</label>
+                            <p id="txtCauHoi_@item.Id">@item.CauHoi</p>
+                            <a href="~/FileUpload/CauHoiXetDuyetDanhGia/@item.TepDinhKemCauHoi" download="@item.TepDinhKemCauHoi">@item.TenTepCauHoi</a>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success btn-sm btnTraLoi" data-id="@item.Id">Xem trả lời</button>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card collapsed-card">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-warning btn-block btn-flat form-control" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                @item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten
+                            </button>
+                            <div class="input-group-append">
+                                <span class="input-group-text bg-warning" title="Chưa trả lời"><i class="fas fa-spinner"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <label>Câu hỏi:</label>
+                            <p>@item.CauHoi</p>
+                            <a href="~/FileUpload/CauHoiXetDuyetDanhGia/@item.TepDinhKemCauHoi" download="@item.TepDinhKemCauHoi">@item.TenTepCauHoi</a>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-warning btn-sm btnTraLoi" data-id="@item.Id">Trả lời</button>
+                        </div>
+                    </div>
+                }
+            }
+
+        }
+        else
+        {
+            <p class="text-center">Hiện chưa có câu hỏi</p>
+        }
+
+
     </div>
-
-    <div class="card collapsed-card">
-        <div class="input-group">
-            <button type="button" class="btn btn-warning btn-block btn-flat form-control" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                Tên người đặt câu hỏi
-            </button>
-            <div class="input-group-append">
-                <span class="input-group-text bg-warning" title="Chưa trả lời"><i class="fas fa-spinner"></i></span>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <label>Câu hỏi:</label>
-            <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modal-TraLoiCauHoi">Trả lời</button>
-        </div>
-    </div>
-
-    <div class="card collapsed-card">
-        <div class="input-group">
-            <button type="button" class="btn btn-success btn-block btn-flat form-control" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                Tên người đặt câu hỏi
-            </button>
-            <div class="input-group-append">
-                <span class="input-group-text bg-success" title="Đã trả lời"><i class="fas fa-check"></i></span>
-            </div>
-        </div>
-
-        <div class="card-body">
-            <label>Câu hỏi:</label>
-            <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-success btn-sm">Xem trả lời</button>
-        </div>
-    </div>
-
-    @*<p class="text-center">Hiện chưa có câu hỏi</p>*@
-
-</div>
 

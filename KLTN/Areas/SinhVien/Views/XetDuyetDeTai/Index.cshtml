@@ -4,6 +4,9 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/SinhVien/Views/Shared/_Layout.cshtml";
 }
+@section Script{
+    <script src="~/Resources/SinhVien/XetDuyetDeTai.js"></script>
+}
 
 @if (ViewBag.DangMoDot == true)
 {
@@ -16,7 +19,7 @@
                     <h3 class="card-title col text-center"><b>Danh sách câu hỏi</b></h3>
                 </div>
 
-                @await Component.InvokeAsync("ListCauHoi")
+                @await Component.InvokeAsync("ListCauHoi", Model)
             </div>
 
             <div class="col-md-8">
@@ -32,6 +35,10 @@
                     </div>
 
                     <div class="card-body" id="NoiDung">
+                        <div class="row">
+                            <label>Báo của của sinh viên: </label>
+                        </div>
+
                         <div class="row">
                             <div class="mailbox-read-message">
                                 @if (ViewBag.XDDG.NoiDung != null)
@@ -54,11 +61,12 @@
 
                         <div class="row">
                             <div class="col text-right">
-                                <button class="btn btn-warning btn-sm">Chỉnh sửa</button>
+                                <button class="btn btn-success btn-sm btnCapNhatND" data-id="@ViewBag.XDDG.Id">Chỉnh sửa</button>
                             </div>
                         </div>
                         <hr />
 
+                        @* List đánh giá *@
                         <div class="row">
                             <div class="col-12">
                                 <div class="card card-navy">
@@ -141,8 +149,11 @@
         </div>
     </div>
 
+    <input id="valueIdCT" hidden />
+    <input id="valueIdXDDG" hidden />
+    
     <!-- modal-TraLoiCauHoi -->
-    <div class="modal fade" id="modal-TraLoiCauHoi">
+    <div class="modal fade" id="modalTraLoiCauHoi">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -152,23 +163,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
-                        <div class="form-group">
-                            <label>Câu hỏi</label>
-                            <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
-                        </div>
-                        <div class="form-group">
-                            <!-- <label for="customFile">Custom File</label> -->
-                            <label>Trả lời</label>
-                            <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập câu trả lời"></textarea>
-                            <div class="custom-file">
-                                <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
-                                <label class="custom-file-label" for="customFile">Chọn tệp</label>
-                                <span class="text-danger lblFiles"></span>
-                            </div>
-                        </div>
-                        @await Component.InvokeAsync("LuuHuyFooter")
-                    </form>
+
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -177,7 +172,7 @@
     </div>
 
     <!-- modal-NopBaoCao -->
-    <div class="modal fade" id="modal-NopBaoCao">
+    <div class="modal fade" id="modalNopBaoCao">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -187,19 +182,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
-                        <div class="form-group">
-                            <!-- <label for="customFile">Custom File</label> -->
-                            <label>Mô tả sơ lược</label>
-                            <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập mô tả sơ lược"></textarea>
-                            <div class="custom-file">
-                                <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
-                                <label class="custom-file-label" for="customFile">Chọn tệp báo cáo</label>
-                                <span class="text-danger lblFiles"></span>
-                            </div>
-                        </div>
-                        @await Component.InvokeAsync("LuuHuyFooter")
-                    </form>
+
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -209,14 +192,14 @@
 }
 else
 {
-<div class="row">
-    <div class="col">
-        <div class="card card-default">
-            <div class="card-header">
-                <p class="card-title col text-center text-danger">Hiện tại chưa có đợt xét duyệt đề tài.</p>
-            </div>
+    <div class="row">
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    <p class="card-title col text-center text-danger">Hiện tại chưa có đợt xét duyệt đề tài.</p>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
 }

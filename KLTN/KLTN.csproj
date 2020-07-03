@@ -41,6 +41,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\FileUpload\BaoCaoTienDo\" />
     <Folder Include="wwwroot\FileUpload\CauHoiXetDuyetDanhGia\" />
+    <Folder Include="wwwroot\FileUpload\CauTraLoiXetDuyetDanhGia\" />
     <Folder Include="wwwroot\img\GVHD\Comments\" />
     <Folder Include="wwwroot\img\GVHD\ThaoLuan\" />
     <Folder Include="wwwroot\img\SinhVien\Background\" />
