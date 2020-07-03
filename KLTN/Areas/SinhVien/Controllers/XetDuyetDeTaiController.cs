@@ -26,39 +26,45 @@ namespace KLTN.Areas.SinhVien.Controllers
                                             join t2 in _context.NhomSinhVien on t0.Id equals t2.IddeTai
                                             where t2.IdsinhVien == long.Parse(User.Identity.Name) && t2.IdnhomNavigation.Status == 1
                                             select t0).SingleOrDefault();
+            List<CtxetDuyetVaDanhGia> ct = new List<CtxetDuyetVaDanhGia>();
             if(DetaiXetDuyet != null)
             {
                 ViewBag.TenDeTai = DetaiXetDuyet.TenDeTai;
-            }
-            var xetDuyetVaDanhGia = DetaiXetDuyet.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
-            ViewBag.XDDG = xetDuyetVaDanhGia;
-            var ct = xetDuyetVaDanhGia.CtxetDuyetVaDanhGia;
-            double diemtb = 0;
-            int chia = 0;
-            foreach (var item in ct)
-            {
-                if (item.Diem.HasValue)
+                var xetDuyetVaDanhGia = DetaiXetDuyet.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
+                if (xetDuyetVaDanhGia != null)
                 {
-                    if (item.VaiTro == (int)LoaiVaiTro.PhanBien)
+                    ViewBag.XDDG = xetDuyetVaDanhGia;
+                    ct = xetDuyetVaDanhGia.CtxetDuyetVaDanhGia.ToList();
+                    double diemtb = 0;
+                    int chia = 0;
+                    foreach (var item in ct)
                     {
-                        diemtb = diemtb + (2 * item.Diem.Value);
-                        chia = chia + 2;
+                        if (item.Diem.HasValue)
+                        {
+                            if (item.VaiTro == (int)LoaiVaiTro.PhanBien)
+                            {
+                                diemtb = diemtb + (2 * item.Diem.Value);
+                                chia = chia + 2;
+                            }
+                            else
+                            {
+                                diemtb = diemtb + item.Diem.Value;
+                                chia++;
+                            }
+                        }
+                    }
+                    if (chia == 0)
+                    {
+                        ViewBag.DiemTB = 0;
                     }
                     else
                     {
-                        diemtb = diemtb + item.Diem.Value;
-                        chia++;
+                        ViewBag.DiemTB = diemtb / chia * 1.0;
                     }
                 }
             }
-            if (chia == 0)
-            {
-                ViewBag.DiemTB = 0;
-            }
-            else
-            {
-                ViewBag.DiemTB = diemtb / chia * 1.0;
-            }
+            
+            
             MoDot moDot = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo && x.Loai == (int)MoDotLoai.XetDuyetDeTai);
             if (moDot != null)
             {

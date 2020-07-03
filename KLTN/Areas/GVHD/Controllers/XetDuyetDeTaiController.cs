@@ -281,8 +281,8 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 if (model.File == null)
                 {
-                    checkCT.TenTepCauHoi = "";
-                    checkCT.TepDinhKemCauHoi = "";
+                    ct.TenTepCauHoi = "";
+                    ct.TepDinhKemCauHoi = "";
                 }
                 xetDuyetVaDanhGia.CtxetDuyetVaDanhGia.Add(ct);
                 await _serviceDeTai.Update(deTai);
