@@ -1,4 +1,4 @@
-﻿
+﻿@model KLTN.Areas.Admin.Models.DeTaiNghienCuuAdminViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -59,6 +59,20 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach(var item in Model.listDeTaiHienTai)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.TenDeTai</td>
+                                        <td>@item.MoTa</td>
+                                        <td>@item.NgayLap</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary btnXemNhom"><i class="fas fa-user-friends"></i> Xem nhóm</button>
+                                        </td>
+                                        <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                        <td>@item.TinhTrangDeTai</td>
+                                    </tr>
+                                }
                             </tbody>
 
                         </table>
