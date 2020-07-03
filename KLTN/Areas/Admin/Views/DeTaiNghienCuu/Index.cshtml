@@ -41,14 +41,14 @@
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                         Mô tả
                                     </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                        Tệp đính kèm
+                                    </th>
                                     <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
                                         Ngày lập
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Sinh viên thực hiện
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tệp đính kèm
+                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                        Giảng viên
                                     </th>
                                     <th tabindex="0" aria-controls="example1" rowspan="1">
                                         Tình trạng
@@ -61,17 +61,24 @@
                             <tbody>
                                 @foreach(var item in Model.listDeTaiHienTai)
                                 {
-                                    <tr>
-                                        <td>@item.Id</td>
-                                        <td>@item.TenDeTai</td>
-                                        <td>@item.MoTa</td>
-                                        <td>@item.NgayLap</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-primary btnXemNhom"><i class="fas fa-user-friends"></i> Xem nhóm</button>
-                                        </td>
-                                        <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
-                                        <td>@item.TinhTrangDeTai</td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.TenDeTai</td>
+                                    <td>@item.MoTa</td>
+                                    <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                    <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                    <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+
+                                    @if (item.TinhTrangDeTai == 3)
+                                    {
+                                        <td>Đã đăng ký</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Chưa đăng ký</td>
+                                    }
+                                    <td><button class="btn btn-success btn-sm"><i class="fas fa-download"></i></button></td>
+                                </tr>
                                 }
                             </tbody>
 
@@ -109,18 +116,19 @@
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
                                         Mô tả
                                     </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                        Tệp đính kèm
+                                    </th>
                                     <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
                                         Ngày lập
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Sinh viên thực hiện
+                                        MSSV đề xuất
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Giảng viên hướng dẫn
+                                        Giảng viên
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tệp đính kèm
-                                    </th>
+
                                     <th tabindex="0" aria-controls="example1" rowspan="1">
                                         Tình trạng
                                     </th>
@@ -129,7 +137,30 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach (var item in Model.listDeTaiDeXuatHienTai)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.TenDeTai</td>
+                                        <td>@item.MoTa</td>
+                                        <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                        <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.IdNguoiDangKy.</td>
+                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+
+                                        @if (item.TinhTrangDeTai == 3)
+                                        {
+                                            <td>Đã đăng ký</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Chưa đăng ký</td>
+                                        }
+                                        <td><button class="btn btn-success btn-sm"><i class="fas fa-download"></i></button></td>
+                                    </tr>
+                                }
+                            </tbody>
 
                         </table>
                     </div>

@@ -26,7 +26,7 @@ namespace KLTN.Areas.Admin.Controllers
             MoDot DotDangKyMoiNhat =  listDotDangKy.ToList().Last();
 
             IEnumerable<DeTaiNghienCuu> listDeTaiHienTai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet 
-                                                                                 && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy
+                                                                                 || x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy
                                                                                  && (x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd
                                                                                  && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt)
                                                                                  || (x.NgayDangKy == null && x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet));

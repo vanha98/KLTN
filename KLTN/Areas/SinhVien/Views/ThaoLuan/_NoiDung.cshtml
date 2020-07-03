@@ -15,6 +15,7 @@
     </div>
 
     @await Component.InvokeAsync("HienThiNoiDungThaoLuan", Model)
+
     <div class="row">
         <div class="col">
             @await Component.InvokeAsync("VietBinhLuan", new { ViewX = Data.Enum.ViewType.ThaoLuanGV })

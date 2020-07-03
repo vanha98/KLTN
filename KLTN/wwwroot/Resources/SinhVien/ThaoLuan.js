@@ -1,14 +1,17 @@
 ﻿$(document).ready(function () {
     var currentImgSV = [];
 
-    var arrayImgSV = new CustomArrayImg("imgFile", "imgAttach");
+    var svimg = new CustomArrayImg("imgFile", "imgAttach");
+
+   
+
     //Delete imgTemp
     $(document).delegate('.DeleteImgTemp', 'click', function (e) {
         e.preventDefault();
         var file = $(this).data('id');
         var li = $(this).closest("li");
         li.remove();
-        arrayImgSV.DeleteImgTemp(file);
+        svimg.DeleteImgTemp(file);
     });
 
     //Save data Edit
@@ -17,8 +20,10 @@
         $('#imgFile').trigger('click');
 
     });
-    $(document).delegate('#imgFile', 'change', function () {
-        arrayImgSV.pushImgToArray();
+
+    $(document).delegate('#imgFile', 'change', function ()
+    {
+        svimg.pushImgToArray();
     });
 
     //Delete CurrentImg
@@ -32,28 +37,31 @@
         //DeleteImg(id);
     });
 
-    //Huy Edit
-    $(document).delegate('.btnHuyEdit', 'click', function () {
-        var id = $('#valueIdBaiPost').val();
-        ReloadNoiDung(id);
-        //LoadNoiDung(id);
-        //LoadComments(id);
-    });
-
     //Luu chinh sửa
-    $(document).delegate('.btnLuuEdit', 'click', function () {
+    $(document).delegate('.btnLuuEdit', 'click', function ()
+    {
         var id = $('#valueIdBaiPost').val();
         var NoiDung = $('#inputNoiDung').val();
         var TieuDe = $('#inputTieuDe').val();
         var data = new FormData();
-        for (var i = 0; i < arrayImgSV.array.length; i++) {
-            data.append('Files', arrayImgSV.array[i]);
+        for (var i = 0; i < svimg.array.length; i++)
+        {
+            data.append('Files', svimg.array[i]);
         }
         data.append('NoiDung', NoiDung);
         data.append('Id', id);
         data.append('TieuDe', TieuDe);
         data.append('currentImg', currentImgSV);
         Edit(data, id);
+    });
+
+
+    //Huy Edit
+    $(document).delegate('.btnHuyEdit', 'click', function () {
+        var id = $('#valueIdBaiPost').val();
+        ReloadNoiDung(id);
+        //LoadNoiDung(id);
+        //LoadComments(id);
     });
 
     
@@ -90,7 +98,7 @@
                     toastr.success(response.mess);
                     $("#tblSinhVien").load(window.location.href + " #tblSinhVien");
                     //LoadNoiDung(id);
-                    arrayImgSV.array = [];
+                    svimg.array = [];
                     currentImgSV = [];
                     ReloadNoiDung(id);
                     //LoadComments(id);
@@ -145,7 +153,7 @@
     function ReloadNoiDung(idbaipost) {
         $(".card-widget").html("");
         currentImgSV = [];
-        arrayImgSV = [];
+        svimg.array = [];
         $.get('/SinhVien/ThaoLuan/NoiDungBaiPost/' + idbaipost, function (content) {
             $(".card-widget").html(content);
         });
