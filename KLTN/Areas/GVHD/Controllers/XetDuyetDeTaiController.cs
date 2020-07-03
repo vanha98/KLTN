@@ -227,8 +227,8 @@ namespace KLTN.Areas.GVHD.Controllers
             string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             string filePath = Path.Combine(UploadsFolder, uniqueFileName);
             await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
-            model.TepDinhKem = uniqueFileName;
-            model.TenTep = file.FileName;
+            model.TepDinhKemCauHoi = uniqueFileName;
+            model.TenTepCauHoi = file.FileName;
             return true;
         }
 
@@ -246,8 +246,8 @@ namespace KLTN.Areas.GVHD.Controllers
                 {
                     if (model.File == null)
                     {
-                        checkCT.TenTep = "";
-                        checkCT.TepDinhKem = "";
+                        checkCT.TenTepCauHoi = "";
+                        checkCT.TepDinhKemCauHoi = "";
                     }
                     await _serviceCT.Update(checkCT);
                     return Ok(new
@@ -281,8 +281,8 @@ namespace KLTN.Areas.GVHD.Controllers
             {
                 if (model.File == null)
                 {
-                    checkCT.TenTep = "";
-                    checkCT.TepDinhKem = "";
+                    checkCT.TenTepCauHoi = "";
+                    checkCT.TepDinhKemCauHoi = "";
                 }
                 xetDuyetVaDanhGia.CtxetDuyetVaDanhGia.Add(ct);
                 await _serviceDeTai.Update(deTai);

@@ -103,7 +103,7 @@
                             {
                                 foreach(var item in Model)
                                 {
-                                    if (item.CauHoi != null || item.TenTep != null)
+                                    if (item.CauHoi != null || item.TenTepCauHoi != null)
                                     {<tr id="@item.Id">
                                 <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten</td>
                                 @if (item.VaiTro == 1)
@@ -123,7 +123,7 @@
                                     <td>Phản biện</td>
                                 }
                                 <td>@item.CauHoi</td>
-                                <td><a href="~/FileUpload/CauHoiXetDuyetDanhGia/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                <td><a href="~/FileUpload/CauHoiXetDuyetDanhGia/@item.TepDinhKemCauHoi" download="@item.TepDinhKemCauHoi">@item.TenTepCauHoi</a></td>
                                 <td>@(item.NgayTaoCauHoi.HasValue ? item.NgayTaoCauHoi.Value.ToString("HH:mm, dd/MM/yyyy") : "")</td>
                                 <td><a href="#"><i class="fas fa-eye"></i> Xem</a></td>
 

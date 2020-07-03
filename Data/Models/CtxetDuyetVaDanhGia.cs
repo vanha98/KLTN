@@ -12,9 +12,11 @@ namespace Data.Models
         public double? Diem { get; set; }
         public string NhanXet { get; set; }
         public string CauHoi { get; set; }
-        public string TenTep { get; set; }
-        public string TepDinhKem { get; set; }
+        public string TenTepCauHoi { get; set; }
+        public string TepDinhKemCauHoi { get; set; }
         public string CauTraLoi { get; set; }
+        public string TenTepCauTraLoi { get; set; }
+        public string TepDinhKemCauTraLoi { get; set; }
         public DateTime? NgayTaoCauHoi { get; set; }
         public DateTime? NgayDanhGia { get; set; }
         public int? Status { get; set; }

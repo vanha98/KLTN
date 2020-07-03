@@ -290,10 +290,16 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
-                    b.Property<string>("TenTep")
+                    b.Property<string>("TenTepCauHoi")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TepDinhKem")
+                    b.Property<string>("TenTepCauTraLoi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TepDinhKemCauHoi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TepDinhKemCauTraLoi")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VaiTro")
