@@ -140,8 +140,8 @@ namespace KLTN.Areas.SinhVien.Controllers
                     || x.TenDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TinhTrangDangKy.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.MoTa.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.HoTenGVHD.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.Email.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    //|| x.HoTenGVHD.ToString().IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    //|| x.Email.ToString().IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TenTep.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     );
                 }
@@ -362,7 +362,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                     await _serviceNhom.Delete(nhom);
                 }
                 DeTai.TinhTrangDangKy = (int)StatusDangKyDeTai.Con;
-                DeTai.TinhTrangDeTai = (int)StatusDeTai.MoiTao;
+                DeTai.TinhTrangDeTai = (int)StatusDeTai.DaDuyet;
                 DeTai.IdNguoiDangKy = null;
                 await _service.Update(DeTai);
                 return Ok(new

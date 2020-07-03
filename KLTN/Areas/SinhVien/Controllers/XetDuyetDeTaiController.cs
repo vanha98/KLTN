@@ -13,15 +13,56 @@ namespace KLTN.Areas.SinhVien.Controllers
     public class XetDuyetDeTaiController : Controller
     {
         private readonly IMoDot _serviceMoDot;
-        public XetDuyetDeTaiController(IMoDot serviceMoDot)
+        private readonly KLTNContext _context;
+        public XetDuyetDeTaiController(IMoDot serviceMoDot, KLTNContext context)
         {
+            _context = context;
             _serviceMoDot = serviceMoDot;
         }
         public async Task<IActionResult> Index()
         {
+            DeTaiNghienCuu DetaiXetDuyet = (from t0 in _context.DeTaiNghienCuu
+                                            join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai
+                                            join t2 in _context.NhomSinhVien on t0.Id equals t2.IddeTai
+                                            where t2.IdsinhVien == long.Parse(User.Identity.Name) && t2.IdnhomNavigation.Status == 1
+                                            select t0).SingleOrDefault();
+            if(DetaiXetDuyet != null)
+            {
+                ViewBag.TenDeTai = DetaiXetDuyet.TenDeTai;
+            }
+            var xetDuyetVaDanhGia = DetaiXetDuyet.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
+            ViewBag.XDDG = xetDuyetVaDanhGia;
+            var ct = xetDuyetVaDanhGia.CtxetDuyetVaDanhGia;
+            double diemtb = 0;
+            int chia = 0;
+            foreach (var item in ct)
+            {
+                if (item.Diem.HasValue)
+                {
+                    if (item.VaiTro == (int)LoaiVaiTro.PhanBien)
+                    {
+                        diemtb = diemtb + (2 * item.Diem.Value);
+                        chia = chia + 2;
+                    }
+                    else
+                    {
+                        diemtb = diemtb + item.Diem.Value;
+                        chia++;
+                    }
+                }
+            }
+            if (chia == 0)
+            {
+                ViewBag.DiemTB = 0;
+            }
+            else
+            {
+                ViewBag.DiemTB = diemtb / chia * 1.0;
+            }
             MoDot moDot = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo && x.Loai == (int)MoDotLoai.XetDuyetDeTai);
             if (moDot != null)
             {
+                ViewBag.Dot = moDot;
                 if (DateTime.Now >= moDot.ThoiGianBd && DateTime.Now <= moDot.ThoiGianKt)
                 {
                     double thoigian = (moDot.ThoiGianKt - DateTime.Now).Value.TotalSeconds;
@@ -37,7 +78,7 @@ namespace KLTN.Areas.SinhVien.Controllers
             {
                 ViewBag.DangMoDot = false;
             }
-            return View();
+            return View(ct);
         }
     }
 }

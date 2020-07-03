@@ -1,18 +1,30 @@
-﻿<div class="card-header">
-    <div class="card-title">Xây dựng ứng dụng sinh viên đăng ký đề tài nghiên cứu khoa học</div>
+﻿@model IEnumerable<Data.Models.CtxetDuyetVaDanhGia>
+
+<div class="card-header">
+    <div class="card-title">
+        @ViewBag.TenDeTai
+    </div>
+    <div class="card-tools"><button class="btn btn-warning btn-sm btnXemNhom" title="Nhóm thực hiện"><i class="fas fa-user-friends"></i></button></div>
 </div>
+
 <div class="card-body" id="NoiDung">
     <div class="row">
         <div class="mailbox-read-message">
-            <p style="white-space: pre-line" id="txtNoiDungBaiPost">
-                Kính gửi hội đồng,
+            @if (ViewBag.XDDG.NoiDung != null)
+            {
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    @ViewBag.XDDG.NoiDung
+                    <a>@ViewBag.XDDG.TepDinhKem</a>
+                </p>
+            }
+            else
+            {
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    Chưa có nội dung
+                </p>
+            }
 
-                Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài
 
-                Nhóm thực hiện.
-
-                TEPDINHKEM.docx
-            </p>
         </div>
     </div>
 
@@ -21,14 +33,6 @@
             <button class="btn btn-warning btn-sm">Chỉnh sửa</button>
         </div>
     </div>
-
-    @*<div class="row">
-        <label class="col text-center">Chưa nộp báo cáo</label>
-    </div>
-    <div class="row">
-        <div class="col text-center"><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-NopBaoCao">Nộp báo cáo</button></div>
-    </div>*@
-
     <hr />
 
     <div class="row">
@@ -43,35 +47,63 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                    <table id="tblDanhGia" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                         <thead>
                             <tr role="row">
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>Thành viên</th>
+                                <th>
                                     Vai trò
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>
                                     Đánh giá
+                                </th>
+                                <th>
+                                    Ngày đánh giá
+                                </th>
+                                <th>
+                                    Điểm
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Chủ nhiệm</td>
-                                <td>Đánh giá của chủ nhiệm</td>
-                            </tr>
-                            <tr>
-                                <td>Thư ký</td>
-                                <td>Đánh giá của thư ý</td>
-                            </tr>
-                            <tr>
-                                <td>Ủy viên</td>
-                                <td>Đánh giá của ủy viên</td>
-                            </tr>
-                            <tr>
-                                <td>Phản biện</td>
-                                <td>Đánh giá của phản biện</td>
-                            </tr>
+                            @if (Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    if (item.Diem.HasValue)
+                                    {
+                                        <tr id="@item.Id">
+                                            <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten</td>
+                                            @if (item.VaiTro == 1)
+                                            {
+                                                <td>Chủ tịch</td>
+                                            }
+                                            else if (item.VaiTro == 2)
+                                            {
+                                                <td>Ủy viên</td>
+                                            }
+                                            else if (item.VaiTro == 3)
+                                            {
+                                                <td>Thư ký</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Phản biện</td>
+                                            }
+                                            <td>@item.NhanXet</td>
+                                            <td>@item.NgayDanhGia.Value.ToString("HH:mm, dd/MM/yyyy")</td>
+                                            <td>@item.Diem</td>
+                                        </tr>
+                                    }
+                                }
+                            }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" colspan="4"><b>Điểm trung bình</b></td>
+                                <td class="bg-success diemTB">@ViewBag.DiemTB</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

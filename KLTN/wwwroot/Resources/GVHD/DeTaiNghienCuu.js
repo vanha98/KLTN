@@ -95,7 +95,7 @@
             ],
             "order": [[7, "asc"]],
             "createdRow": function (row, data, dataIndex) {
-                if (data.tinhTrangDeTai == "Đã gửi") {
+                if (data.tinhTrangPheDuyet == "Gửi đăng ký") {
                     $(row).addClass('changeRowColor');
                 }
             }
