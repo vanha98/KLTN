@@ -75,22 +75,22 @@ namespace KLTN.Areas.SinhVien.Controllers
                 var query = nhomSv.Select(x => x.IddeTaiNavigation);
                 //Mapping
                 var list = _mapper.Map<IEnumerable<DeTaiNghienCuu>, IEnumerable<DeTaiNghienCuuViewModel>>(query);
-                foreach (var item in list)
-                {
-                    //var nhomSinhVien = await _serviceNhomSV.GetAll(x=>x.Idnhom == item.Idnhom);
-                    //foreach(var x in nhomSinhVien)
-                    //{
-                    //    item.Mssv = item.Mssv + x.IdsinhVien.ToString() + '   ';
-                    //}
-                    if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DanhGiaLai)
-                        item.TinhTrangDeTai = "Chờ xét duyệt/đánh giá";
-                    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.HoanThanh)
-                        item.TinhTrangDeTai = "Hoàn thành";
-                    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DaDangKy)
-                        item.TinhTrangDeTai = "Đã đăng ký";
-                    else
-                        item.TinhTrangDeTai = "Đang thực hiện";
-                }
+                //foreach (var item in list)
+                //{
+                //    //var nhomSinhVien = await _serviceNhomSV.GetAll(x=>x.Idnhom == item.Idnhom);
+                //    //foreach(var x in nhomSinhVien)
+                //    //{
+                //    //    item.Mssv = item.Mssv + x.IdsinhVien.ToString() + '   ';
+                //    //}
+                //    if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DanhGiaLai)
+                //        item.TinhTrangDeTai = "Chờ xét duyệt/đánh giá";
+                //    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.HoanThanh)
+                //        item.TinhTrangDeTai = "Hoàn thành";
+                //    else if (int.Parse(item.TinhTrangDeTai) == (int)StatusDeTai.DaDangKy)
+                //        item.TinhTrangDeTai = "Đã đăng ký";
+                //    else
+                //        item.TinhTrangDeTai = "Đang thực hiện";
+                //}
 
                 //Sorting  
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
@@ -109,8 +109,8 @@ namespace KLTN.Areas.SinhVien.Controllers
                     || x.TenDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TinhTrangDeTai.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.MoTa.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.HoTenGVHD.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
-                    || x.Email.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    //|| x.HoTenGVHD.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
+                    //|| x.Email.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     || x.TenTep.IndexOf(searchValue, StringComparison.OrdinalIgnoreCase) >= 0
                     );
                 }

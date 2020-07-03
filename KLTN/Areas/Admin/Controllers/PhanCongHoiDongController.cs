@@ -51,7 +51,7 @@ namespace KLTN.Areas.Admin.Controllers
                 ViewBag.IdMoDot = moDot.Id;
             }
             var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong);
             ViewBag.DeTai = deTai;
             return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
@@ -120,7 +120,7 @@ namespace KLTN.Areas.Admin.Controllers
         {
             var hoiDong = await _serviceHoiDong.GetById(idHoiDong);
             var list = hoiDong.XetDuyetVaDanhGia.Where(x=>x.Status == 1);
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong);
             List<DeTaiNghienCuu> datas = new List<DeTaiNghienCuu>();
             if (list.Any())
             {
@@ -150,7 +150,7 @@ namespace KLTN.Areas.Admin.Controllers
             for (int i = 0; i < idsDeTai.Length; i++)
             {
                 var deTai = await _serviceDeTai.GetById(idsDeTai[i]);
-                deTai.TinhTrangDeTai = (int)StatusPhanCong.DaPhanCong;
+                deTai.TinhTrangPhanCong = (int)StatusPhanCong.DaPhanCong;
                 XetDuyetVaDanhGia entity = new XetDuyetVaDanhGia
                 {
                     IddeTai = idsDeTai[i],

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class updatedata : Migration
+    public partial class initaldb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -237,7 +237,8 @@ namespace Data.Migrations
                     NgayKetThuc = table.Column<DateTime>(nullable: true),
                     Loai = table.Column<bool>(nullable: true),
                     TinhTrangDangKy = table.Column<int>(nullable: true, defaultValue: 1),
-                    TinhTrangPheDuyet = table.Column<int>(nullable: true, defaultValue: 1),
+                    TinhTrangDeTai = table.Column<int>(nullable: true, defaultValue: 1),
+                    TinhTrangPheDuyet = table.Column<int>(nullable: false, defaultValue: 0),
                     TinhTrangPhanCong = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
@@ -290,6 +291,8 @@ namespace Data.Migrations
                     ThoiGianBD = table.Column<DateTime>(type: "datetime", nullable: true),
                     ThoiGianKT = table.Column<DateTime>(type: "datetime", nullable: true),
                     Loai = table.Column<int>(nullable: true),
+                    DiemToiDa = table.Column<int>(nullable: true),
+                    DiemToiThieu = table.Column<int>(nullable: true),
                     Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
@@ -451,6 +454,7 @@ namespace Data.Migrations
                     IDHoiDong = table.Column<int>(nullable: true),
                     IDMoDot = table.Column<int>(nullable: true),
                     NoiDung = table.Column<string>(nullable: true),
+                    TenTep = table.Column<string>(nullable: true),
                     TepDinhKem = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
@@ -530,17 +534,27 @@ namespace Data.Migrations
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IDXetDuyet = table.Column<int>(nullable: true),
-                    IDNguoiTao = table.Column<int>(nullable: false),
+                    IDGiangVien = table.Column<long>(nullable: false),
+                    VaiTro = table.Column<int>(nullable: false),
                     Diem = table.Column<double>(nullable: true),
                     NhanXet = table.Column<string>(nullable: true),
                     CauHoi = table.Column<string>(nullable: true),
+                    TenTep = table.Column<string>(nullable: true),
+                    TepDinhKem = table.Column<string>(nullable: true),
                     CauTraLoi = table.Column<string>(nullable: true),
-                    NgayTao = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Status = table.Column<int>(nullable: true)
+                    NgayTaoCauHoi = table.Column<DateTime>(type: "datetime", nullable: true),
+                    NgayDanhGia = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Status = table.Column<int>(nullable: true, defaultValue: 1)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CTXetDuyetVaDanhGia", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK__CTXetDuye__IDGia__7AEE31B7",
+                        column: x => x.IDGiangVien,
+                        principalTable: "GiangVien",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK__CTXetDuye__IDXet__5AEE82B9",
                         column: x => x.IDXetDuyet,
@@ -573,6 +587,11 @@ namespace Data.Migrations
                 name: "IX_Comments_IDBaiPost",
                 table: "Comments",
                 column: "IDBaiPost");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CTXetDuyetVaDanhGia_IDGiangVien",
+                table: "CTXetDuyetVaDanhGia",
+                column: "IDGiangVien");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CTXetDuyetVaDanhGia_IDXetDuyet",

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(KLTNContext))]
-    [Migration("20200701095124_tinhtrangdetai")]
-    partial class tinhtrangdetai
+    [Migration("20200702033345_initaldb")]
+    partial class initaldb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -363,6 +363,11 @@ namespace Data.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(0);
 
+                    b.Property<int>("TinhTrangPheDuyet")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdgiangVien");
@@ -487,6 +492,12 @@ namespace Data.Migrations
                         .HasColumnName("ID")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("DiemToiDa")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DiemToiThieu")
+                        .HasColumnType("int");
 
                     b.Property<int?>("IdnamHoc")
                         .HasColumnName("IDNamHoc")
