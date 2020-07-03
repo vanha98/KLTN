@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
+using KLTN.Areas.SinhVien.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KLTN.Areas.SinhVien.Controllers
@@ -13,10 +17,17 @@ namespace KLTN.Areas.SinhVien.Controllers
     public class XetDuyetDeTaiController : Controller
     {
         private readonly IMoDot _serviceMoDot;
+        private readonly IctXetDuyetDanhGia _serviceCT;
+        private readonly IXetDuyetDanhGia _serviceXDDG;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly KLTNContext _context;
-        public XetDuyetDeTaiController(IMoDot serviceMoDot, KLTNContext context)
+        public XetDuyetDeTaiController(IMoDot serviceMoDot, IXetDuyetDanhGia serviceXDDG,
+            IHostingEnvironment hostingEnvironment, IctXetDuyetDanhGia serviceCT, KLTNContext context)
         {
+            _hostingEnvironment = hostingEnvironment;
             _context = context;
+            _serviceCT = serviceCT;
+            _serviceXDDG = serviceXDDG;
             _serviceMoDot = serviceMoDot;
         }
         public async Task<IActionResult> Index()
@@ -64,7 +75,6 @@ namespace KLTN.Areas.SinhVien.Controllers
                 }
             }
             
-            
             MoDot moDot = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo && x.Loai == (int)MoDotLoai.XetDuyetDeTai);
             if (moDot != null)
             {
@@ -85,6 +95,108 @@ namespace KLTN.Areas.SinhVien.Controllers
                 ViewBag.DangMoDot = false;
             }
             return View(ct);
+        }
+
+        public async Task<IActionResult> LoadCauHoi(int id)
+        {
+            var ct = await _serviceCT.GetById(id);
+            return PartialView("_TraLoiCauHoi", ct);
+        }
+
+        public async Task<IActionResult> LoadBaoCao(int id)
+        {
+            var XDDG = await _serviceXDDG.GetById(id);
+            return PartialView("_NopBaoCao", XDDG);
+        }
+
+        [NonAction]
+        public async Task<bool> UpLoadFile(IFormFile file, CtxetDuyetVaDanhGia model)
+        {
+            if (file == null) return true;
+            string[] permittedExtensions = { ".txt", ".pdf", ".doc", ".docx", ".xlsx", ".xls" };
+
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                return false;
+            }
+
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/CauTraLoiXetDuyetDanhGia");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TepDinhKemCauTraLoi = uniqueFileName;
+            model.TenTepCauTraLoi = file.FileName;
+            return true;
+        }
+
+        [NonAction]
+        public async Task<bool> UpLoadFileXDDG(IFormFile file, XetDuyetVaDanhGia model)
+        {
+            if (file == null) return true;
+            string[] permittedExtensions = { ".txt", ".pdf", ".doc", ".docx", ".xlsx", ".xls" };
+
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                return false;
+            }
+
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/CauTraLoiXetDuyetDanhGia");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TepDinhKem = uniqueFileName;
+            model.TenTep = file.FileName;
+            return true;
+        }
+
+        public async Task<IActionResult> TraLoi(CauTraLoi model)
+        {
+            var ct = await _serviceCT.GetById(model.IdCT);
+            ct.CauTraLoi = model.TraLoi;
+            if(await UpLoadFile(model.File,ct))
+            {
+                await _serviceCT.Update(ct);
+                return Ok(new
+                {
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.UpLoadFileFail
+                });
+            }
+        }
+
+        public async Task<IActionResult> BaoCao(BaoCaoXDDGViewModel model)
+        {
+            var XDDG = await _serviceXDDG.GetById(model.IdXDDG);
+            XDDG.NoiDung = model.NoiDung;
+            if (await UpLoadFileXDDG(model.File, XDDG))
+            {
+                await _serviceXDDG.Update(XDDG);
+                return Ok(new
+                {
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.UpLoadFileFail
+                });
+            }
         }
     }
 }

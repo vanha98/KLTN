@@ -1,0 +1,25 @@
+﻿@model Data.Models.CtxetDuyetVaDanhGia
+
+<form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
+    <div class="form-group">
+        <label>Câu hỏi</label>
+        <p>@Model.CauHoi</p>
+        <a href="~/FileUpload/CauHoiXetDuyetDanhGia/@Model.TepDinhKemCauHoi" download="@Model.TepDinhKemCauHoi">@Model.TenTepCauHoi</a>
+    </div>
+    <div class="form-group">
+        <!-- <label for="customFile">Custom File</label> -->
+        <label>Trả lời</label>
+        <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập câu trả lời">@Model.CauTraLoi</textarea>
+        <div class="custom-file">
+            <input type="file" id="Files" class="custom-file-input" name="Files" multiple />
+            @if (Model != null && Model.TenTepCauTraLoi != null)
+            {
+                <label class="custom-file-label" for="customFile">@Model.TenTepCauTraLoi</label>
+            }
+            else
+            {<label class="custom-file-label" for="customFile">Chọn tệp </label>}
+            <span class="text-danger lblFiles"></span>
+        </div>
+    </div>
+    @await Component.InvokeAsync("LuuHuyFooter")
+</form>

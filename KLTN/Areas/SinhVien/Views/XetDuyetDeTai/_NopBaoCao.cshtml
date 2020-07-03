@@ -1,0 +1,23 @@
+﻿@model Data.Models.XetDuyetVaDanhGia
+
+<form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
+    <div class="form-group">
+        <!-- <label for="customFile">Custom File</label> -->
+        <label>Mô tả sơ lược</label>
+        <textarea class="form-control" id="InputMoTa" name="NoiDung" placeholder="Nhập mô tả sơ lược">@Model.NoiDung</textarea>
+        <div class="custom-file">
+            <input type="file" id="FilesBaoCao" class="custom-file-input" name="Files" multiple />
+            @if (Model != null && Model.TenTep != null)
+            {
+                <label class="custom-file-label" for="customFile">@Model.TenTep</label>
+            }
+            else
+            {<label class="custom-file-label" for="customFile">Chọn tệp </label>}
+            <span class="text-danger lblFiles"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button id="btnLuuBaoCao" class="btn btn-success">Lưu</button>
+        <button class="btn btn-danger" data-dismiss="modal">Hủy</button>
+    </div>
+</form>
