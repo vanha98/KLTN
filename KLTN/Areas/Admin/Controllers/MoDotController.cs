@@ -75,7 +75,10 @@ namespace KLTN.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTGThucHienDeTai(DateTime NgayBdDeTai, DateTime NgayKtDeTai)
         {
-            IEnumerable<DeTaiNghienCuu> deTaiNghienCuus = await _serviceDeTai.GetAll();
+            IEnumerable<MoDot> listDotDangKy = await _service.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
+            MoDot DotDangKyMoiNhat = listDotDangKy.ToList().Last();
+
+            IEnumerable<DeTaiNghienCuu> deTaiNghienCuus = await _serviceDeTai.GetAll(x => x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt);
             if(deTaiNghienCuus.Any())
             {
                 foreach (var item in deTaiNghienCuus)
@@ -86,13 +89,16 @@ namespace KLTN.Areas.Admin.Controllers
                 }
             }
             
-            return RedirectToAction("Index", new { mess = "Tạo gian thực hiện thành công" });
+            return RedirectToAction("Index", new { mess = "Tạo thời gian thực hiện thành công" });
         }
 
         [HttpPost]
         public async Task<IActionResult> EditTGThucHienDeTai(DateTime NgayBdDeTai, DateTime NgayKtDeTai)
         {
-            IEnumerable<DeTaiNghienCuu> deTaiNghienCuus = await _serviceDeTai.GetAll();
+            IEnumerable<MoDot> listDotDangKy = await _service.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
+            MoDot DotDangKyMoiNhat = listDotDangKy.ToList().Last();
+
+            IEnumerable<DeTaiNghienCuu> deTaiNghienCuus = await _serviceDeTai.GetAll(x => x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt);
             if (deTaiNghienCuus.Any())
             {
                 foreach (var item in deTaiNghienCuus)

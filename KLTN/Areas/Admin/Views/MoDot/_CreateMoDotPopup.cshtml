@@ -1,63 +1,107 @@
 ﻿
 @model MoDot
 
+
     <form method="post">
+        @if (Model == null)
+        {
+            <div class="form-group">
+                <label>Chọn loại đợt</label>
+                <select asp-for="Loai" class="form-control">
+                    <option value="1">Đăng ký đề tài</option>
+                    <option value="2">Xét duyệt đề tài</option>
+                    <option value="3">Nghiệm thu đề tài</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label>Chọn loại đợt</label>
-            <select asp-for="Loai" class="form-control">
-                <option value="1">Đăng ký đề tài</option>
-                <option value="2">Xét duyệt đề tài</option>
-                <option value="3">Nghiệm thu đề tài</option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label>Thời gian bắt đầu</label>
 
-        <div class="form-group">
-            <label>Thời gian bắt đầu</label>
-
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                    @*<input asp-for="ThoiGianBd" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>*@
+                    <input asp-for="ThoiGianBd" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
                 </div>
-                @*<input asp-for="ThoiGianBd" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>*@
-                <input asp-for="ThoiGianBd" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Thời gian kết thúc</label>
+            <div class="form-group">
+                <label>Thời gian kết thúc</label>
 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                    <input asp-for="ThoiGianKt" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
                 </div>
-                <input asp-for="ThoiGianKt" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Khoảng điểm duyệt lại đề tài</label>
+            <div class="form-group MocDiem" hidden>
+                <label>Khoảng điểm duyệt lại đề tài</label>
 
-            <div class="input-group">
-                <input asp-for="DiemToiThieu" class="form-control" min="0" max="10" placeholder="Nhập điểm tối thiểu...">
-                <span class="input-group-text input-group-append">-</span>
-                <input asp-for="DiemToiDa" class="form-control input-group-append" min="0" max="10"  placeholder="Nhập điểm tối đa...">
+                <div class="input-group">
+                    <input asp-for="DiemToiThieu" class="form-control" min="0" max="10" placeholder="Nhập điểm tối thiểu...">
+                    <span class="input-group-text input-group-append">-</span>
+                    <input asp-for="DiemToiDa" class="form-control input-group-append" min="0" max="10" placeholder="Nhập điểm tối đa...">
 
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @if (Model == null)
-            {
+
+            <div class="form-group">
                 <button class="btn btn-primary" asp-controller="MoDot" asp-action="Create">Tạo</button>
-            }
-            else
+            </div>
+
+        }
+        else
+        {
+            <div class="form-group">
+                <label>Thời gian bắt đầu</label>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                    @*<input asp-for="ThoiGianBd" type="text" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask>*@
+                    <input asp-for="ThoiGianBd" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Thời gian kết thúc</label>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                    <input asp-for="ThoiGianKt" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                </div>
+            </div>
+
+            @if (Model.Loai != (int)MoDotLoai.DangKy)
             {
+                <div class="form-group MocDiem">
+                    <label>Khoảng điểm duyệt lại đề tài</label>
+
+                    <div class="input-group">
+                        <input asp-for="DiemToiThieu" class="form-control" min="0" max="10" placeholder="Nhập điểm tối thiểu...">
+                        <span class="input-group-text input-group-append">-</span>
+                        <input asp-for="DiemToiDa" class="form-control input-group-append" min="0" max="10" placeholder="Nhập điểm tối đa...">
+
+                    </div>
+                </div>
+            }
+
+
+            <div class="form-group">
+                <input asp-for="Loai" hidden />
                 <input asp-for="Id" hidden />
                 <input asp-for="Status" hidden />
                 <button class="btn btn-primary" asp-controller="MoDot" asp-action="Edit">Chỉnh sửa</button>
-            }
+            </div>
 
-        </div>
+        }
+
     </form>
 

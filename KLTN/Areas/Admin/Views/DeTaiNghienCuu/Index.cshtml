@@ -3,71 +3,98 @@
     ViewData["Title"] = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <button class="btn btn-success">Xuất báo cáo tổng quát</button>
-            </div>
+@section Script
+{
+    <script>
+        $(document).ready(function ()
+        {
+            $(document).on("click", ".btnPhanCong", function ()
+            {
+                $("#IdDeTai").val($(this).attr("id"));
+            })
+        })
+    </script>
+}
+@if (ViewBag.mess != null)
+{
+    <script type="text/javascript">
+        window.onload = function ()
+        {
+            this.toastr.success("@ViewBag.mess");
+        }
+    </script>
+}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <a asp-controller="DeTaiNghienCuu" asp-action="XuatBaoCaoTongQuat" class="btn btn-success">Xuất báo cáo tổng quát</a>
         </div>
-        <hr />
+    </div>
+    <hr />
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-primary">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-primary">
 
-                    @*CARD HEADER*@
-                    <div class="card-header">
-                        <h3 class="card-title">Danh sách đề tài trong đợt đăng ký học kỳ... năm... (thời gian bắt đầu - thời gian kết thúc) </h3>
+                @*CARD HEADER*@
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách đề tài trong đợt đăng ký (@Model.DotDangKyHienTai.ThoiGianBd.Value.ToString("dd/MM/yyyy") - @Model.DotDangKyHienTai.ThoiGianKt.Value.ToString("dd/MM/yyyy")) </h3>
 
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
                     </div>
+                </div>
 
-                    @*CARD BODY*@
-                    <div class="card-body">
-                        <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
-                            <thead>
-                                <tr role="row">
-                                    <th tabindex="0" aria-controls="example1" rowspan="1">
-                                        Mã đề tài
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tên đề tài
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Mô tả
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tệp đính kèm
-                                    </th>
-                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Ngày lập
-                                    </th>
-                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Giảng viên
-                                    </th>
-                                    <th tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tình trạng
-                                    </th>
-                                    <th>
+                @*CARD BODY*@
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mã đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tên đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mô tả
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tệp đính kèm
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Ngày lập
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Giảng viên
+                                </th>
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tình trạng
+                                </th>
+                                <th>
 
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach(var item in Model.listDeTaiHienTai)
-                                {
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.listDeTaiHienTai)
+                            {
                                 <tr>
                                     <td>@item.Id</td>
                                     <td>@item.TenDeTai</td>
                                     <td>@item.MoTa</td>
                                     <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
                                     <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                                    <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                    @if (item.IdgiangVien != null)
+                                    {
+                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                    }
+                                    else
+                                    {
+                                        <td><a>Chưa có GVHD</a></td>
+                                    }
 
                                     @if (item.TinhTrangDeTai == 3)
                                     {
@@ -77,94 +104,126 @@
                                     {
                                         <td>Chưa đăng ký</td>
                                     }
-                                    <td><button class="btn btn-success btn-sm"><i class="fas fa-download"></i></button></td>
+                                    <td><a asp-controller="DeTaiNghienCuu" asp-action="XuatBaoCaoChiTietDeTai" asp-route-id="@item.Id" class="btn btn-primary btn-xs" title="Báo cáo chi tiết"><i class="fas fa-download"></i></a></td>
                                 </tr>
-                                }
-                            </tbody>
+                            }
+                        </tbody>
 
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-warning">
-                    @*CARD HEADER*@
-                    <div class="card-header">
-                        <h3 class="card-title">Danh sách đề tài đề xuất</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    @*CARD BODY*@
-                    <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover dataTable table-sm nowrap" style="width:100%" role="grid" aria-describedby="example1_info">
-                            <thead>
-                                <tr role="row">
-                                    <th tabindex="0" aria-controls="example1" rowspan="1">
-                                        Mã đề tài
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tên đề tài
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Mô tả
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tệp đính kèm
-                                    </th>
-                                    <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Ngày lập
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        MSSV đề xuất
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                        Giảng viên
-                                    </th>
-
-                                    <th tabindex="0" aria-controls="example1" rowspan="1">
-                                        Tình trạng
-                                    </th>
-                                    <th>
-
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.listDeTaiDeXuatHienTai)
-                                {
-                                    <tr>
-                                        <td>@item.Id</td>
-                                        <td>@item.TenDeTai</td>
-                                        <td>@item.MoTa</td>
-                                        <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
-                                        <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                                        <td>@item.IdNguoiDangKy.</td>
-                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
-
-                                        @if (item.TinhTrangDeTai == 3)
-                                        {
-                                            <td>Đã đăng ký</td>
-                                        }
-                                        else
-                                        {
-                                            <td>Chưa đăng ký</td>
-                                        }
-                                        <td><button class="btn btn-success btn-sm"><i class="fas fa-download"></i></button></td>
-                                    </tr>
-                                }
-                            </tbody>
-
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-warning">
+                @*CARD HEADER*@
+                <div class="card-header">
+                    <h3 class="card-title">Danh sách đề tài đề xuất</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @*CARD BODY*@
+                <div class="card-body">
+                    <table id="example2" class="table table-bordered table-hover dataTable table-sm nowrap" style="width:100%" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mã đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tên đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mô tả
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tệp đính kèm
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Ngày lập
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    MSSV đề xuất
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Giảng viên
+                                </th>
+
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tình trạng
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.listDeTaiDeXuatHienTai)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.TenDeTai</td>
+                                    <td>@item.MoTa</td>
+                                    <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                    <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                    <td>@item.IdNguoiDangKy</td>
+                                    @if (item.IdgiangVien != null)
+                                    {
+                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                    }
+                                    else
+                                    {
+                                        <td><button id="@item.Id" class="btn btn-warning btn-xs btnPhanCong" data-toggle="modal" data-target="#modal-PhanCongGVHD">Chưa có GVHD</button></td>
+                                    }
+
+                                    @if (item.TinhTrangDeTai == 3)
+                                    {
+                                        <td>Đã đăng ký</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Chưa đăng ký</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-PhanCongGVHD">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-navy">
+                <h3 class="card-title">Phân công giảng viên</h3>
+                <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-controller="DeTaiNghienCuu" asp-action="PhanCongGiangVien">
+                    <input type="number" id="IdDeTai" name="IdDeTai" hidden />
+                    <div class="form-group">
+                        <label>Chọn giảng viên</label>
+                        <select id="IdGiangVien" name="IdGiangVien" class="form-control"
+                                asp-items="@Model.listGiangVien">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success">Phân công</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
