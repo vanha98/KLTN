@@ -5,53 +5,77 @@
     Layout = "~/Areas/GVHD/Views/Shared/_Layout.cshtml";
 }
 
-@section Script{ 
+@section Script{
     <script src="~/Resources/GVHD/XetDuyetDeTai.js"></script>
 }
+@if (ViewBag.MoDot != null)
+{
+    <div class="container" id="mydiv">
+        <div class="row">
+            <div class="col-md-4 p-3 card">
+                @await Component.InvokeAsync("ThoiGianMoDot", ViewBag.MoDot)
+                <br />
+                @await Component.InvokeAsync("TimKiem")
 
-<div class="container" id="mydiv">
-    <div class="row">
-        <div class="col-md-4 p-3 card">
-            @await Component.InvokeAsync("ThoiGianMoDot",ViewBag.MoDot)
-            <br />
-            @await Component.InvokeAsync("TimKiem")
+                <div class="card-header">
+                    <h3 class="card-title col text-center"><b>Danh sách đề tài</b></h3>
+                </div>
 
-            <div class="card-header">
-                <h3 class="card-title col text-center"><b>Danh sách đề tài</b></h3>
+                @await Component.InvokeAsync("ListDeTaiDanhGia", Model)
+
+                <input id="valueIdDeTai" hidden />
+
             </div>
 
-            @await Component.InvokeAsync("ListDeTaiDanhGia", Model)
+            <div class="col-md-8">
+                <div hidden id="wait" class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+                <div class="card card-primary">
 
-            <input id="valueIdDeTai" hidden/>
-
-        </div>
-
-        <div class="col-md-8">
-            <div hidden id="wait" class="overlay">
-                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-            </div>
-            <div class="card card-primary">
-                
-                @*@await Html.PartialAsync("_NoiDungXetDuyetGV")*@
+                    @*@await Html.PartialAsync("_NoiDungXetDuyetGV")*@
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <div class="row">
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    <p class="card-title col text-center text-danger">Hiện tại chưa có đợt xét duyệt đề tài.</p>
+                </div>
 
-<div class="modal fade" id="modal-NhomSV">
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="modalXemTraLoi">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-navy">
-                <h3 class="card-title">Thông tin nhóm thực hiện</h3>
-                <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-            </div>
-            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
+
+
+<div class="modal fade" id="modal-NhomSV">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-navy">
+                            <h3 class="card-title">Thông tin nhóm thực hiện</h3>
+                            <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>

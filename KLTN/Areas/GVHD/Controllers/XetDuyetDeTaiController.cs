@@ -41,9 +41,10 @@ namespace KLTN.Areas.GVHD.Controllers
         public List<TinhTrangXDDG> LoadList()
         {
             List<DeTaiNghienCuu> listDetaiXetDuyet = (from t0 in _context.DeTaiNghienCuu
-                                                      join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai
+                                                      join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai 
                                                       join t2 in _context.BoNhiem on t1.IdhoiDong equals t2.IdhoiDong
-                                                      where t2.IdgiangVien == long.Parse(User.Identity.Name) && t2.Status == 1
+                                                      where t2.IdgiangVien == long.Parse(User.Identity.Name) 
+                                                            && t2.Status == 1
                                                       select t0).ToList();
             List<CtxetDuyetVaDanhGia> listCT = (from t0 in _context.CtxetDuyetVaDanhGia
                                                 where t0.IdgiangVien == long.Parse(User.Identity.Name) && t0.Diem > 0 && t0.Status == 1
@@ -70,7 +71,7 @@ namespace KLTN.Areas.GVHD.Controllers
             var allDot = await _serviceMoDot.GetAll();
             if (!allDot.Any())
                 return View();
-            DotHienTai = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo);
+            DotHienTai = await _serviceMoDot.GetEntity(x => x.Status == (int)MoDotStatus.Mo && x.Loai == (int)MoDotLoai.XetDuyetDeTai);
             if (DotHienTai == null)
                 return View();
             ViewBag.MoDot = DotHienTai;
@@ -339,6 +340,12 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             var NhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == id);
             return ViewComponent("ToggleThongTinSinhVien", NhomSV.Select(x => x.IdsinhVienNavigation));
+        }
+
+        public async Task<IActionResult> LoadCauTraLoi(int id)
+        {
+            var ct = await _serviceCT.GetById(id);
+            return PartialView("_XemTraLoi", ct);
         }
     }
 }

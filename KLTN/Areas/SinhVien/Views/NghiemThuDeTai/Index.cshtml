@@ -1,22 +1,24 @@
-﻿
+﻿@model IEnumerable<Data.Models.CtxetDuyetVaDanhGia>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Areas/SinhVien/Views/Shared/_Layout.cshtml";
+}
+
+@section Script{
+    <script src="~/Resources/SinhVien/XetDuyetDeTai.js"></script>
 }
 @if (ViewBag.DangMoDot == true)
 {
     <div class="container" id="mydiv">
         <div class="row">
             <div class="col-md-4 p-3 card">
-                @await Component.InvokeAsync("ThoiGianMoDot")
-                <br />
-                @await Component.InvokeAsync("TimKiem")
-
+                @await Component.InvokeAsync("ThoiGianMoDot", ViewBag.Dot)
+                <hr />
                 <div class="card-header">
                     <h3 class="card-title col text-center"><b>Danh sách câu hỏi</b></h3>
                 </div>
 
-                @await Component.InvokeAsync("ListCauHoi")
+                @await Component.InvokeAsync("ListCauHoi", Model)
             </div>
 
             <div class="col-md-8">
@@ -24,14 +26,129 @@
                     <i class="fas fa-2x fa-sync-alt fa-spin"></i>
                 </div>
                 <div class="card card-primary">
-                    @await Html.PartialAsync("_NoiDungNghiemThuSV")
+                    <div class="card-header">
+                        <div class="card-title">
+                            @ViewBag.TenDeTai
+                        </div>
+                        @*<div class="card-tools"><button class="btn btn-warning btn-sm btnXemNhom" title="Nhóm thực hiện"><i class="fas fa-user-friends"></i></button></div>*@
+                    </div>
+                    <div class="card-body" id="NoiDung">
+                        <div class="row">
+                            <label>Báo của của sinh viên: </label>
+                        </div>
+
+                        <div class="row">
+                            <div class="mailbox-read-message">
+                                @if (ViewBag.XDDG.NoiDung != null)
+                                {
+                                    <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                                        @ViewBag.XDDG.NoiDung
+                                        <a>@ViewBag.XDDG.TepDinhKem</a>
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                                        Chưa có nội dung
+                                    </p>
+                                }
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col text-right">
+                                <button class="btn btn-success btn-sm btnCapNhatND" data-id="@ViewBag.XDDG.Id">Chỉnh sửa</button>
+                            </div>
+                        </div>
+                        <hr />
+
+                        @* List đánh giá *@
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card card-navy">
+                                    <div class="card-header">
+                                        <h2 class="card-title">Đánh giá của hội đồng</h2>
+                                        <div class="card-tools">
+                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="tblDanhGia" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th>Thành viên</th>
+                                                    <th>
+                                                        Vai trò
+                                                    </th>
+                                                    <th>
+                                                        Đánh giá
+                                                    </th>
+                                                    <th>
+                                                        Ngày đánh giá
+                                                    </th>
+                                                    <th>
+                                                        Điểm
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.Any())
+                                                {
+                                                    foreach (var item in Model)
+                                                    {
+                                                        if (item.Diem.HasValue)
+                                                        {
+                                                            <tr id="@item.Id">
+                                                                <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten</td>
+                                                                @if (item.VaiTro == 1)
+                                                                {
+                                                                    <td>Chủ tịch</td>
+                                                                }
+                                                                else if (item.VaiTro == 2)
+                                                                {
+                                                                    <td>Ủy viên</td>
+                                                                }
+                                                                else if (item.VaiTro == 3)
+                                                                {
+                                                                    <td>Thư ký</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>Phản biện</td>
+                                                                }
+                                                                <td>@item.NhanXet</td>
+                                                                <td>@item.NgayDanhGia.Value.ToString("HH:mm, dd/MM/yyyy")</td>
+                                                                <td>@item.Diem</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="text-center" colspan="4"><b>Điểm trung bình</b></td>
+                                                    <td class="bg-success diemTB">@ViewBag.DiemTB</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <input id="valueIdCT" hidden />
+    <input id="valueIdXDDG" hidden />
     <!-- modal-TraLoiCauHoi -->
-    <div class="modal fade" id="modal-TraLoiCauHoi">
+    <div class="modal fade" id="modalTraLoiCauHoi">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -41,23 +158,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
-                        <div class="form-group">
-                            <label>Câu hỏi</label>
-                            <p>Đây là câu hỏi dài dòng thật là dài dòng được đặt để test độ dài của khung câu hỏi. dfadsfljflaskdjf efe ljelrj Bla bla bla bla</p>
-                        </div>
-                        <div class="form-group">
-                            <!-- <label for="customFile">Custom File</label> -->
-                            <label>Trả lời</label>
-                            <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập câu trả lời"></textarea>
-                            <div class="custom-file">
-                                <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
-                                <label class="custom-file-label" for="customFile">Chọn tệp</label>
-                                <span class="text-danger lblFiles"></span>
-                            </div>
-                        </div>
-                        @await Component.InvokeAsync("LuuHuyFooter")
-                    </form>
+
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -66,7 +167,7 @@
     </div>
 
     <!-- modal-NopBaoCao -->
-    <div class="modal fade" id="modal-NopBaoCao">
+    <div class="modal fade" id="modalNopBaoCao">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -76,19 +177,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" id="formTaoBaiPost" enctype="multipart/form-data" onsubmit="return false;">
-                        <div class="form-group">
-                            <!-- <label for="customFile">Custom File</label> -->
-                            <label>Mô tả sơ lược</label>
-                            <textarea class="form-control" id="InputNoiDung" name="NoiDung" placeholder="Nhập mô tả sơ lược"></textarea>
-                            <div class="custom-file">
-                                <input type="file" id="Files" accept="image/jpeg, image/png, image/jpg" class="custom-file-input" name="Files" multiple />
-                                <label class="custom-file-label" for="customFile">Chọn tệp báo cáo</label>
-                                <span class="text-danger lblFiles"></span>
-                            </div>
-                        </div>
-                        @await Component.InvokeAsync("LuuHuyFooter")
-                    </form>
+
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -98,14 +187,14 @@
 }
 else
 {
-<div class="row">
-    <div class="col">
-        <div class="card card-default">
-            <div class="card-header">
-                <p class="card-title col text-center text-danger">Hiện tại chưa có đợt đánh giá nghiệm thu đề tài.</p>
-            </div>
+    <div class="row">
+        <div class="col">
+            <div class="card card-default">
+                <div class="card-header">
+                    <p class="card-title col text-center text-danger">Hiện tại chưa có đợt đánh giá nghiệm thu đề tài.</p>
+                </div>
 
+            </div>
         </div>
     </div>
-</div>
 }
