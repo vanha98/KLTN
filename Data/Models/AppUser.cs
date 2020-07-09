@@ -7,6 +7,6 @@ namespace Data.Models
 {
     public class AppUser : IdentityUser<Guid>
     {
-
+        public bool? IsEnabled { get; set; }
     }
 }

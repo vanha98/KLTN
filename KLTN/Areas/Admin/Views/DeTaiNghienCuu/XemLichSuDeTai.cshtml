@@ -1,0 +1,128 @@
+﻿@model IEnumerable<DeTaiNghienCuu>
+@{
+    ViewData["Title"] = "XemLichSuDeTai";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section Script
+{
+    <script>
+        $(document).ready(function ()
+        {
+            $(document).on("click", ".btnXemNhom", function ()
+            {
+                var id = $(this).attr("id");
+                $("#modal-NhomSV .modal-body").html("");
+                $.get('/Admin/DetaiNghienCuu/XemNhom/' + id, function (content)
+                {
+                    $("#modal-NhomSV .modal-body").html(content);
+                    $("#modal-NhomSV").modal();
+                });
+            })
+        })
+    </script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-danger">
+
+                @*CARD HEADER*@
+                <div class="card-header">
+                    <h3 class="card-title">Lịch sử đề tài nghiên cứu</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @*CARD BODY*@
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row">
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mã đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tên đề tài
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Mô tả
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tệp đính kèm
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Ngày lập
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Nhóm thực hiện
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Giảng viên
+                                </th>
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tình trạng
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.TenDeTai</td>
+                                    <td>@item.MoTa</td>
+                                    <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                    <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                    <td><button id="@item.Id" class="btn btn-sm btn-danger btnXemNhom"><i class="fas fa-user-friends"></i> Xem nhóm </button></td>
+                                    @if (item.IdgiangVien != null)
+                                    {
+                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                    }
+                                    else
+                                    {
+                                        <td><a>Chưa có GVHD</a></td>
+                                    }
+
+                                    @if (item.TinhTrangDeTai == 3)
+                                    {
+                                        <td>Đã đăng ký</td>
+                                    }
+                                    else
+                                    {
+                                        <td>Chưa đăng ký</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a asp-controller="DeTaiNghienCuu" asp-action="Index" class="btn btn-danger btn-sm">trở về</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-NhomSV">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-navy">
+                <h3 class="card-title">Thông tin nhóm thực hiện</h3>
+                <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

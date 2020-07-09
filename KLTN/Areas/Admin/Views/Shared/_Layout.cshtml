@@ -56,7 +56,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-area="GVHD" asp-controller="Home" asp-action="Index" class="nav-link">Trang chủ</a>
+                    <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-link">Trang chủ</a>
                 </li>
             </ul>
 
@@ -151,42 +151,45 @@
                                 </p>
                             </a>
                         </li>
+                        @if (User.IsInRole("Administrators"))
+                        {
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-controller="PhanCongHoiDong" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-people-carry"></i>
+                                    <p>
+                                        Phân công hội đồng
+                                    </p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="PhanCongHoiDong" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-people-carry"></i>
-                                <p>
-                                    Phân công hội đồng
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-controller="QLHoiDong" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-university"></i>
+                                    <p>
+                                        Quản lý hội đồng
+                                    </p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="QLHoiDong" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-university"></i>
-                                <p>
-                                    Quản lý hội đồng
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-controller="QLTaiKhoan" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Quản lý tài khoản
+                                    </p>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="QLTaiKhoan" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Quản lý tài khoản
-                                </p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a asp-area="Admin" asp-controller="DeTaiNghienCuu" asp-action="Index" class="nav-link">
+                                    <i class="nav-icon fas fa-cubes"></i>
+                                    <p>
+                                        Đề tài nghiên cứu
+                                    </p>
+                                </a>
+                            </li>
+                        }
 
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="DeTaiNghienCuu" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-cubes"></i>
-                                <p>
-                                    Đề tài nghiên cứu
-                                </p>
-                            </a>
-                        </li>
 
 
                     </ul>

@@ -14,9 +14,12 @@ namespace KLTN
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
+            EnsureCreatedUser(services, "111641001", "Administrators", new Claim[]{
+                    new Claim("Name", "Trần Văn Admin"),
+                });
             var context = services.GetRequiredService<KLTNContext>();
             await context.Database.MigrateAsync();
-
+            
             if (!context.Roles.Any())
             {
                 await EnsureCreatedRole(services, "SinhVien");

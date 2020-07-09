@@ -6,14 +6,35 @@
 @section Script
 {
     <script>
-        $(function ()
+        $(document).ready(function ()
         {
-            $("input[data-bootstrap-switch]").each(function ()
-            {
-                $(this).bootstrapSwitch('state', $(this).prop('checked'));
-            });
+            $('#Files').on('change',function(e){
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(e.target.files[0].name);
+            })
         })
     </script>
+}
+@if (ViewBag.mess != null)
+{
+    @if (ViewBag.status == "success")
+    {
+        <script type="text/javascript">
+        window.onload = function ()
+        {
+            this.toastr.success("@ViewBag.mess");
+        }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+        window.onload = function ()
+        {
+            this.toastr.error("@ViewBag.mess");
+        }
+        </script>
+    }
 }
 
 <div class="content-header">
@@ -23,85 +44,273 @@
     <hr />
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-            @*<div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="example1_length"><label>Show <select name="example1_length" aria-controls="example1" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="example1_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row">*@
-            <div class="col-sm-12">
-                <table id="example1" class="table table-bordered dataTable table-hover table-sm nowrap" role="grid" aria-describedby="example1_info">
-                    <thead>
-                        <tr role="row" align="center">
-                            <th tabindex="0" aria-controls="example1" rowspan="1">
-                                Tên tài khoản
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                Họ tên
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                SĐT
-                            </th>
-                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                Email
-                            </th>
-                            <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
-                                Vai trò
-                            </th>
-                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
-                                Trạng thái
-                            </th>
-                            <th>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <button class="btn btn-info" data-toggle="modal" data-target="#modal-Create">Tạo tài khoản</button>
+        </div>
+        <div class="col-6">
+            <form method="post" asp-controller="QLTaiKhoan" asp-action="Import" enctype="multipart/form-data">
 
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>333641001</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>nguyenvana@gmail.com</td>
-                            <td>Giảng viên</td>
-                            <td class="text-center">
-                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3116410024</td>
-                            <td>Đinh Tuấn Hải</td>
-                            <td>0123465777</td>
-                            <td>tuanhai@gmail.com</td>
-                            <td>Sinh viên</td>
-                            <td class="text-center">
-                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3116410020</td>
-                            <td>Nguyễn Văn T</td>
-                            <td>0123465727</td>
-                            <td>T@gmail.com</td>
-                            <td>Sinh viên</td>
-                            <td class="text-center">
-                                <input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                            </td>
-                            <td class="text-center">
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-key"></i></button>
-                                <button class="btn btn-sm btn-default" title="Cấp lại mật khẩu"><i class="fas fa-user-tag"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="custom-file">
+                            <input class="custom-file-input" type="file" id="Files" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="Files" multiple />
+                            <label class="custom-file-label" for="customFile">Chọn tệp excel </label>
+                        </div>
+                        <span class="input-group-append">
+                            <button type="submit" class="btn btn-info btn-sm btn-flat">Tạo danh sách tài khoản</button>
+                        </span>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-warning">
+
+                @*CARD HEADER*@
+                <div class="card-header">
+                    <h3 class="card-title">Tài khoản quản lý & quản trị viên</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @*CARD BODY*@
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row" align="center">
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tên tài khoản
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Họ tên
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    SĐT
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Email
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Vai trò
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Trạng thái
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in ViewBag.TaiKhoanQuanLyVaQuanTri)
+                            {
+                                <tr>
+                                    <td>@item.TenTaiKhoan</td>
+                                    <td>@item.HoTen</td>
+                                    <td>@item.Sdt</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.VaiTro</td>
+                                    @if (item.TrangThai == true)
+                                    {
+                                        <td class="text-center">
+                                            <a asp-controller="QLTaiKhoan" asp-action="ChangStatus" asp-route-id="@item.TenTaiKhoan" class="btn btn-success btn-sm btnTrangThai">Hoạt động</a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <a asp-controller="QLTaiKhoan" asp-action="ChangStatus" asp-route-id="@item.TenTaiKhoan" class="btn btn-danger btn-sm btnTrangThai">Khóa</a>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
         </div>
-        @*<div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example1" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div>*@
+
+        <div class="col-md-12">
+            <div class="card card-primary">
+
+                @*CARD HEADER*@
+                <div class="card-header">
+                    <h3 class="card-title">Tài khoản giảng viên & sinh viên</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                @*CARD BODY*@
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-hover dataTable table-sm nowrap" role="grid" aria-describedby="example1_info">
+                        <thead>
+                            <tr role="row" align="center">
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tên tài khoản
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Họ tên
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    SĐT
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Email
+                                </th>
+                                <th class="sorting_desc" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Vai trò
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1">
+                                    Trạng thái
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in ViewBag.TaiKhoanSinhVienVaGiangVien)
+                            {
+                                <tr>
+                                    <td>@item.TenTaiKhoan</td>
+                                    <td>@item.HoTen</td>
+                                    <td>@item.Sdt</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.VaiTro</td>
+                                    @if (item.TrangThai == true)
+                                    {
+                                        <td class="text-center">
+                                            <a asp-controller="QLTaiKhoan" asp-action="ChangStatus" asp-route-id="@item.TenTaiKhoan" class="btn btn-success btn-sm btnTrangThai">Hoạt động</a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            <a asp-controller="QLTaiKhoan" asp-action="ChangStatus" asp-route-id="@item.TenTaiKhoan" class="btn btn-danger btn-sm btnTrangThai">Khóa</a>
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    @*@await  Component.InvokeAsync("DangKySV")*@
+</div>
+
+<div class="modal fade" id="modal-Create">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-navy">
+                <h3 class="card-title">Phân quyền tài khoản</h3>
+                <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-controller="QLTaiKhoan" asp-action="Create">
+
+                    <div class="form-group">
+                        <label>Mã số*</label>
+                        <div class="input-group">
+                            <input type="number" min="1" id="Id" name="Id" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Họ</label>
+                        <div class="input-group">
+                            <input type="text" id="Ho" name="Ho" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên</label>
+                        <div class="input-group">
+                            <input type="text" id="Ten" name="Ten" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <div class="input-group">
+                            <select id="GioiTinh" name="GioiTinh" class="form-control">
+                                <option value="0">Nữ</option>
+                                <option value="1">Nam</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ngày sinh</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input type="datetime-local" id="NgaySinh" name="NgaySinh" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <div class="input-group">
+                            <input type="text" id="DiaChi" name="DiaChi" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>SĐT</label>
+                        <div class="input-group">
+                            <input type="text" id="Sdt" name="Sdt" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <div class="input-group">
+                            <input type="text" id="Email" name="Email" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chọn vai trò</label>
+                        <select id="role" name="role" class="form-control">
+                            <option value="GVHD">Giảng viên</option>
+                            <option value="SinhVien">Sinh viên</option>
+                            <option value="QuanLy">Quản lý</option>
+                            <option value="Administrators">Quản trị viên</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success">Tạo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>

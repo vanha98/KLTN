@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class initialnew : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -214,7 +214,8 @@ namespace Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    IsEnabled = table.Column<bool>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,6 +227,7 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     ID = table.Column<long>(nullable: false),
+                    IDDot = table.Column<int>(nullable: false),
                     TenDeTai = table.Column<string>(nullable: true),
                     MoTa = table.Column<string>(nullable: true),
                     TenTep = table.Column<string>(nullable: true),
@@ -233,6 +235,7 @@ namespace Data.Migrations
                     IDGiangVien = table.Column<long>(nullable: true),
                     IDNguoiDangKy = table.Column<long>(nullable: true),
                     NgayLap = table.Column<DateTime>(type: "datetime", nullable: true),
+                    NgayDangKy = table.Column<DateTime>(nullable: true),
                     NgayThucHien = table.Column<DateTime>(nullable: true),
                     NgayKetThuc = table.Column<DateTime>(nullable: true),
                     Loai = table.Column<bool>(nullable: true),

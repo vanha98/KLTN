@@ -23,8 +23,11 @@ namespace KLTN.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index(string mess)
         {
+            IEnumerable<MoDot> listDotDangKy = await _service.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
+            MoDot DotDangKyMoiNhat = listDotDangKy.ToList().Last();
+
             MoDot moDot = await _service.GetEntity(x => x.Status == (int)MoDotStatus.Mo);
-            DeTaiNghienCuu detai = await _serviceDeTai.GetEntity(x => x.NgayThucHien != null);
+            DeTaiNghienCuu detai = await _serviceDeTai.GetEntity(x => x.NgayThucHien != null && x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt);
             if(mess != "")
             {
                 ViewBag.mess = mess;
@@ -87,9 +90,10 @@ namespace KLTN.Areas.Admin.Controllers
                     item.NgayKetThuc = NgayKtDeTai;
                     await _serviceDeTai.Update(item);
                 }
+                return RedirectToAction("Index", new { mess = "Tạo thời gian thực hiện thành công" });
             }
-            
-            return RedirectToAction("Index", new { mess = "Tạo thời gian thực hiện thành công" });
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

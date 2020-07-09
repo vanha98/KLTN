@@ -40,27 +40,33 @@ namespace KLTN.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username,model.Password,model.RememberMe,false);
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByNameAsync(model.Username);
-                    var role = await _userManager.GetRolesAsync(user);
+                
+                    var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                    if (result.Succeeded)
+                    {
+                        var checkingUser = _userManager.FindByNameAsync(model.Username);
+                        if ((bool)checkingUser.Result.IsEnabled)
+                        {
+                            var user = await _userManager.FindByNameAsync(model.Username);
+                            var role = await _userManager.GetRolesAsync(user);
 
-                    if (role[0] == "QuanLy" || role[0] == "Admin")
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "Admin" });
+                            if (role[0] == "QuanLy" || role[0] == "Administrators")
+                            {
+                                return RedirectToAction("Index", "Home", new { area = "Admin" });
+                            }
+                            else if (role[0] == "GVHD")
+                            {
+                                return RedirectToAction("Index", "Home", new { area = "GVHD" });
+                            }
+                            else if (role[0] == "SinhVien")
+                            {
+                                return RedirectToAction("Index", "Home", new { area = "SinhVien" });
+                            }
+                        }
                     }
-                    else if (role[0] == "GVHD")
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "GVHD" });
-                    }
-                    else if (role[0] == "SinhVien")
-                    {
-                        return RedirectToAction("Index", "Home", new { area = "SinhVien" });
-                    }
-                }
+                
             }
-            ModelState.AddModelError("", "Invalid login attempt");
+            ModelState.AddModelError("", "Lỗi đăng nhập");
             return View(model);
         }
         //public async Task<IActionResult> Authencate (LoginRequest request)

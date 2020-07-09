@@ -531,6 +531,12 @@ namespace KLTN.Areas.Admin.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename);
         }
 
+        public async Task<IActionResult> XemLichSuDeTai()
+        {
+            IEnumerable<DeTaiNghienCuu> listLichSuDetai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.HoanThanh);
+            return View(listLichSuDetai);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PhanCongGiangVien(long IdGiangVien, long IdDeTai)
         {
@@ -621,6 +627,13 @@ namespace KLTN.Areas.Admin.Controllers
             {
                 return diemtb / chia * 1.0;
             }
+        }
+
+        public async Task<IActionResult> XemNhom(long id)
+        {
+            var DeTai = await _service.GetById(id);
+            var NhomSV = await _serviceNhomSV.GetAll(x => x.IddeTai == DeTai.Id);
+            return ViewComponent("ToggleThongTinSinhVien", NhomSV.Select(x => x.IdsinhVienNavigation));
         }
     }
 }
