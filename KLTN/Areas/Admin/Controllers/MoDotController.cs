@@ -13,10 +13,14 @@ namespace KLTN.Areas.Admin.Controllers
     public class MoDotController : Controller
     {
         private readonly IMoDot _service;
+        private readonly IXetDuyetDanhGia _serviceXDDG;
+        private readonly IHoiDong _serviceHoiDong;
         private readonly IDeTaiNghienCuu _serviceDeTai;
 
-        public MoDotController(IMoDot service, IDeTaiNghienCuu serviceDeTai)
+        public MoDotController(IMoDot service, IDeTaiNghienCuu serviceDeTai, IXetDuyetDanhGia serviceXDDG, IHoiDong serviceHoiDong)
         {
+            _serviceHoiDong = serviceHoiDong;
+            _serviceXDDG = serviceXDDG;
             _service = service;
             _serviceDeTai = serviceDeTai;
         }
@@ -24,6 +28,10 @@ namespace KLTN.Areas.Admin.Controllers
         public async Task<IActionResult> Index(string mess)
         {
             IEnumerable<MoDot> listDotDangKy = await _service.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
+            if(!listDotDangKy.Any())
+            {
+                return View();
+            }
             MoDot DotDangKyMoiNhat = listDotDangKy.ToList().Last();
 
             MoDot moDot = await _service.GetEntity(x => x.Status == (int)MoDotStatus.Mo);
@@ -53,6 +61,33 @@ namespace KLTN.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(MoDot moDot)
         {
+            var allXDDG = await _serviceXDDG.GetAll();
+            if (allXDDG.Any())
+            {
+                foreach (var item in allXDDG)
+                {
+                    item.Status = 0;
+                    await _serviceXDDG.Update(item);
+                }
+            }
+            var HoiDong = await _serviceHoiDong.GetAll();
+            if (HoiDong.Any())
+            {
+                foreach (var item in HoiDong)
+                {
+                    item.StatusPhanCong = (int)StatusPhanCong.ChuaPhanCong;
+                    await _serviceHoiDong.Update(item);
+                }
+            }
+            var DeTai = await _serviceDeTai.GetAll();
+            if (DeTai.Any())
+            {
+                foreach (var item in DeTai)
+                {
+                    item.TinhTrangPhanCong = (int)StatusPhanCong.ChuaPhanCong;
+                    await _serviceDeTai.Update(item);
+                }
+            }
             moDot.Status = 1;
             moDot.IdquanLy = long.Parse(User.Identity.Name);
             await _service.Add(moDot);

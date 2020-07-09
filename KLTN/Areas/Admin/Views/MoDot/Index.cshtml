@@ -7,16 +7,13 @@
 @section Script
 {
     <script>
-        $(function ()
-        {
+        $(function () {
             $('.datepicker').datepicker();
         })
     </script>
     <script>
-        $(document).ready(function ()
-        {
-            $(".btnDelete").on("click", function ()
-            {
+        $(document).ready(function () {
+            $(".btnDelete").on("click", function () {
                 var id = $(this).attr("id");
                 var SetModalFooter = $("#modelfooter").html("");
                 var Data = '<a class="btn btn-danger btn-block" href="MoDot/Delete/' + id + '">Xóa</a>'
@@ -24,24 +21,20 @@
             })
         });
 
-        $("#Loai").change(function ()
-        {
+        $("#Loai").change(function () {
             var loai = $(this).val();
-            if (loai != 1)
-            {
+            if (loai != 1) {
                 $('.MocDiem').prop("hidden", false);
             }
-            else
-            {
-                if (!$(".MocDiem").is(":hidden"))
-                {
+            else {
+                if (!$(".MocDiem").is(":hidden")) {
                     $('.MocDiem').prop("hidden", true);
                 }
             }
         })
     </script>
 }
-@if(ViewBag.mess != null)
+@if (ViewBag.mess != null)
 {
     <script type="text/javascript">
         window.onload = function ()
@@ -59,7 +52,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Sự kiện</h3>
                         <div class="card-tools">
-                            <button type="button" id="@Model.Id" class="btn btn-tool btnDelete text-right"  data-toggle="modal" data-target="#modal-sm"><i class="fas fa-times"></i></button>
+                            <button type="button" id="@Model.Id" class="btn btn-tool btnDelete text-right" data-toggle="modal" data-target="#modal-sm"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -137,7 +130,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                 </div>
-                                <input  type="datetime-local" id="NgayBdDeTai" name="NgayBdDeTai" value="@ViewBag.NgayBdDeTai" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+                                <input type="datetime-local" id="NgayBdDeTai" name="NgayBdDeTai" value="@ViewBag.NgayBdDeTai" class="form-control" data-provide="datepicker" data-date-format="mm/dd/yyyy">
                             </div>
                         </div>
 

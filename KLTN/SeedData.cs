@@ -14,9 +14,7 @@ namespace KLTN
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            EnsureCreatedUser(services, "111641001", "Administrators", new Claim[]{
-                    new Claim("Name", "Trần Văn Admin"),
-                });
+            
             var context = services.GetRequiredService<KLTNContext>();
             await context.Database.MigrateAsync();
             
@@ -30,6 +28,10 @@ namespace KLTN
             
             if (!context.Users.Any())
             {
+                EnsureCreatedUser(services, "111641001", "Administrators", new Claim[]{
+                    new Claim("Name", "Trần Văn Admin"),
+                });
+
                 EnsureCreatedUser(services, "3116410022", "SinhVien", new Claim[]{
                     new Claim("Name", "Tạ Văn Hà"),
                 });
@@ -62,7 +64,8 @@ namespace KLTN
             {
                 user = new AppUser
                 {
-                    UserName = username
+                    UserName = username,
+                    IsEnabled = true,
                 };
                 var result = userMgr.CreateAsync(user, "Pass123$").Result;
                 if (!result.Succeeded)

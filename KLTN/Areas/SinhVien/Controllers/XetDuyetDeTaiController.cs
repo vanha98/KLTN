@@ -37,7 +37,8 @@ namespace KLTN.Areas.SinhVien.Controllers
             DeTaiNghienCuu DetaiXetDuyet = (from t0 in _context.DeTaiNghienCuu
                                             join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai
                                             join t2 in _context.NhomSinhVien on t0.Id equals t2.IddeTai
-                                            where t2.IdsinhVien == long.Parse(User.Identity.Name) && t2.IdnhomNavigation.Status == 1
+                                            where t2.IdsinhVien == long.Parse(User.Identity.Name) 
+                                               && t2.IdnhomNavigation.Status == 1 && t1.Status == 1
                                             select t0).SingleOrDefault();
             List<CtxetDuyetVaDanhGia> ct = new List<CtxetDuyetVaDanhGia>();
             if(DetaiXetDuyet != null)
@@ -47,6 +48,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 if (xetDuyetVaDanhGia != null)
                 {
                     ViewBag.XDDG = xetDuyetVaDanhGia;
+                    ViewBag.BoNhiem = xetDuyetVaDanhGia.IdhoiDongNavigation.BoNhiem;
                     ct = xetDuyetVaDanhGia.CtxetDuyetVaDanhGia.ToList();
                     double diemtb = 0;
                     int chia = 0;
@@ -74,6 +76,10 @@ namespace KLTN.Areas.SinhVien.Controllers
                     {
                         ViewBag.DiemTB = diemtb / chia * 1.0;
                     }
+                }
+                else
+                {
+                    return View();
                 }
             }
             

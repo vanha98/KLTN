@@ -96,9 +96,9 @@
     });
 
     ////reLoad
-    function ReloadNoiDung(idDeTai) {
+    function ReloadNoiDung(idDeTai,tab) {
         $(".card-primary").html("");
-        $.get('/GVHD/XetDuyetDeTai/LoadNoiDung/' + idDeTai, function (content) {
+        $.get('/GVHD/XetDuyetDeTai/LoadNoiDung/', { idDeTai: idDeTai, tab: tab }, function (content) {
             $(".card-primary").html(content);
         });
     }
@@ -109,7 +109,7 @@
         $(this).toggleClass("table-info");
         var iddeTai = $(this).attr("id");
         $('#valueIdDeTai').val(iddeTai);
-        ReloadNoiDung(iddeTai);
+        ReloadNoiDung(iddeTai,1);
         //LoadNoiDung(idbaipost);
     });
 
@@ -118,7 +118,7 @@
         $(this).toggleClass("table-info");
         var iddeTai = $(this).attr("id");
         $('#valueIdDeTai').val(iddeTai);
-        ReloadNoiDung(iddeTai);
+        ReloadNoiDung(iddeTai,2);
         //LoadNoiDung(idbaipost);
     });
 
@@ -196,6 +196,7 @@
                 success: function (response) {
                     if (response.status == true) {
                         ReloadNoiDung(idDeTai);
+                        $('#LkRefreshList').trigger('click');
                         toastr.success(response.mess);
                     }
                     else {

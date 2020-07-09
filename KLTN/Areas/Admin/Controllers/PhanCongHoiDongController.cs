@@ -22,6 +22,7 @@ namespace KLTN.Areas.Admin.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
+        private static int Dot;
         public PhanCongHoiDongController(UserManager<AppUser> userManager, IHoiDong serviceHoiDong,
              IDeTaiNghienCuu serviceDeTai, IMapper mapper, IMoDot serviceMoDot,
              IAuthorizationService authorizationService, IXetDuyetDanhGia serviceXetDuyetDanhGia)
@@ -50,8 +51,18 @@ namespace KLTN.Areas.Admin.Controllers
                 ViewBag.MoDot = temp;
                 ViewBag.IdMoDot = moDot.Id;
             }
-            var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
+            var allDot = await _serviceMoDot.GetAll();
+            if (!allDot.Any())
+                return View();
+            Dot = 1;
             var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
+            if (allDot.Count() > 1 && allDot.ToList()[allDot.Count() - 2].Loai == moDot.Loai)
+            {
+                Dot = 2;
+                deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai);
+            }
+            var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
+            
             ViewBag.DeTai = deTai;
             return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
@@ -121,6 +132,8 @@ namespace KLTN.Areas.Admin.Controllers
             var hoiDong = await _serviceHoiDong.GetById(idHoiDong);
             var list = hoiDong.XetDuyetVaDanhGia.Where(x=>x.Status == 1);
             var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
+            if (Dot == 2)
+                deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai);
             List<DeTaiNghienCuu> datas = new List<DeTaiNghienCuu>();
             if (list.Any())
             {
@@ -145,7 +158,20 @@ namespace KLTN.Areas.Admin.Controllers
             for (int i = 0; i<XDDG.Count();i++)
             {
                 XDDG[i].IddeTaiNavigation.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
+                if (Dot == 2)
+                    XDDG[i].IddeTaiNavigation.TinhTrangDeTai = (int)StatusDeTai.DanhGiaLai;
+                XDDG[i].IddeTaiNavigation.TinhTrangPhanCong = (int)StatusPhanCong.ChuaPhanCong;
                 await _serviceXetDuyetDanhGia.Delete(XDDG[i]);
+            }
+            if(idsDeTai.Length == 0)
+            {
+                hoiDong.StatusPhanCong = 0; //chưa phân công
+                await _serviceHoiDong.Update(hoiDong);
+                return Ok(new
+                {
+                    status = true,
+                    mess = MessageResult.UpdateSuccess
+                });
             }
             for (int i = 0; i < idsDeTai.Length; i++)
             {

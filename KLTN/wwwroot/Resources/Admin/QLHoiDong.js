@@ -246,6 +246,8 @@
                             table.ajax.reload();
                             toastr.success(res.mess);
                         }
+                        else
+                            toastr.error(res.mess);
                     }
                 });
             })

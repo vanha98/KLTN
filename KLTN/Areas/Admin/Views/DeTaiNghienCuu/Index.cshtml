@@ -174,11 +174,11 @@
                                     <td>@item.IdNguoiDangKy</td>
                                     @if (item.IdgiangVien != null)
                                     {
-                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                        <td><button id="@item.Id" class="btn btn-success btn-sm btnPhanCong" data-toggle="modal" data-target="#modal-PhanCongGVHD">@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten) </button></td>
                                     }
                                     else
                                     {
-                                        <td><button id="@item.Id" class="btn btn-warning btn-xs btnPhanCong" data-toggle="modal" data-target="#modal-PhanCongGVHD">Chưa có GVHD</button></td>
+                                        <td><button id="@item.Id" class="btn btn-warning btn-sm btnPhanCong" data-toggle="modal" data-target="#modal-PhanCongGVHD">Chưa có GVHD</button></td>
                                     }
 
                                     @if (item.TinhTrangDeTai == 3)
