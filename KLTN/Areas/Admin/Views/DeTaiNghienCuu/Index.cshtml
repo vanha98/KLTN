@@ -72,7 +72,10 @@
                                     Giảng viên
                                 </th>
                                 <th tabindex="0" aria-controls="example1" rowspan="1">
-                                    Tình trạng
+                                    Tình trạng đăng ký
+                                </th>
+                                <th tabindex="0" aria-controls="example1" rowspan="1">
+                                    Tình trạng đề tài
                                 </th>
                                 <th>
 
@@ -82,31 +85,45 @@
                         <tbody>
                             @foreach (var item in Model.listDeTaiHienTai)
                             {
-                                <tr>
-                                    <td>@item.Id</td>
-                                    <td>@item.TenDeTai</td>
-                                    <td>@item.MoTa</td>
-                                    <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
-                                    <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                                    @if (item.IdgiangVien != null)
-                                    {
-                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
-                                    }
-                                    else
-                                    {
-                                        <td><a>Chưa có GVHD</a></td>
-                                    }
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.TenDeTai</td>
+                                <td>@item.MoTa</td>
+                                <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                @if (item.IdgiangVien != null)
+                                {
+                                    <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                }
+                                else
+                                {
+                                    <td><a>Chưa có GVHD</a></td>
+                                }
 
-                                    @if (item.TinhTrangDeTai == 3)
-                                    {
-                                        <td>Đã đăng ký</td>
-                                    }
-                                    else
-                                    {
-                                        <td>Chưa đăng ký</td>
-                                    }
-                                    <td><a asp-controller="DeTaiNghienCuu" asp-action="XuatBaoCaoChiTietDeTai" asp-route-id="@item.Id" class="btn btn-primary btn-xs" title="Báo cáo chi tiết"><i class="fas fa-download"></i></a></td>
-                                </tr>
+                                @if (item.TinhTrangDangKy == 0)
+                                {
+                                    <td>Đã đăng ký</td>
+                                }
+                                else
+                                {
+                                    <td>Chưa đăng ký</td>
+                                    <td>Chưa thực hiện</td>
+                                }
+
+                                @if (item.TinhTrangDeTai == (int)StatusDeTai.HoanThanh)
+                                {
+                                    <td>Hoàn thành</td>
+                                }
+                                else if(item.TinhTrangDeTai == (int)StatusDeTai.Huy)
+                                {
+                                    <td>Hủy</td>
+                                }
+                                else if(item.TinhTrangDeTai == (int)StatusDeTai.DaDangKy || item.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai)
+                                {
+                                    <td>Đang thực hiện</td>
+                                }
+                                <td><a asp-controller="DeTaiNghienCuu" asp-action="XuatBaoCaoChiTietDeTai" asp-route-id="@item.Id" class="btn btn-primary btn-xs" title="Báo cáo chi tiết"><i class="fas fa-download"></i></a></td>
+                            </tr>
                             }
                         </tbody>
 

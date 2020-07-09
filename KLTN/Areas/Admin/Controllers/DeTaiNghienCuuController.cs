@@ -40,6 +40,8 @@ namespace KLTN.Areas.Admin.Controllers
 
             IEnumerable<DeTaiNghienCuu> listDeTaiHienTai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet 
                                                                                  || x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy
+                                                                                 || x.TinhTrangDeTai == (int)StatusDeTai.HoanThanh
+                                                                                 || x.TinhTrangDeTai == (int)StatusDeTai.Huy
                                                                                  && (x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt)
                                                                                  || (x.NgayDangKy == null && x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet));
             IEnumerable<DeTaiNghienCuu> listDeTaiDeXuatHienTai = await _service.GetAll(x => x.Loai == LoaiDeTai.DeXuat
@@ -448,9 +450,9 @@ namespace KLTN.Areas.Admin.Controllers
                             #endregion
 
                             #region -- Details Hội đồng nghiệm thu --
-                            rowSheet2 += 1;
+                            rowSheet3 += 1;
                             IEnumerable<CtxetDuyetVaDanhGia> ctXetDuyet = await _serviceCTXetDuyetVaDanhGia.GetAll(x => x.IdxetDuyetNavigation.IddeTai == id
-                                                                                                                   && x.IdxetDuyetNavigation.IdmoDotNavigation.Loai == (int)MoDotLoai.XetDuyetDeTai
+                                                                                                                   && x.IdxetDuyetNavigation.IdmoDotNavigation.Loai == (int)MoDotLoai.NghiemThuDeTai
                                                                                                                    && x.IdxetDuyet == dot.Id);
                             foreach (var item in ctXetDuyet)
                             {
@@ -475,7 +477,7 @@ namespace KLTN.Areas.Admin.Controllers
                                 Sheet1.Cells[string.Format("D{0}", rowSheet3)].Value = item.CauTraLoi;
                                 Sheet1.Cells[string.Format("E{0}", rowSheet3)].Value = item.NhanXet;
                                 Sheet1.Cells[string.Format("F{0}", rowSheet3)].Value = item.Diem;
-                                rowSheet2++;
+                                rowSheet3++;
                             }
                             Sheet1.Cells[string.Format("A{0}:E{1}", rowSheet3, rowSheet3)].Merge = true;
                             Sheet1.Cells["A" + rowSheet3].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
@@ -533,7 +535,7 @@ namespace KLTN.Areas.Admin.Controllers
 
         public async Task<IActionResult> XemLichSuDeTai()
         {
-            IEnumerable<DeTaiNghienCuu> listLichSuDetai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.HoanThanh);
+            IEnumerable<DeTaiNghienCuu> listLichSuDetai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.HoanThanh || x.TinhTrangDeTai == (int)StatusDeTai.Huy);
             return View(listLichSuDetai);
         }
 

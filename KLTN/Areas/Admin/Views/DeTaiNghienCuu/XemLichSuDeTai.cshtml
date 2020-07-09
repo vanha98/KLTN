@@ -65,38 +65,38 @@
                                     Giảng viên
                                 </th>
                                 <th tabindex="0" aria-controls="example1" rowspan="1">
-                                    Tình trạng
+                                    Tình trạng đề tài
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@item.Id</td>
-                                    <td>@item.TenDeTai</td>
-                                    <td>@item.MoTa</td>
-                                    <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
-                                    <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
-                                    <td><button id="@item.Id" class="btn btn-sm btn-danger btnXemNhom"><i class="fas fa-user-friends"></i> Xem nhóm </button></td>
-                                    @if (item.IdgiangVien != null)
-                                    {
-                                        <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
-                                    }
-                                    else
-                                    {
-                                        <td><a>Chưa có GVHD</a></td>
-                                    }
+                            <tr>
+                                <td>@item.Id</td>
+                                <td>@item.TenDeTai</td>
+                                <td>@item.MoTa</td>
+                                <td><a href="~/FileUpload/DeTaiNghienCuu/@item.TepDinhKem" download="@item.TepDinhKem">@item.TenTep</a></td>
+                                <td>@item.NgayLap.Value.ToString("dd/MM/yyyy")</td>
+                                <td><button id="@item.Id" class="btn btn-sm btn-danger btnXemNhom"><i class="fas fa-user-friends"></i> Xem nhóm </button></td>
+                                @if (item.IdgiangVien != null)
+                                {
+                                    <td>@(item.IdgiangVienNavigation.Ho + " " + item.IdgiangVienNavigation.Ten)</td>
+                                }
+                                else
+                                {
+                                    <td><a>Chưa có GVHD</a></td>
+                                }
 
-                                    @if (item.TinhTrangDeTai == 3)
-                                    {
-                                        <td>Đã đăng ký</td>
-                                    }
-                                    else
-                                    {
-                                        <td>Chưa đăng ký</td>
-                                    }
-                                </tr>
+                                @if (item.TinhTrangDeTai == (int)StatusDeTai.HoanThanh)
+                                {
+                                    <td>Hoàn thành</td>
+                                }
+                                else
+                                {
+                                    <td>Hủy</td>
+                                }
+                            </tr>
                             }
                         </tbody>
                     </table>
