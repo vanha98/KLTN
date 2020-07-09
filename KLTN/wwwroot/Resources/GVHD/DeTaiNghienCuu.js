@@ -93,7 +93,7 @@
                     }
                 },
             ],
-            "order": [[7, "asc"]],
+            "order": [[8, "asc"]],
             "createdRow": function (row, data, dataIndex) {
                 if (data.tinhTrangPheDuyet == "Gửi đăng ký") {
                     $(row).addClass('changeRowColor');

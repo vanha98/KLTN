@@ -70,11 +70,11 @@
                 <div class="card-header">
                     <h3 class="card-title col text-center"><b>Danh sách hội đồng</b></h3>
                 </div>
+                @if (Model.Any())
+                {
+                    <div class="form-group" id="listHoiDong">
+                        <table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblHoiDong">
 
-                <div class="form-group" id="listHoiDong">
-                    <table class="table table-borderless table-hover dataTable table-sm" role="grid" id="tblHoiDong">
-                        @if (Model.Any())
-                        {
                             @foreach (var item in Model)
                             {
                                 <tr class="row_@item.Id" id="@item.Id">
@@ -90,17 +90,15 @@
                                 </tr>
 
                             }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td><label class="text-truncate" style="max-width: 190px">Chưa có hội đồng</label></td>
-                            </tr>
-                        }
 
-                    </table>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center">Chưa có hội đồng</div>
+                }
                 </div>
-            </div>
         </div>
 
 

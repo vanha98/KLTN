@@ -57,21 +57,9 @@
                         </div>
                         <div class="tab-pane fade " id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
                             <table id="tblDot2" class="table table-borderless table-hover dataTable table-sm" role="grid">
-                                @if (Model.tabDot2.Any())
-                                {@foreach (var item in Model.tabDot2)
-                                    {
-                                        <tr id="@item.IdDeTai">
-                                            <td>@item.TenDeTai</td>
-                                            <td>@item.TinhTrang</td>
-                                        </tr>
-                                    }
-                            }
-                            else
-                            {
                                 <tr>
                                     <td>Không có đề tài</td>
                                 </tr>
-                            }
                             </table>
                         </div>
                     }

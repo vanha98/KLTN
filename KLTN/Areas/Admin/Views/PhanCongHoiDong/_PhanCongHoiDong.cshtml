@@ -6,7 +6,7 @@
         <select class="duallistbox" multiple="multiple">
             @foreach (var item in Model)
             {
-                if (item.XetDuyetVaDanhGia.Any())
+                if (item.XetDuyetVaDanhGia.LastOrDefault()!=null && item.XetDuyetVaDanhGia.LastOrDefault().Status == 1)
                 {
                     <option selected value="@item.Id">@item.Id - @item.TenDeTai (@item.IdgiangVienNavigation.Ho  @item.IdgiangVienNavigation.Ten)</option>
                 }

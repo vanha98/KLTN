@@ -142,10 +142,6 @@
             //if (elem.hasAttribute("data-sortindex"))
                 idsDeTai.push(elem.getAttribute("value"));
         });
-        if (idsDeTai.length > 0) {
-            PhanCong(idHoiDong, idMoDot, idsDeTai);
-        }
-        else
-            toastr.error("Chưa chọn đề tài cần phân công!!");
+        PhanCong(idHoiDong, idMoDot, idsDeTai);
     });
 });
