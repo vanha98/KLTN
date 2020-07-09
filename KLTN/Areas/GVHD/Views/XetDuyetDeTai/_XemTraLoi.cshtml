@@ -1,0 +1,30 @@
+﻿@model Data.Models.CtxetDuyetVaDanhGia
+
+@if (Model != null)
+{<div class="modal-header bg-gray-light">
+    <h3 class="card-title">Câu hỏi: @Model.CauHoi  
+        @if (Model.TenTepCauHoi != "" && Model.TenTepCauHoi != null)
+        {<a href="~/FileUpload/CauHoiXetDuyetDanhGia/@Model.TepDinhKemCauHoi" download="@Model.TepDinhKemCauHoi"> - Tệp đính kèm: @Model.TenTepCauHoi</a>
+        }
+    </h3>
+    <button type="button" class="close btn btn-tool" data-dismiss="modal" aria-label="Close">
+        <i class="fas fa-times"></i>
+    </button>
+</div>
+<div class="modal-body">
+    <p>Câu trả lời: </p>
+    @if (Model.CauTraLoi != null || Model.TenTepCauTraLoi != null)
+    {<p style="white-space: pre-line">@Model.CauTraLoi</p>
+    <a href="~/FileUpload/CauHoiXetDuyetDanhGia/@Model.TepDinhKemCauTraLoi" download="@Model.TepDinhKemCauTraLoi">@Model.TenTepCauTraLoi</a>
+    }
+    else
+    {
+        <p class="text-center">Sinh viên chưa trả lời câu hỏi.</p>
+    }
+</div>
+
+}
+else
+{
+    <div>Không có dữ liệu</div>
+}

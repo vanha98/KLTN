@@ -126,14 +126,14 @@
         //LoadNoiDung(idbaipost);
     });
 
-    $(document).delegate('.btnXemNhom', 'click', function () {
-        $("#modal-NhomSV .modal-body").html("");
-        var id = $('#valueIdDeTai').val();
-        $.get('/GVHD/XetDuyetDeTai/XemNhom/' + id, function (content) {
-            $("#modal-NhomSV .modal-body").html(content);
-            $("#modal-NhomSV").modal();
-        });
-    })
+    //$(document).delegate('.btnXemNhom', 'click', function () {
+    //    $("#modal-NhomSV .modal-body").html("");
+    //    var id = $('#valueIdDeTai').val();
+    //    $.get('/GVHD/XetDuyetDeTai/XemNhom/' + id, function (content) {
+    //        $("#modal-NhomSV .modal-body").html(content);
+    //        $("#modal-NhomSV").modal();
+    //    });
+    //})
 
     //function Refresh() {
     //    $('#InputTieuDe').val('');
@@ -152,62 +152,5 @@
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
     });
 
-    $(document).delegate('.btnDatCauHoi', 'click', function () {
-        var value = $("#inputCauHoi").val();
-        var files = $("#Files").get(0).files;
-        if (value == "" && files.length == 0) {
-            toastr.error("Chưa nhập câu hỏi hoặc chưa đính kèm tệp");
-            return;
-        }
-        var idDeTai = $('#valueIdDeTai').val();
-        var data = new FormData();
-        data.append('File', files[0]);
-        data.append('CauHoi', value);
-        data.append('idDeTai', idDeTai);
-        $.ajax({
-            url: "XetDuyetDeTai/DatCauHoi",
-            type: "POST",
-            processData: false,
-            contentType: false,
-            data: data,
-            success: function (response) {
-                if (response.status == true) {
-                    ReloadNoiDung(idDeTai);
-                    toastr.success(response.mess);
-                }
-            }
-        })
-    })
-
-    $(document).delegate('.btnDanhGia', 'click', function () {
-        var DanhGia = $("#inputDanhGia").val();
-        var Diem = $("#inputDiem").val();
-        var idDeTai = $('#valueIdDeTai').val();
-        if (DanhGia == "" || Diem == "") {
-            toastr.error("Chưa nhập đánh giá hoặc điểm");
-            return;
-        }
-        if (0 <= Diem && Diem <= 10) {
-            var data = {
-                NhanXet: DanhGia,
-                Diem: Diem,
-                idDeTai: idDeTai
-            };
-            $.ajax({
-                url: "XetDuyetDeTai/DanhGia",
-                type: "POST",
-                data: data,
-                success: function (response) {
-                    if (response.status == true) {
-                        ReloadNoiDung(idDeTai);
-                        toastr.success(response.mess);
-                    }
-                    else {
-                        toastr.error(response.mess);
-                    }
-                }
-            })
-        } else
-            toastr.error("Điểm phải lớn hơn bằng 0 và nhỏ hơn bằng 10");
-    })
+    
 });

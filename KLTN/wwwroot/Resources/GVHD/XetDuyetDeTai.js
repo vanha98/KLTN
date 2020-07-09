@@ -206,4 +206,14 @@
         } else
             toastr.error("Điểm phải lớn hơn bằng 0 và nhỏ hơn bằng 10");
     })
+
+    $(document).delegate('.xemTraLoi', 'click', function (e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $("#modalXemTraLoi .modal-content").html();
+        $.get('XetDuyetDeTai/LoadCauTraLoi', { id: id }, function (data) {
+            $("#modalXemTraLoi .modal-content").html(data);
+            $("#modalXemTraLoi").modal();
+        })
+    })
 });

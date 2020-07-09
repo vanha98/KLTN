@@ -31,7 +31,7 @@
                         <div class="card-title">
                             @ViewBag.TenDeTai
                         </div>
-                        <div class="card-tools"><button class="btn btn-warning btn-sm btnXemNhom" title="Nhóm thực hiện"><i class="fas fa-user-friends"></i></button></div>
+                        @*<div class="card-tools"><button class="btn btn-warning btn-sm btnXemNhom" title="Nhóm thực hiện"><i class="fas fa-user-friends"></i></button></div>*@
                     </div>
 
                     <div class="card-body" id="NoiDung">
@@ -45,7 +45,7 @@
                                 {
                                     <p style="white-space: pre-line" id="txtNoiDungBaiPost">
                                         @ViewBag.XDDG.NoiDung
-                                        <a>@ViewBag.XDDG.TepDinhKem</a>
+                                        <a href="~/FileUpload/BaoCaoXetDuyetDanhGia/@ViewBag.XDDG.TepDinhKem" download="@ViewBag.XDDG.TepDinhKem">@ViewBag.XDDG.TenTep</a>
                                     </p>
                                 }
                                 else

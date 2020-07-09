@@ -7,6 +7,7 @@ using Data.Enum;
 using Data.Interfaces;
 using Data.Models;
 using KLTN.Areas.SinhVien.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KLTN.Areas.SinhVien.Controllers
 {
     [Area("SinhVien")]
+    [Authorize(Roles = "SinhVien")]
     public class XetDuyetDeTaiController : Controller
     {
         private readonly IMoDot _serviceMoDot;
@@ -144,7 +146,7 @@ namespace KLTN.Areas.SinhVien.Controllers
                 return false;
             }
 
-            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/CauTraLoiXetDuyetDanhGia");
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/BaoCaoXetDuyetDanhGia");
             string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
             string filePath = Path.Combine(UploadsFolder, uniqueFileName);
             await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
