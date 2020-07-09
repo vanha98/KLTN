@@ -14,7 +14,6 @@ namespace KLTN
     {
         public static async Task InitializeAsync(IServiceProvider services)
         {
-            
             var context = services.GetRequiredService<KLTNContext>();
             await context.Database.MigrateAsync();
             

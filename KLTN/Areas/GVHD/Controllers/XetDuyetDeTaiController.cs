@@ -43,12 +43,13 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             List<DeTaiNghienCuu> listDetaiXetDuyet = (from t0 in _context.DeTaiNghienCuu
                                                       join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai 
-                                                      join t2 in _context.HoiDong on t1.IdhoiDong equals t2.Id
-                                                      where t1.Status == 1
-
+                                                      //join t2 in _context.HoiDong on t1.IdhoiDong equals t2.Id
+                                                      join t3 in _context.BoNhiem on t1.IdhoiDong equals t3.IdhoiDong
+                                                      where t1.Status == 1 && t3.IdgiangVien == long.Parse(User.Identity.Name)
                                                       select t0).ToList();
             List<CtxetDuyetVaDanhGia> listCT = (from t0 in _context.CtxetDuyetVaDanhGia
-                                                where t0.IdgiangVien == long.Parse(User.Identity.Name) && t0.Diem > 0 && t0.IdxetDuyetNavigation.Status == 1
+                                                where t0.IdgiangVien == long.Parse(User.Identity.Name) 
+                                                && t0.Diem > 0 && t0.IdxetDuyetNavigation.Status == 1
                                                 select t0).ToList();
             List<TinhTrangXDDG> data = new List<TinhTrangXDDG>();
             for (int i = 0; i < listDetaiXetDuyet.Count(); i++)
@@ -235,7 +236,14 @@ namespace KLTN.Areas.GVHD.Controllers
                 {
                     deTai.TinhTrangDeTai = (int)StatusDeTai.Huy;
                 }
-                
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.XetDuyetDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
+                }
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.NghiemThuDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.HoanThanh;
+                }
                 else
                 {
                     deTai.TinhTrangDeTai = (int)StatusDeTai.DanhGiaLai;
@@ -255,6 +263,10 @@ namespace KLTN.Areas.GVHD.Controllers
                 else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.NghiemThuDeTai)
                 {
                     deTai.TinhTrangDeTai = (int)StatusDeTai.HoanThanh;
+                }
+                else
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.Huy;
                 }
             }
             await _serviceDeTai.Update(deTai);
@@ -291,7 +303,7 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             var deTai = await _serviceDeTai.GetById(model.idDeTai);
             var xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
-            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name) && x.Status == 1
+            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name)
                                                     && x.IdxetDuyet == xetDuyetVaDanhGia.Id);
             if (checkCT != null) // update
             {
@@ -361,7 +373,7 @@ namespace KLTN.Areas.GVHD.Controllers
         {
             var deTai = await _serviceDeTai.GetById(model.idDeTai);
             var xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
-            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name) && x.Status == 1
+            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name) 
                                                     && x.IdxetDuyet == xetDuyetVaDanhGia.Id);
             if (checkCT == null)
             {

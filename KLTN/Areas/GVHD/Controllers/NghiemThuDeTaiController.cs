@@ -19,22 +19,23 @@ namespace KLTN.Areas.GVHD.Controllers
     [Authorize(Roles = "GVHD")]
     public class NghiemThuDeTaiController : Controller
     {
-        //private readonly IBoNhiem _service;
+        private readonly IBoNhiem _service;
         private readonly IMoDot _serviceMoDot;
         //private readonly INhomSinhVien _serviceNhomSV;
-        //private readonly IDeTaiNghienCuu _serviceDeTai;
-        //private readonly IctXetDuyetDanhGia _serviceCT;
+        private readonly IDeTaiNghienCuu _serviceDeTai;
+        private readonly IctXetDuyetDanhGia _serviceCT;
         private readonly KLTNContext _context;
-        //private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private static MoDot DotHienTai;
+        private static int Dot;
 
         public NghiemThuDeTaiController(IBoNhiem service, INhomSinhVien serviceNhomSV, IMoDot serviceMoDot, IctXetDuyetDanhGia serviceCT, IHostingEnvironment hostingEnvironment, IDeTaiNghienCuu serviceDeTai, KLTNContext context)
         {
             //_serviceNhomSV = serviceNhomSV;
-            //_serviceCT = serviceCT;
+            _serviceCT = serviceCT;
             //_hostingEnvironment = hostingEnvironment;
-            //_service = service;
-            //_serviceDeTai = serviceDeTai;
+            _service = service;
+            _serviceDeTai = serviceDeTai;
             _serviceMoDot = serviceMoDot;
             _context = context;
         }
@@ -46,11 +47,11 @@ namespace KLTN.Areas.GVHD.Controllers
                                                       join t1 in _context.XetDuyetVaDanhGia on t0.Id equals t1.IddeTai
                                                       join t2 in _context.BoNhiem on t1.IdhoiDong equals t2.IdhoiDong
                                                       where t2.IdgiangVien == long.Parse(User.Identity.Name)
-                                                            && t2.Status == 1 
+                                                            && t1.Status == 1 
                                                       select t0).ToList();
             List<CtxetDuyetVaDanhGia> listCT = (from t0 in _context.CtxetDuyetVaDanhGia
                                                 where t0.IdgiangVien == long.Parse(User.Identity.Name) 
-                                                      && t0.Diem > 0 && t0.Status == 1 
+                                                      && t0.Diem > 0 && t0.IdxetDuyetNavigation.Status == 1 
                                                 select t0).ToList();
             List<TinhTrangXDDG> data = new List<TinhTrangXDDG>();
             for (int i = 0; i < listDetaiNghiemThu.Count(); i++)
@@ -78,24 +79,256 @@ namespace KLTN.Areas.GVHD.Controllers
             if (DotHienTai == null)
                 return View();
             ViewBag.MoDot = DotHienTai;
+            Dot = 1;
             ViewBag.Dot = 1;
             if (allDot.Count() > 1 && allDot.ToList()[allDot.Count() - 2].Loai == DotHienTai.Loai)
             {
+                Dot = 2;
                 ViewBag.Dot = 2;
             }
 
             List<TinhTrangXDDG> data = LoadList();
-            List<TinhTrangXDDG> tabDot1 = data.Where(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy).ToList();
-            List<TinhTrangXDDG> tabDot2 = data.Where(x => x.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai).ToList();
+            if (ViewBag.Dot == 1)
+            {
+                List<TinhTrangXDDG> tabDot1 = data.ToList();
+                TabDotViewModel viewx = new TabDotViewModel();
+                //viewx.ListDeTaiDuocPhanCong = listDetaiXetDuyet;
+                viewx.tabDot1 = tabDot1;
 
-            TabDotViewModel viewx = new TabDotViewModel();
-            //viewx.ListDeTaiDuocPhanCong = listDetaiXetDuyet;
-            viewx.tabDot1 = tabDot1;
-            viewx.tabDot2 = tabDot2;
-
-            return View(viewx);
+                return View(viewx);
+            }
+            else
+            {
+                List<TinhTrangXDDG> tabDot2 = data.ToList();
+                List<TinhTrangXDDG> tabDot1 = new List<TinhTrangXDDG>(); //edit lại
+                foreach (var item in tabDot2)
+                {
+                    TinhTrangXDDG t = new TinhTrangXDDG();
+                    t.IdDeTai = item.IdDeTai;
+                    t.TenDeTai = item.TenDeTai;
+                    t.TinhTrangDeTai = item.TinhTrangDeTai;
+                    t.TinhTrang = "Đã đánh giá";
+                    tabDot1.Add(t);
+                }
+                TabDotViewModel viewx = new TabDotViewModel();
+                //viewx.ListDeTaiDuocPhanCong = listDetaiXetDuyet;
+                viewx.tabDot1 = tabDot1;
+                viewx.tabDot2 = tabDot2;
+                return View(viewx);
+            }
         }
 
+        public async Task<IActionResult> LoadNoiDung(long idDeTai, int tab)
+        {
+            var deTai = await _serviceDeTai.GetById(idDeTai);
+            ViewBag.TenDeTai = deTai.TenDeTai;
+            ViewBag.NhomSV = deTai.NhomSinhVien.Select(x => x.IdsinhVienNavigation);
+            var xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
+            if (Dot == 2 && tab == 1)
+            {
+                xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 0 && 
+                                                                            x.IdmoDotNavigation.Loai == (int)MoDotLoai.NghiemThuDeTai);
+            }
+            ViewBag.XDDG = xetDuyetVaDanhGia;
+            var ct = xetDuyetVaDanhGia.CtxetDuyetVaDanhGia;
+            double diemtb = 0;
+            int chia = 0;
+            foreach (var item in ct)
+            {
+                if (item.Diem.HasValue)
+                {
+                    if (item.VaiTro == (int)LoaiVaiTro.PhanBien)
+                    {
+                        diemtb = diemtb + (2 * item.Diem.Value);
+                        chia = chia + 2;
+                    }
+                    else
+                    {
+                        diemtb = diemtb + item.Diem.Value;
+                        chia++;
+                    }
+                }
+            }
+            if (chia == 0)
+            {
+                ViewBag.DiemTB = 0;
+            }
+            else
+            {
+                ViewBag.DiemTB = diemtb / chia * 1.0;
+            }
+            if (Dot == 1)
+            {
+                if (ViewBag.DiemTB < DotHienTai.DiemToiThieu)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.Huy;
+                }
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.XetDuyetDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
+                }
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.NghiemThuDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.HoanThanh;
+                }
+                else
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.DanhGiaLai;
+                }
+
+            }
+            else
+            {
+                if (ViewBag.DiemTB < DotHienTai.DiemToiThieu)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.Huy;
+                }
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.XetDuyetDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.DaDangKy;
+                }
+                else if (ViewBag.DiemTB > DotHienTai.DiemToiDa && DotHienTai.Loai == (int)MoDotLoai.NghiemThuDeTai)
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.HoanThanh;
+                }
+                else
+                {
+                    deTai.TinhTrangDeTai = (int)StatusDeTai.Huy;
+                }
+            }
+            await _serviceDeTai.Update(deTai);
+            ViewBag.ctUSer = ct.SingleOrDefault(x => x.IdgiangVien == long.Parse(User.Identity.Name) && x.Status == 1);
+            //foreach()
+            ViewBag.Tab = tab;
+            ViewBag.Dot = Dot;
+            return PartialView("_NoiDungNghiemThuGV", ct);
+        }
+
+        [NonAction]
+        public async Task<bool> UpLoadFile(IFormFile file, CtxetDuyetVaDanhGia model)
+        {
+            if (file == null) return true;
+            string[] permittedExtensions = { ".txt", ".pdf", ".doc", ".docx", ".xlsx", ".xls" };
+
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+            {
+                return false;
+            }
+
+            string UploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "FileUpload/CauHoiXetDuyetDanhGia");
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(UploadsFolder, uniqueFileName);
+            await file.CopyToAsync(new FileStream(filePath, FileMode.Create));
+            model.TepDinhKemCauHoi = uniqueFileName;
+            model.TenTepCauHoi = file.FileName;
+            return true;
+        }
+
+        public async Task<IActionResult> DatCauHoi(ctXetDuyetDanhGiaViewModel model)
+        {
+            var deTai = await _serviceDeTai.GetById(model.idDeTai);
+            var xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
+            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name)
+                                                     && x.IdxetDuyet == xetDuyetVaDanhGia.Id);
+            if (checkCT != null) // update
+            {
+                checkCT.CauHoi = model.CauHoi;
+                checkCT.NgayTaoCauHoi = DateTime.Now;
+                if (await UpLoadFile(model.File, checkCT))
+                {
+                    if (model.File == null)
+                    {
+                        checkCT.TenTepCauHoi = "";
+                        checkCT.TepDinhKemCauHoi = "";
+                    }
+                    await _serviceCT.Update(checkCT);
+                    return Ok(new
+                    {
+                        status = true,
+                        mess = "Cập nhật câu hỏi thành công"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        status = false,
+                        mess = MessageResult.UpLoadFileFail
+                    });
+                }
+
+            }
+            //create new
+            CtxetDuyetVaDanhGia ct = new CtxetDuyetVaDanhGia
+            {
+                CauHoi = model.CauHoi,
+                IdgiangVien = long.Parse(User.Identity.Name),
+                NgayTaoCauHoi = DateTime.Now,
+                IdxetDuyet = DotHienTai.Id,
+            };
+            var vaitro = _service.GetEntity(x => x.IdhoiDong == xetDuyetVaDanhGia.IdhoiDong
+                                            && x.IdgiangVien == long.Parse(User.Identity.Name)).Result.VaiTro;
+            ct.VaiTro = vaitro.Value;
+            if (await UpLoadFile(model.File, ct))
+            {
+                if (model.File == null)
+                {
+                    ct.TenTepCauHoi = "";
+                    ct.TepDinhKemCauHoi = "";
+                }
+                xetDuyetVaDanhGia.CtxetDuyetVaDanhGia.Add(ct);
+                await _serviceDeTai.Update(deTai);
+                return Ok(new
+                {
+                    status = true,
+                    mess = "Đặt câu hỏi thành công"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    status = false,
+                    mess = MessageResult.UpLoadFileFail
+                });
+            }
+        }
+
+        public async Task<IActionResult> DanhGia(ctXetDuyetDanhGiaViewModel model)
+        {
+            var deTai = await _serviceDeTai.GetById(model.idDeTai);
+            var xetDuyetVaDanhGia = deTai.XetDuyetVaDanhGia.SingleOrDefault(x => x.Status == 1);
+            var checkCT = await _serviceCT.GetEntity(x => x.IdgiangVien == long.Parse(User.Identity.Name) 
+                                                    && x.IdxetDuyet == xetDuyetVaDanhGia.Id);
+            if (checkCT == null)
+            {
+                CtxetDuyetVaDanhGia ct = new CtxetDuyetVaDanhGia
+                {
+                    IdgiangVien = long.Parse(User.Identity.Name),
+                    IdxetDuyet = DotHienTai.Id,
+                    IdxetDuyetNavigation = xetDuyetVaDanhGia
+                };
+                var vaitro = _service.GetEntity(x => x.IdhoiDong == xetDuyetVaDanhGia.IdhoiDong
+                                            && x.IdgiangVien == long.Parse(User.Identity.Name)).Result.VaiTro;
+                ct.VaiTro = vaitro.Value;
+                ct.NhanXet = model.NhanXet;
+                ct.NgayDanhGia = DateTime.Now;
+                ct.Diem = model.Diem;
+
+                await _serviceCT.Add(ct);
+                return Ok(new { status = true, mess = "Đánh giá thành công" });
+            }
+            else
+            {
+                checkCT.NhanXet = model.NhanXet;
+                checkCT.NgayDanhGia = DateTime.Now;
+                checkCT.Diem = model.Diem;
+                await _serviceCT.Update(checkCT);
+                return Ok(new { status = true, mess = MessageResult.UpdateSuccess });
+            }
+        }
         //[NonAction]
         //public List<TinhTrangXDDG> LoadData(string SearchString, bool ActiveTabDot1)
         //{

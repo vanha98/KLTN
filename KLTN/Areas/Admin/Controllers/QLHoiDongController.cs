@@ -160,7 +160,7 @@ namespace KLTN.Areas.Admin.Controllers
             if(obj.Id > 0)
             {
                 var hoiDong = await _serviceHoiDong.GetById(obj.Id);
-                if(await EditHoiDong(obj, hoiDong))
+                if (await EditHoiDong(obj, hoiDong))
                     return Ok(new
                     {
                         status = true,

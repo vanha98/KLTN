@@ -1,29 +1,36 @@
-﻿@model Data.Models.CtxetDuyetVaDanhGia
+﻿@model IEnumerable<Data.Models.CtxetDuyetVaDanhGia>
 
 <div class="card-header">
-    <div class="card-title">Tên đề tài</div>
+    <div class="card-title">
+        @ViewBag.TenDeTai
+    </div>
+    <div class="card-tools"><button class="btn btn-warning btn-sm btnXemNhom" title="Nhóm thực hiện"><i class="fas fa-user-friends"></i></button></div>
 </div>
+
 <div class="card-body" id="NoiDung">
     <div class="row">
-        <div class="mailbox-read-message">
-            <p style="white-space: pre-line" id="txtNoiDungBaiPost">
-                Kính gửi hội dồng,
-
-                Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài
-                Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài. Nội dung mô tả sơ lược về đề tài.
-
-                Nhóm thực hiện.
-
-                TEPDINHKEM.docx
-            </p>
-        </div>
+        <label>Báo cáo của sinh viên: </label>
     </div>
-
     <div class="row">
-        <div class="col-12">
-            <button class="w-100 btn btn-warning">Thông tin nhóm thực hiện</button>
+        <div class="mailbox-read-message">
+            @if (ViewBag.XDDG.NoiDung != null)
+            {
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    @ViewBag.XDDG.NoiDung
+                    <a href="~/FileUpload/BaoCaoXetDuyetDanhGia/@ViewBag.XDDG.TepDinhKem" download="@ViewBag.XDDG.TepDinhKem">@ViewBag.XDDG.TenTep</a>
+                </p>
+            }
+            else
+            {
+                <p style="white-space: pre-line" id="txtNoiDungBaiPost">
+                    Chưa có nội dung
+                </p>
+            }
         </div>
     </div>
+
+
+
 
     <hr />
 
@@ -32,17 +39,38 @@
             <h3 class="form-group text-center">Phần đánh giá</h3>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="input-group">
-                <textarea type="text" class="form-control" placeholder="Nhập câu hỏi..."></textarea>
-                <span class="input-group-append">
-                    <button type="button" class="btn btn-info btn-flat">Đặt câu hỏi</button>
-                </span>
+    @if (ViewBag.Dot == 2 && ViewBag.Tab == 1)
+    {
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                <div class="input-group">
+                    @if (ViewBag.ctUSer != null)
+                    {
+                        <textarea type="text" class="form-control" id="inputCauHoi" placeholder="Nhập câu hỏi...">@ViewBag.ctUSer.CauHoi</textarea>
+                    }
+                    else
+                    {
+                        <textarea type="text" class="form-control" id="inputCauHoi" placeholder="Nhập câu hỏi..."></textarea>
+                    }
+                    <span class="input-group-append">
+                        <button type="button" class="btn btn-info btn-flat btnDatCauHoi">Đặt câu hỏi</button>
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col">
+                <div class="custom-file">
+                    <input type="file" id="Files" class="custom-file-input" name="Files" />
+                    <label class="custom-file-label" for="customFile">Chọn tệp đính kèm(nếu có)</label>
+                </div>
+            </div>
+        </div>
+    }
+
 
     <br />
 
@@ -58,24 +86,61 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                    <table id="tblCauHoi" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                         <thead>
                             <tr role="row">
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>Thành viên</th>
+                                <th>
                                     Vai trò
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>
                                     Câu hỏi
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
-                                    Thời gian
+                                <th>
+                                    Tệp đính kèm
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>
+                                    Ngày gửi
+                                </th>
+                                <th>
                                     Câu trả lời
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
+                            @if (Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    if (item.CauHoi != null || item.TenTepCauHoi != null)
+                                    {
+                                        <tr id="@item.Id">
+                                            <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten</td>
+                                            @if (item.VaiTro == 1)
+                                            {
+                                                <td>Chủ tịch</td>
+                                            }
+                                            else if (item.VaiTro == 2)
+                                            {
+                                                <td>Ủy viên</td>
+                                            }
+                                            else if (item.VaiTro == 3)
+                                            {
+                                                <td>Thư ký</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Phản biện</td>
+                                            }
+                                            <td>@item.CauHoi</td>
+                                            <td><a href="~/FileUpload/CauHoiXetDuyetDanhGia/@item.TepDinhKemCauHoi" download="@item.TepDinhKemCauHoi">@item.TenTepCauHoi</a></td>
+                                            <td>@(item.NgayTaoCauHoi.HasValue ? item.NgayTaoCauHoi.Value.ToString("HH:mm, dd/MM/yyyy") : "")</td>
+                                            <td><a href="#" data-id="@item.Id" class="xemTraLoi"><i class="fas fa-eye"></i> Xem</a></td>
+
+                                        </tr>
+                                    }
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -83,18 +148,32 @@
         </div>
     </div>
 
+    @if (ViewBag.Dot == 2 && ViewBag.Tab == 1)
+    {
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                <div class="input-group">
+                    @if (ViewBag.ctUSer != null)
+                    {
+                        <textarea type="text" class="form-control" id="inputDanhGia" placeholder="Nhập đánh giá...">@ViewBag.ctUSer.NhanXet</textarea>
+                        <input type="number" class="form-control" id="inputDiem" value="@ViewBag.ctUSer.Diem" style="height:63px; width:10px" placeholder="Nhập điểm..." />
+                    }
+                    else
+                    {
+                        <textarea type="text" class="form-control" id="inputDanhGia" placeholder="Nhập đánh giá..."></textarea>
+                        <input type="number" class="form-control" id="inputDiem" style="height:63px; width:10px" placeholder="Nhập điểm..." />
+                    }
 
-    <div class="row">
-        <div class="col">
-            <div class="input-group">
-                <textarea type="text" class="form-control" placeholder="Nhập đánh giá..."></textarea>
-                <input type="number" class="form-control" style="height:63px; width:10px" placeholder="Nhập điểm..." />
-                <span class="input-group-append">
-                    <button type="button" class="btn btn-info btn-flat">Gửi đánh giá</button>
-                </span>
+                    <span class="input-group-append">
+                        <button type="button" class="btn btn-info btn-flat btnDanhGia">Gửi đánh giá</button>
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
+    }
 
     <br />
 
@@ -110,25 +189,63 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
+                    <table id="tblDanhGia" class="table table-bordered table-hover dataTable table-sm" role="grid" aria-describedby="example1_info">
                         <thead>
                             <tr role="row">
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>Thành viên</th>
+                                <th>
                                     Vai trò
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>
                                     Đánh giá
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
-                                    Thời gian
+                                <th>
+                                    Ngày đánh giá
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1">
+                                <th>
                                     Điểm
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
+                            @if (Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    if (item.Diem.HasValue)
+                                    {
+                                        <tr id="@item.Id">
+                                            <td>@item.IdgiangVienNavigation.Ho @item.IdgiangVienNavigation.Ten</td>
+                                            @if (item.VaiTro == 1)
+                                            {
+                                                <td>Chủ tịch</td>
+                                            }
+                                            else if (item.VaiTro == 2)
+                                            {
+                                                <td>Ủy viên</td>
+                                            }
+                                            else if (item.VaiTro == 3)
+                                            {
+                                                <td>Thư ký</td>
+                                            }
+                                            else
+                                            {
+                                                <td>Phản biện</td>
+                                            }
+                                            <td>@item.NhanXet</td>
+                                            <td>@item.NgayDanhGia.Value.ToString("HH:mm, dd/MM/yyyy")</td>
+                                            <td>@item.Diem</td>
+                                        </tr>
+                                    }
+                                }
+                            }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" colspan="4"><b>Điểm trung bình</b></td>
+                                <td class="bg-success diemTB">@ViewBag.DiemTB</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -136,4 +253,3 @@
     </div>
 
 </div>
-

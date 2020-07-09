@@ -97,7 +97,7 @@
     ////reLoad
     function ReloadNoiDung(idDeTai,tab) {
         $(".card-primary").html("");
-        $.get('/GVHD/XetDuyetDeTai/LoadNoiDung/', { idDeTai: idDeTai, tab: tab }, function (content) {
+        $.get('/GVHD/NghiemThuDeTai/LoadNoiDung/', { idDeTai: idDeTai, tab: tab }, function (content) {
             $(".card-primary").html(content);
         });
     }
@@ -160,7 +160,7 @@
         data.append('CauHoi', value);
         data.append('idDeTai', idDeTai);
         $.ajax({
-            url: "XetDuyetDeTai/DatCauHoi",
+            url: "NghiemThuDeTai/DatCauHoi",
             type: "POST",
             processData: false,
             contentType: false,
@@ -189,7 +189,7 @@
                 idDeTai: idDeTai
             };
             $.ajax({
-                url: "XetDuyetDeTai/DanhGia",
+                url: "NghiemThuDeTai/DanhGia",
                 type: "POST",
                 data: data,
                 success: function (response) {
