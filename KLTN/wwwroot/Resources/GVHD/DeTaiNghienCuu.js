@@ -65,7 +65,7 @@
                     orderable: false,
                     "className": 'text-center',
                     "render": function (data, type, full, meta) {
-                        return '<button class="btn btn-sm btn-info" onclick="XemBaoCao(' + full.id + ')"><i class="fas fa-clipboard-list"></i> Báo cáo </button>';
+                        return '<button class="btn btn-sm btn-info" onclick="BaoCaoTienDo(' + full.id + ')"><i class="fas fa-clipboard-list"></i> Báo cáo </button>';
                     }
                 },
                 {

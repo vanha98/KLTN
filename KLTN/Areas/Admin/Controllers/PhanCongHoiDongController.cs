@@ -38,8 +38,15 @@ namespace KLTN.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
+            Dot = 1;
             var moDot = await _serviceMoDot.GetEntity(x => x.Status == 1);
-            if(moDot != null && moDot.Loai != (int)MoDotLoai.DangKy)
+            var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
+            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
+            var allDot = await _serviceMoDot.GetAll();
+            ViewBag.DeTai = deTai;
+            if (!allDot.Any())
+                return View(hoiDong);
+            if (moDot != null && moDot.Loai != (int)MoDotLoai.DangKy)
             {
                 string temp = "";
                 if (moDot.Loai == (int)MoDotLoai.XetDuyetDeTai)
@@ -51,19 +58,13 @@ namespace KLTN.Areas.Admin.Controllers
                 ViewBag.MoDot = temp;
                 ViewBag.IdMoDot = moDot.Id;
             }
-            var allDot = await _serviceMoDot.GetAll();
-            if (!allDot.Any())
-                return View();
-            Dot = 1;
-            var deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy);
             if (allDot.Count() > 1 && allDot.ToList()[allDot.Count() - 2].Loai == moDot.Loai)
             {
                 Dot = 2;
                 deTai = await _serviceDeTai.GetAll(x => x.TinhTrangPhanCong == (int)StatusPhanCong.ChuaPhanCong && x.TinhTrangDeTai == (int)StatusDeTai.DanhGiaLai);
+                ViewBag.DeTai = deTai;
             }
-            var hoiDong = await _serviceHoiDong.GetAll(x => x.Status == 1);
             
-            ViewBag.DeTai = deTai;
             return View(hoiDong.OrderBy(x=>x.StatusPhanCong));
         }
 

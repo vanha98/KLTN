@@ -125,6 +125,17 @@ namespace KLTN.Areas.GVHD.Controllers
             }
         }
 
+        public async Task<IActionResult> LoadBaoCao(long id)
+        {
+            var DeTai = await _service.GetById(id);
+            if (DeTai != null)
+            {
+                var baoCao = DeTai.BaoCaoTienDo.ToList();
+                return ViewComponent("ListBaoCao", baoCao);
+            }
+            return ViewComponent("ListBaoCao");
+        }
+
         [NonAction]
         public async Task<bool> UpLoadFile(IFormFile file, DeTaiNghienCuu model)
         {

@@ -14,11 +14,13 @@ namespace KLTN.Areas.Admin.Controllers
     {
         private readonly IMoDot _service;
         private readonly IXetDuyetDanhGia _serviceXDDG;
+        private readonly INhom _serviceNhom;
         private readonly IHoiDong _serviceHoiDong;
         private readonly IDeTaiNghienCuu _serviceDeTai;
 
-        public MoDotController(IMoDot service, IDeTaiNghienCuu serviceDeTai, IXetDuyetDanhGia serviceXDDG, IHoiDong serviceHoiDong)
+        public MoDotController(IMoDot service, INhom serviceNhom, IDeTaiNghienCuu serviceDeTai, IXetDuyetDanhGia serviceXDDG, IHoiDong serviceHoiDong)
         {
+            _serviceNhom = serviceNhom;
             _serviceHoiDong = serviceHoiDong;
             _serviceXDDG = serviceXDDG;
             _service = service;
@@ -86,6 +88,18 @@ namespace KLTN.Areas.Admin.Controllers
                 {
                     item.TinhTrangPhanCong = (int)StatusPhanCong.ChuaPhanCong;
                     await _serviceDeTai.Update(item);
+                }
+            }
+            if(moDot.Loai == (int)MoDotLoai.DangKy)
+            {
+                var Nhom = await _serviceNhom.GetAll();
+                if(Nhom.Any())
+                {
+                    foreach (var item in Nhom)
+                    {
+                        item.Status = (int)BaseStatus.Disable;
+                        await _serviceNhom.Update(item);
+                    }
                 }
             }
             moDot.Status = 1;

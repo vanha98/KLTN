@@ -36,7 +36,11 @@ namespace KLTN.Areas.Admin.Controllers
         public async Task<IActionResult> Index(string mess)
         {
             IEnumerable<MoDot> listDotDangKy = await _serviceMoDot.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
-            MoDot DotDangKyMoiNhat =  listDotDangKy.ToList().Last();
+            if(!listDotDangKy.Any())
+            {
+                return View();
+            }
+            MoDot DotDangKyMoiNhat =  listDotDangKy.ToList().LastOrDefault();
 
             IEnumerable<DeTaiNghienCuu> listDeTaiHienTai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet 
                                                                                  || x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy
@@ -73,15 +77,14 @@ namespace KLTN.Areas.Admin.Controllers
             IEnumerable<MoDot> listDotDangKy = await _serviceMoDot.GetAll(x => x.Loai == (int)MoDotLoai.DangKy);
             MoDot DotDangKyMoiNhat = listDotDangKy.ToList().Last();
 
-            IEnumerable<DeTaiNghienCuu> listDeTaiHienTai = await _service.GetAll(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet
-                                                                                 || x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy
+            IEnumerable<DeTaiNghienCuu> listDeTaiHienTai = await _service.GetAll(x => x.TinhTrangDeTai != (int)StatusDeTai.MoiTao
                                                                                  && (x.NgayDangKy > DotDangKyMoiNhat.ThoiGianBd
                                                                                  && x.NgayDangKy < DotDangKyMoiNhat.ThoiGianKt)
                                                                                  || (x.NgayDangKy == null && x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet));
             
-            List<DeTaiNghienCuu> listDeTaiDaDangKy = listDeTaiHienTai.Where(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDangKy).ToList();
+            List<DeTaiNghienCuu> listDeTaiDaDangKy = listDeTaiHienTai.Where(x => x.TinhTrangDangKy == (int)StatusDangKyDeTai.Het).ToList();
 
-            List<DeTaiNghienCuu> listDeTaiChuaDangKy = listDeTaiHienTai.Where(x => x.TinhTrangDeTai == (int)StatusDeTai.DaDuyet).ToList();
+            List<DeTaiNghienCuu> listDeTaiChuaDangKy = listDeTaiHienTai.Where(x => x.TinhTrangDeTai != (int)StatusDeTai.MoiTao && x.TinhTrangDangKy == (int)StatusDangKyDeTai.Con).ToList();
 
             var stream = new MemoryStream();
 

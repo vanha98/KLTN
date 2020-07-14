@@ -82,63 +82,64 @@
             
         });
 
-        //var table2 = $("#example2").DataTable({
-        //    //"responsive": true,
-        //    "autoWidth": false,
-        //    "scrollX": true,
-        //    //"fixedColumns": {
-        //    //    leftColumns: 3,
-        //    //},
-        //    //"fixedHeader": true,
-        //    "pageLength": 10,
-        //    "language": {
-        //        "lengthMenu": "",
-        //        "zeroRecords": "Không có dữ liệu",
-        //        "info": "",
-        //        "infoEmpty": "",
-        //        "infoFiltered": "",
-        //        "search": "",
-        //        "searchPlaceholder": "Tìm kiếm",
-        //        "paginate": {
-        //            "first": "<<",
-        //            "last": ">>",
-        //            "next": ">",
-        //            "previous": "<"
-        //        },
-        //    },
-        //    "processing": true, // for show progress bar    
-        //    "serverSide": true, // for process server side    
-        //    "filter": true, // this is for disable filter (search box)    
-        //    "orderMulti": false, // for disable multiple column at once    
-        //    "ajax": {
-        //        "url": "/Admin/PheDuyetYeuCau/LoadData2",
-        //        "type": "POST",
-        //        "datatype": "json"
-        //    },
-        //    "columns": [
-        //        { "data": "id", "name": "Id", "autoWidth": true },
-        //        { "data": "tenDeTai", "name": "TenDeTai", "autoWidth": true, "className": "text-truncate" },
-        //        { "data": "moTa", "name": "MoTa", "autoWidth": true },
-        //        {
-        //            data: "tepDinhKem",
-        //            render: function (data, type, row) {
-        //                if (data != null && data != "")
-        //                    return "<a href='/../../FileUpload/DeTaiNghienCuu/" + data + "' download='" + data + "'>" + row.tenTep + "</a>";
-        //                else
-        //                    return "";
-        //            }
-        //        },
-        //        {
-        //            "data": "idgiangVienNavigation", "name": "idgiangVienNavigation", "autoWidth": true,
-        //            orderable: false,
-        //            render: function (data, type, row) {
-        //                return '<a>'+data.ho+' '+data.ten+'</a>';
-        //            }
-        //        },
+        var table2 = $("#example2").DataTable({
+            //"responsive": true,
+            "autoWidth": false,
+            "scrollX": true,
+            //"fixedColumns": {
+            //    leftColumns: 3,
+            //},
+            //"fixedHeader": true,
+            "pageLength": 10,
+            "language": {
+                "lengthMenu": "",
+                "zeroRecords": "Không có dữ liệu",
+                "info": "",
+                "infoEmpty": "",
+                "infoFiltered": "",
+                "search": "",
+                "searchPlaceholder": "Tìm kiếm",
+                "paginate": {
+                    "first": "<<",
+                    "last": ">>",
+                    "next": ">",
+                    "previous": "<"
+                },
+            },
+            "processing": true, // for show progress bar    
+            "serverSide": true, // for process server side    
+            "filter": true, // this is for disable filter (search box)    
+            "orderMulti": false, // for disable multiple column at once    
+            "ajax": {
+                "url": "/Admin/PheDuyetYeuCau/LoadData2",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "tenDeTai", "name": "TenDeTai", "autoWidth": true, "className": "text-truncate" },
+                { "data": "moTa", "name": "MoTa", "autoWidth": true },
+                {
+                    data: "tepDinhKem",
+                    render: function (data, type, row) {
+                        if (data != null && data != "")
+                            return "<a href='/../../FileUpload/DeTaiNghienCuu/" + data + "' download='" + data + "'>" + row.tenTep + "</a>";
+                        else
+                            return "";
+                    }
+                },
+                {
+                    "data": "idgiangVienNavigation", "name": "idgiangVienNavigation", "autoWidth": true,
+                    orderable: false,
+                    render: function (data, type, row) {
+                        return '<a>'+data.ho+' '+data.ten+'</a>';
+                    }
+                },
                 
-        //    ],
+            ],
 
-        //});
+        });
+
         function ChangeStatus(id,type) {
             $.ajax({
                 url: 'PheDuyetYeuCau/ChangeStatus',

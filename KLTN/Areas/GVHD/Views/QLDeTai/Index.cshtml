@@ -31,6 +31,14 @@
             });
         }
 
+        var BaoCaoTienDo = function (id) {
+        $("#LoadBaoCao .modal-body").html("");
+        $.get('/GVHD/QLDeTai/LoadBaoCao/' + id, function (content) {
+            $("#LoadBaoCao .modal-body").html(content);
+            $("#LoadBaoCao").modal();
+        });
+    }
+
         var CreateAction = function () {
             url = "/GVHD/QLDeTai/Create/";
             $(".modal-body").load(url, function () {
@@ -153,6 +161,26 @@
             <div class="modal-body">
             </div>
             @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade" id="LoadBaoCao">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Danh sách báo cáo tiến độ</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
         </div>
         <!-- /.modal-content -->
     </div>

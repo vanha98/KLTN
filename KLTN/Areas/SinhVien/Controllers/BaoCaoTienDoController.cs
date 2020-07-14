@@ -52,6 +52,9 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
             else
             {
+                var DeTai = nhomSV.IddeTaiNavigation;
+                if (!await BaoCaoTreHan(DeTai))
+                    return View();
                 ViewBag.Check = true;
                 ViewBag.TenDeTai = nhomSV.IddeTaiNavigation.TenDeTai;
                 ViewBag.IdDeTai = nhomSV.IddeTai;
@@ -205,7 +208,58 @@ namespace KLTN.Areas.SinhVien.Controllers
             }
         }
 
-
+        [NonAction]
+        public async Task<bool> BaoCaoTreHan(DeTaiNghienCuu deTai)
+        {
+            var baoCao = deTai.BaoCaoTienDo;
+            int week = ((DateTime.Now - deTai.NgayThucHien.Value).Days) / 7 + 1;
+            if (!baoCao.Any())
+            {
+                if (week == 1)
+                {
+                    BaoCaoTienDo entity = new BaoCaoTienDo
+                    {
+                        TuanDaNop = 1,
+                        NgayNop = DateTime.Now,
+                        Status = (int)StatusBaoCao.TreHan
+                    };
+                    deTai.BaoCaoTienDo.Add(entity);
+                }
+                else
+                {
+                    for (int i = 1; i < week; i++)
+                    {
+                        BaoCaoTienDo entity = new BaoCaoTienDo
+                        {
+                            TuanDaNop = i,
+                            NgayNop = DateTime.Now,
+                            Status = (int)StatusBaoCao.TreHan
+                        };
+                        deTai.BaoCaoTienDo.Add(entity);
+                    }
+                }
+                await _service.Update(deTai);
+                return true;
+            }
+            else
+            {
+                int tuanDaNop = baoCao.LastOrDefault().TuanDaNop;
+                if (tuanDaNop == week || week == tuanDaNop+1)
+                    return true;
+                for (int i = tuanDaNop+1; i < week; i++)
+                {
+                    BaoCaoTienDo entity = new BaoCaoTienDo
+                    {
+                        TuanDaNop = i,
+                        NgayNop = DateTime.Now,
+                        Status = (int)StatusBaoCao.TreHan
+                    };
+                    deTai.BaoCaoTienDo.Add(entity);
+                }
+                await _service.Update(deTai);
+                return true;
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateEdit(BaoCaoTienDoViewModel vmodel)
@@ -257,11 +311,6 @@ namespace KLTN.Areas.SinhVien.Controllers
             else
             {
                 BaoCaoTienDo baoCao = await _serviceBaoCao.GetById(vmodel.Id);
-                int week = ((DateTime.Now - DeTai.NgayThucHien.Value).Days / 7) + 1;
-                if(baoCao.TuanDaNop < week)
-                {
-                    baoCao.Status = (int)StatusBaoCao.TreHan;
-                }
                 baoCao.NoiDung = vmodel.NoiDung;
                 baoCao.TienDo = vmodel.TienDo;
                 baoCao.NgayNop = DateTime.Now;
